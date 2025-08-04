@@ -1,0 +1,12 @@
+# Overwrite the bins created from the Spring Framework 5.* - When you try to register bins with the same name - BeanDefinitionOverrideException occurs, setting that eliminates this.
+spring:
+  main:
+    allow-bean-definition-overriding: true
+
+logging:
+  level:
+    '[org.egovframe]': DEBUG
+    '[egovframework]': DEBUG
+    '[org.springframework]': DEBUG
+#    root: DEBUG
+

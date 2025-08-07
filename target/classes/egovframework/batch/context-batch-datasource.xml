@@ -21,17 +21,19 @@
     <alias name="dataSource-${Globals.DbType}" alias="dataSource"/>
 
     <!-- Hsql -->
+    <!-- 
 	<jdbc:embedded-database id="dataSource-hsql" type="HSQL">
 		<jdbc:script location= "classpath:/db/sampledb.script"/>
 	</jdbc:embedded-database>
+ 	-->
 
 	<!-- MySQL -->
-    <!-- <bean id="dataSource-mysql" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+    <bean id="dataSource-mysql" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${Globals.DriverClassName}"/>
         <property name="url" value="${Globals.Url}" />
         <property name="username" value="${Globals.UserName}"/>
         <property name="password" value="${Globals.Password}"/>
-    </bean> -->
+    </bean>
 
     <!-- Oracle -->
    <!--  <bean id="dataSource-oracle" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">

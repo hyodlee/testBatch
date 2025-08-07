@@ -27,13 +27,13 @@ public class EgovSchedulerJobRunner {
 	 */
 	public static void main(String[] args) {
 
-               List<String> jobPaths = new ArrayList<String>();
+		List<String> jobPaths = new ArrayList<String>();
 
-               /*
-                 * 2. DB 실행 예제(DB To DB)에서 사용 할 Batch Job이 기술 된 xml파일 경로들(jobPaths)
-                 */
-               jobPaths.add("/egovframework/batch/job/mybatisToMybatisJob.xml");
-               jobPaths.add("/egovframework/batch/job/jdbcToJdbcJob.xml");
+		/*
+		 * 2. DB 실행 예제(DB To DB)에서 사용 할 Batch Job이 기술 된 xml파일 경로들(jobPaths)
+		 */
+		jobPaths.add("/egovframework/batch/job/mybatisToMybatisJob.xml");
+		jobPaths.add("/egovframework/batch/job/jdbcToJdbcJob.xml");
 
 		/*
 		 * EgovSchedulerRunner에 contextPath, schedulerJobPath, jobPaths를 인수로 넘겨서 실행한다.

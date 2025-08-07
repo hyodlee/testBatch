@@ -50,9 +50,9 @@ public class EgovBootApplication implements CommandLineRunner {
 		
 		List<String> jobPaths = new ArrayList<String>();
 
-                /*
-                 * 2. DB 실행 예제(DB To DB)에서 사용 할 Batch Job이 기술 된 xml파일 경로들(jobPaths)
-                 */
+		/*
+		 * 2. DB 실행 예제(DB To DB)에서 사용 할 Batch Job이 기술 된 xml파일 경로들(jobPaths)
+		 */
 		jobPaths.add("/egovframework/batch/job/mybatisToMybatisJob.xml");
 		jobPaths.add("/egovframework/batch/job/jdbcToJdbcJob.xml");
 

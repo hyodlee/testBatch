@@ -7,8 +7,8 @@
 		<property name="group" value="quartz-batch" />
 		<property name="jobDataAsMap">
 			<map>
-                                <!-- DB에서 DB로 데이터 이동을 위한 작업 이름 설정 -->
-                                <entry key="jobName" value="mybatisToMybatisJob" />
+				<!-- DB에서 DB로 데이터 이동을 위한 작업 이름 설정 -->
+				<entry key="jobName" value="mybatisToMybatisJob" />
 				<entry key="jobLocator" value-ref="jobRegistry" />
 				<entry key="jobLauncher" value-ref="jobLauncher" />
 			</map>

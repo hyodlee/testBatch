@@ -13,11 +13,7 @@
 		<property name="mapperLocations">
 			<list>
 				<value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL.xml</value>
-				<!-- <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL_altibase.xml</value> -->
-				<!-- <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL_cubrid.xml</value> -->
 				<!-- <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL_mysql.xml</value> -->
-				<!-- <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL_oracle.xml</value> -->
-				<!-- <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL_tibero.xml</value> -->
 			</list>
 		</property>
 	</bean>

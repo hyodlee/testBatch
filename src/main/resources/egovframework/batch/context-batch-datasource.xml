@@ -16,18 +16,11 @@
         </property>
     </bean>
 
-	<!-- DataSource -->
+        <!-- 데이터소스 설정 -->
 	<alias name="dataSource-${Globals.DbType}" alias="egov.dataSource"/>
     <alias name="dataSource-${Globals.DbType}" alias="dataSource"/>
 
-    <!-- Hsql -->
-    <!-- 
-	<jdbc:embedded-database id="dataSource-hsql" type="HSQL">
-		<jdbc:script location= "classpath:/db/sampledb.script"/>
-	</jdbc:embedded-database>
- 	-->
-
-	<!-- MySQL -->
+        <!-- MySQL 데이터소스 설정 -->
     <bean id="dataSource-mysql" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${Globals.DriverClassName}"/>
         <property name="url" value="${Globals.Url}" />
@@ -35,41 +28,9 @@
         <property name="password" value="${Globals.Password}"/>
     </bean>
 
-    <!-- Oracle -->
-   <!--  <bean id="dataSource-oracle" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="${Globals.DriverClassName}"/>
-        <property name="url" value="${Globals.Url}" />
-        <property name="username" value="${Globals.UserName}"/>
-        <property name="password" value="${Globals.Password}"/>
-    </bean> -->
-
-    <!-- Altibase -->
-    <!-- <bean id="dataSource-altibase" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="${Globals.DriverClassName}"/>
-        <property name="url" value="${Globals.Url}" />
-        <property name="username" value="${Globals.UserName}"/>
-        <property name="password" value="${Globals.Password}"/>
-    </bean> -->
-
-    <!-- Tibero -->
-    <!-- <bean id="dataSource-tibero" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="${Globals.DriverClassName}"/>
-        <property name="url" value="${Globals.Url}" />
-        <property name="username" value="${Globals.UserName}"/>
-        <property name="password" value="${Globals.Password}"/>
-    </bean> -->
-
-	<!-- cubrid -->
-    <!-- <bean id="dataSource-cubrid" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="${Globals.DriverClassName}"/>
-        <property name="url" value="${Globals.Url}" />
-        <property name="username" value="${Globals.UserName}"/>
-        <property name="password" value="${Globals.Password}"/>
-    </bean> -->
-
-	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" lazy-init="true">
-		<property name="dataSource" ref="dataSource" />
-	</bean>
+        <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" lazy-init="true">
+                <property name="dataSource" ref="dataSource" />
+        </bean>
 
 	<bean id="lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" />
 

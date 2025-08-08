@@ -18,14 +18,14 @@
 
     <!-- 데이터소스 설정 -->
     <bean id="dataSource-remote" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="${Globals.DriverClassName}"/>
+        <property name="driverClassName" value="${Globals.Remote.DriverClassName}"/>
         <property name="url" value="${Globals.Remote.Url}" />
         <property name="username" value="${Globals.Remote.UserName}"/>
         <property name="password" value="${Globals.Remote.Password}"/>
     </bean>
 
     <bean id="dataSource-local" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="${Globals.DriverClassName}"/>
+        <property name="driverClassName" value="${Globals.Local.DriverClassName}"/>
         <property name="url" value="${Globals.Local.Url}" />
         <property name="username" value="${Globals.Local.UserName}"/>
         <property name="password" value="${Globals.Local.Password}"/>

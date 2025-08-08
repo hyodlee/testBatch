@@ -168,6 +168,23 @@
     </profiles>
 
 	<build>
+		<resources>
+			<!-- 공통 리소스: env 폴더는 기본 제외 (환경별 폴더를 아래에서 개별 포함) -->
+			<resource>
+				<directory>src/main/resources</directory>
+				<excludes>
+					<exclude>egovframework/batch/properties/env/**</exclude>
+				</excludes>
+				<filtering>false</filtering>
+			</resource>
+
+			<!-- 환경별 리소스: env/${env} 폴더의 globals.properties만 클래스패스에 포함 -->
+			<resource>
+				<directory>src/main/resources/egovframework/batch/properties/env/${env}</directory>
+				<filtering>false</filtering>
+			</resource>
+		</resources>
+
 		<defaultGoal>install</defaultGoal>
 		<directory>${basedir}/target</directory>
 		<finalName>egovframework.example.bat.template.db.scheduler</finalName>

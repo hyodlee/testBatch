@@ -223,7 +223,7 @@
 			</plugins>
 		</pluginManagement>
 		<plugins>
-			<!-- 환경별 globals-*.properties 파일을 globals.properties로 복사 -->
+                        <!-- 환경별 globals-*.properties 파일을 egovframework/batch/properties에서 globals.properties로 복사 -->
 			<plugin>
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>3.3.1</version>
@@ -237,13 +237,13 @@
 						<configuration>
 							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
 							<resources>
-								<resource>
-									<directory>src/main/resources</directory>
-									<includes>
-										<include>globals-${env}.properties</include>
-									</includes>
-									<filtering>false</filtering>
-								</resource>
+                                                                <resource>
+                                                                        <directory>src/main/resources/egovframework/batch/properties</directory>
+                                                                        <includes>
+                                                                                <include>globals-${env}.properties</include>
+                                                                        </includes>
+                                                                        <filtering>false</filtering>
+                                                                </resource>
 							</resources>
 							<flatten>true</flatten>
 							<overwrite>true</overwrite>

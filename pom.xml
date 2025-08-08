@@ -161,7 +161,7 @@
 			<artifactId>cubrid</artifactId>
 			<version>10.2.0</version>
 		</dependency>-->
-</dependencies>
+	</dependencies>
        
         <!-- 환경별 프로필 설정 -->
         <profiles>

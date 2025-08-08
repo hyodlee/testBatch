@@ -161,9 +161,37 @@
 			<artifactId>cubrid</artifactId>
 			<version>10.2.0</version>
 		</dependency>-->
-	</dependencies>
+</dependencies>
 
-	<build>
+        <!-- 환경별 프로필 설정 -->
+        <profiles>
+                <!-- 로컬: 기본 활성화 -->
+                <profile>
+                        <id>local</id>
+                        <activation>
+                                <activeByDefault>true</activeByDefault>
+                        </activation>
+                        <properties>
+                                <env>local</env>
+                        </properties>
+                </profile>
+                <!-- 개발 환경 -->
+                <profile>
+                        <id>dev</id>
+                        <properties>
+                                <env>dev</env>
+                        </properties>
+                </profile>
+                <!-- 운영 환경 -->
+                <profile>
+                        <id>prod</id>
+                        <properties>
+                                <env>prod</env>
+                        </properties>
+                </profile>
+        </profiles>
+
+        <build>
 		<defaultGoal>install</defaultGoal>
 		<directory>${basedir}/target</directory>
 		<finalName>egovframework.example.bat.template.db.scheduler</finalName>
@@ -193,9 +221,43 @@
 					<version>3.23.0</version>
 				</plugin>
 			</plugins>
-		</pluginManagement>
-		<plugins>
-			<!-- EMMA -->
+                </pluginManagement>
+                <plugins>
+                        <!-- 환경별 globals-*.properties 파일을 globals.properties로 복사 -->
+                        <plugin>
+                                <artifactId>maven-resources-plugin</artifactId>
+                                <version>3.3.1</version>
+                                <executions>
+                                        <execution>
+                                                <id>copy-globals</id>
+                                                <phase>process-resources</phase>
+                                                <goals>
+                                                        <goal>copy-resources</goal>
+                                                </goals>
+                                                <configuration>
+                                                        <outputDirectory>${project.build.outputDirectory}</outputDirectory>
+                                                        <resources>
+                                                                <resource>
+                                                                        <directory>src/main/resources</directory>
+                                                                        <includes>
+                                                                                <include>globals-${env}.properties</include>
+                                                                        </includes>
+                                                                        <filtering>false</filtering>
+                                                                </resource>
+                                                        </resources>
+                                                        <flatten>true</flatten>
+                                                        <overwrite>true</overwrite>
+                                                        <transformers>
+                                                                <transformer implementation="org.apache.maven.plugins.resources.transformer.RenameRegExpTransformer">
+                                                                        <regExp>globals-${env}.properties</regExp>
+                                                                        <replacement>globals.properties</replacement>
+                                                                </transformer>
+                                                        </transformers>
+                                                </configuration>
+                                        </execution>
+                                </executions>
+                        </plugin>
+                        <!-- EMMA -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>

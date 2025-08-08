@@ -136,31 +136,7 @@
 		    <groupId>com.mysql</groupId>
 		    <artifactId>mysql-connector-j</artifactId>
 		    <version>8.0.33</version>
-		</dependency>		
-		<!-- oracle 11g driver -->
-		<!--<dependency>
-			<groupId>project</groupId>
-			<artifactId>ojdbc6</artifactId>
-			<version>11.2.0.3</version>
-		</dependency>-->
-		<!-- altibase driver -->
-		<!--<dependency>
-			<groupId>project</groupId>
-			<artifactId>altibase</artifactId>
-			<version>7.1.0</version>
-		</dependency>-->
-		<!-- tibero driver -->
-		<!--<dependency>
-			<groupId>project</groupId>
-			<artifactId>tibero5</artifactId>
-			<version>5.0.0</version>
-		</dependency>-->
-		<!-- cubrid driver -->
-		<!--<dependency>
-			<groupId>project</groupId>
-			<artifactId>cubrid</artifactId>
-			<version>10.2.0</version>
-		</dependency>-->
+		</dependency>
 	</dependencies>
        
         <!-- 환경별 프로필 설정 -->

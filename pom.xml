@@ -162,18 +162,18 @@
 			<version>10.2.0</version>
 		</dependency>-->
 </dependencies>
-
+       
         <!-- 환경별 프로필 설정 -->
         <profiles>
                 <!-- 로컬: 기본 활성화 -->
                 <profile>
                         <id>local</id>
-                        <activation>
-                                <activeByDefault>true</activeByDefault>
-                        </activation>
                         <properties>
                                 <env>local</env>
                         </properties>
+                        <activation>
+                                <activeByDefault>true</activeByDefault>
+                        </activation>                        
                 </profile>
                 <!-- 개발 환경 -->
                 <profile>
@@ -228,34 +228,6 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>3.3.1</version>
 				<executions>
-					<execution>
-						<id>copy-globals</id>
-						<phase>process-resources</phase>
-						<goals>
-							<goal>copy-resources</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
-							<resources>
-	                            <resource>
-	                                <directory>src/main/resources/egovframework/batch/properties</directory>
-	                                <includes>
-	                                        <include>globals-${env}.properties</include>
-	                                </includes>
-	                                <filtering>false</filtering>
-	                            </resource>
-							</resources>
-							<flatten>true</flatten>
-							<overwrite>true</overwrite>
-							<transformers>
-								<transformer
-									implementation="org.apache.maven.plugins.resources.transformer.RenameRegExpTransformer">
-									<regExp>globals-${env}.properties</regExp>
-									<replacement>globals.properties</replacement>
-								</transformer>
-							</transformers>
-						</configuration>
-					</execution>
 				</executions>
 			</plugin>
 			<!-- EMMA -->
@@ -265,8 +237,6 @@
 				<version>3.3.0</version>
 				<configuration>
 					<skipTests>true</skipTests>
-					<forkMode>once</forkMode>
-					<reportFormat>xml</reportFormat>
 					<excludes>
 						<exclude>**/Abstract*.java</exclude>
 						<exclude>**/*Suite.java</exclude>
@@ -274,6 +244,8 @@
 					<includes>
 						<include>**/*Test.java</include>
 					</includes>
+					<forkCount>1</forkCount>
+					<reuseForks>true</reuseForks>
 				</configuration>
 			</plugin>
 			<!--  JavaDoc -->
@@ -290,6 +262,28 @@
 						<goals>
 							<goal>jar</goal>
 						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<id>copy-globals</id>
+						<phase>process-resources</phase>
+						<goals>
+							<goal>run</goal>
+						</goals>
+						<configuration>
+							<target>
+								<copy
+									file="src/main/resources/egovframework/batch/properties/globals-${env}.properties"
+									tofile="${project.build.outputDirectory}/globals.properties"
+									overwrite="true" />
+							</target>
+						</configuration>
 					</execution>
 				</executions>
 			</plugin>

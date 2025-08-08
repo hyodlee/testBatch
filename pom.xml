@@ -3,18 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>egov.batch</groupId>
-	<artifactId>db-scheduler</artifactId>
+	<artifactId>testBatch</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0.0</version>
-	<name>db-scheduler</name>
-	<url>http://www.egovframe.go.kr</url>
-
-	<licenses>
-		<license>
-			<name>The Apache Software License, Version 2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-		</license>
-	</licenses>
+	<name>testBatch</name>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -187,7 +179,7 @@
 
 		<defaultGoal>install</defaultGoal>
 		<directory>${basedir}/target</directory>
-		<finalName>egovframework.example.bat.template.db.scheduler</finalName>
+		<finalName>testBatch</finalName>
 		<pluginManagement>
 			<plugins>
 				<plugin>

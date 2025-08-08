@@ -5,13 +5,14 @@
 
 	<import resource="abstract/eGovBase.xml" />
 
+	<!-- commit-interval 값은 일반적으로 500~1000으로 설정함 -->
 	<job id="mybatisToMybatisJob" parent="eGovBaseJob" xmlns="http://www.springframework.org/schema/batch">
 		<step id="mybatisToMybatisStep" parent="eGovBaseStep">
 			<tasklet>
 				<chunk reader="mybatisToIbatisJob.mybatisToIbatisStep.mybatisItemReader"
                     processor="mybatisToIbatisJob.mybatisToIbatisStep.itemProcessor"
 					writer="mybatisToIbatisJob.mybatisToIbatisStep.mybatisItemWriter"
-                    commit-interval="2" />
+                    commit-interval="500" />
 			</tasklet>
 		</step>
 	</job>

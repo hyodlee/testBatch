@@ -3,24 +3,32 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
     <!-- 실행환경에서 빈이름 참조(EgovAbstractDAO) -->
-	<bean id="egov.lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" lazy-init="true" />
+        <bean id="egov.lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" lazy-init="true" />
 
-	<!-- Mybatis setup for Mybatis Database Layer -->
-	<bean id="egov.sqlSession" class="org.mybatis.spring.SqlSessionFactoryBean">		
-		<property name="dataSource" ref="egov.dataSource"/>
-		<property name="configLocation" value="classpath:/egovframework/mapper/config/mapper-config.xml" />
-		
-		<property name="mapperLocations">
-			<list>
-				<value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL.xml</value>
-				<!-- <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL_mysql.xml</value> -->
-			</list>
-		</property>
-	</bean>
+        <!-- 원격 DB용 SqlSessionFactory -->
+        <bean id="sqlSessionFactory-remote" class="org.mybatis.spring.SqlSessionFactoryBean">
+                <property name="dataSource" ref="dataSource-remote"/>
+                <property name="configLocation" value="classpath:/egovframework/mapper/config/mapper-config.xml" />
 
-	<!-- Mybatis Session Template -->
-	<bean id="egov.sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
-		<constructor-arg ref="egov.sqlSession"/>
-	</bean>
+                <property name="mapperLocations">
+                        <list>
+                                <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL.xml</value>
+                                <!-- <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL_mysql.xml</value> -->
+                        </list>
+                </property>
+        </bean>
+
+        <!-- 로컬 DB용 SqlSessionFactory -->
+        <bean id="sqlSessionFactory-local" class="org.mybatis.spring.SqlSessionFactoryBean">
+                <property name="dataSource" ref="dataSource-local"/>
+                <property name="configLocation" value="classpath:/egovframework/mapper/config/mapper-config.xml" />
+
+                <property name="mapperLocations">
+                        <list>
+                                <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL.xml</value>
+                                <!-- <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL_mysql.xml</value> -->
+                        </list>
+                </property>
+        </bean>
 
 </beans>

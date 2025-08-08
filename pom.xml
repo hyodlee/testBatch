@@ -161,68 +161,15 @@
 			<artifactId>cubrid</artifactId>
 			<version>10.2.0</version>
 		</dependency>-->
-        </dependencies>
+	</dependencies>
 
-        <!-- 프로필 정의 -->
-        <profiles>
-                <profile>
-                        <id>local</id>
-                        <properties>
-                                <spring.profiles.active>local</spring.profiles.active>
-                        </properties>
-                        <build>
-                                <filters>
-                                        <filter>src/main/resources/egovframework/batch/properties/globals-local.properties</filter>
-                                </filters>
-                        </build>
-                </profile>
-                <profile>
-                        <id>dev</id>
-                        <properties>
-                                <spring.profiles.active>dev</spring.profiles.active>
-                        </properties>
-                        <build>
-                                <filters>
-                                        <filter>src/main/resources/egovframework/batch/properties/globals-dev.properties</filter>
-                                </filters>
-                        </build>
-                </profile>
-                <profile>
-                        <id>prod</id>
-                        <properties>
-                                <spring.profiles.active>prod</spring.profiles.active>
-                        </properties>
-                        <build>
-                                <filters>
-                                        <filter>src/main/resources/egovframework/batch/properties/globals-prod.properties</filter>
-                                </filters>
-                        </build>
-                </profile>
-        </profiles>
-
-        <build>
-                <defaultGoal>install</defaultGoal>
-                <directory>${basedir}/target</directory>
-                <finalName>egovframework.example.bat.template.db.scheduler</finalName>
-                <resources>
-                        <resource>
-                                <directory>src/main/resources</directory>
-                                <filtering>true</filtering>
-                                <includes>
-                                        <include>egovframework/batch/properties/globals.properties</include>
-                                </includes>
-                        </resource>
-                        <resource>
-                                <directory>src/main/resources</directory>
-                                <filtering>false</filtering>
-                                <excludes>
-                                        <exclude>egovframework/batch/properties/globals.properties</exclude>
-                                </excludes>
-                        </resource>
-                </resources>
-                <pluginManagement>
-                        <plugins>
-                                <plugin>
+	<build>
+		<defaultGoal>install</defaultGoal>
+		<directory>${basedir}/target</directory>
+		<finalName>egovframework.example.bat.template.db.scheduler</finalName>
+		<pluginManagement>
+			<plugins>
+				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.13.0</version>

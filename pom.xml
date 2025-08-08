@@ -6,7 +6,6 @@
 	<artifactId>testBatch</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0.0</version>
-	<name>testBatch</name>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
@@ -139,6 +138,9 @@
             <properties>
                 <env>local</env>
             </properties>
+	        <build>
+	            <finalName>testBatchlocal</finalName>
+	        </build>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>                        
@@ -149,6 +151,9 @@
             <properties>
                 <env>dev</env>
             </properties>
+	        <build>
+	            <finalName>testBatchdev</finalName>
+	        </build>
         </profile>
         <!-- 운영 환경 -->
         <profile>
@@ -156,6 +161,9 @@
             <properties>
                 <env>prod</env>
             </properties>
+	        <build>
+	            <finalName>testBatchprod</finalName>
+	        </build>
         </profile>
     </profiles>
 

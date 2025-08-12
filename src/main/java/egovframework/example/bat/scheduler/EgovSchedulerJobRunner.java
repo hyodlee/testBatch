@@ -40,10 +40,11 @@ public class EgovSchedulerJobRunner {
 		 * schedulerJobPath: Scheduler의 Trigger가 수행할 SchedulerJob(ex: QuartzJob)이 기술된 xml파일 경로
 		 * jobPaths: Batch Job이 기술 된 xml 파일 경로들
 		 * delayTime: Scheduler 실행을 위해 ApplicationContext를 종료를 지연시키는 시간(실행시간)
-		 *            (기본 30000 milliseconds: 30초)
+		 *            (기본 30000 milliseconds: 30초) -> Long.MAX_VALUE (약 2.9억 년(292,471,208년))
 		 */
 		EgovSchedulerRunner egovSchedulerRunner = new EgovSchedulerRunner("/egovframework/batch/context-batch-scheduler.xml", "/egovframework/batch/context-scheduler-job.xml",
-				jobPaths, 30000);
+//				jobPaths, 30000);
+				jobPaths, Long.MAX_VALUE);
 		egovSchedulerRunner.start();
 	}
 }

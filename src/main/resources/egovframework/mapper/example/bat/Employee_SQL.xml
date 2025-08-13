@@ -3,65 +3,65 @@
 
 <mapper namespace="Employee">
 
-  <resultMap id="employeeMap" type="egovframework.example.bat.domain.employee.EmployeeInfo">
-    <result property="emplyrId" column="EMPLYR_ID" />
-    <result property="orgnztId" column="ORGNZT_ID" />
-    <result property="orgnztNm" column="ORGNZT_NM" />
-    <result property="orgnztDc" column="ORGNZT_DC" />
-    <result property="userNm" column="USER_NM" />
-    <result property="sexdstnCode" column="SEXDSTN_CODE" />
-    <result property="brthdy" column="BRTHDY" />
-    <result property="mbtlnum" column="MBTLNUM" />
-    <result property="emailAdres" column="EMAIL_ADRES" />
-    <result property="ofcpsNm" column="OFCPS_NM" />
-    <result property="emplyrSttusCode" column="EMPLYR_STTUS_CODE" />
-    <result property="regDttm" column="REG_DTTM" />
-    <result property="modDttm" column="MOD_DTTM" />
-  </resultMap>
+	<resultMap id="employeeMap" type="egovframework.example.bat.domain.employee.EmployeeInfo">
+		<result property="emplyrId" column="EMPLYR_ID" />
+		<result property="orgnztId" column="ORGNZT_ID" />
+		<result property="orgnztNm" column="ORGNZT_NM" />
+		<result property="orgnztDc" column="ORGNZT_DC" />
+		<result property="userNm" column="USER_NM" />
+		<result property="sexdstnCode" column="SEXDSTN_CODE" />
+		<result property="brthdy" column="BRTHDY" />
+		<result property="mbtlnum" column="MBTLNUM" />
+		<result property="emailAdres" column="EMAIL_ADRES" />
+		<result property="ofcpsNm" column="OFCPS_NM" />
+		<result property="emplyrSttusCode" column="EMPLYR_STTUS_CODE" />
+		<result property="regDttm" column="REG_DTTM" />
+		<result property="modDttm" column="MOD_DTTM" />
+	</resultMap>
 
-  <select id="selectEmployeeList" resultMap="employeeMap">
-    SELECT
-      e.EMPLYR_ID,
-      e.ORGNZT_ID,
-      o.ORGNZT_NM,
-      o.ORGNZT_DC,
-      e.USER_NM,
-      e.SEXDSTN_CODE,
-      e.BRTHDY,
-      e.MBTLNUM,
-      e.EMAIL_ADRES,
-      e.OFCPS_NM,
-      e.EMPLYR_STTUS_CODE,
-      e.REG_DTTM,
-      e.MOD_DTTM
-    FROM comtnemplyrinfo e
-    LEFT JOIN comtnorgnztinfo o ON e.ORGNZT_ID = o.ORGNZT_ID
-  </select>
+	<select id="selectEmployeeList" resultMap="employeeMap">
+		SELECT
+			e.EMPLYR_ID,
+			e.ORGNZT_ID,
+			o.ORGNZT_NM,
+			o.ORGNZT_DC,
+			e.USER_NM,
+			e.SEXDSTN_CODE,
+			e.BRTHDY,
+			e.MBTLNUM,
+			e.EMAIL_ADRES,
+			e.OFCPS_NM,
+			e.EMPLYR_STTUS_CODE,
+			e.REG_DTTM,
+			e.MOD_DTTM
+		FROM comtnemplyrinfo e
+			LEFT JOIN comtnorgnztinfo o ON e.ORGNZT_ID = o.ORGNZT_ID
+	</select>
 
-  <insert id="insertOrganization" parameterType="egovframework.example.bat.domain.employee.EmployeeInfo">
-    INSERT INTO comtnorgnztinfo (ORGNZT_ID, ORGNZT_NM, ORGNZT_DC)
-    VALUES (#{orgnztId}, #{orgnztNm}, #{orgnztDc})
-    ON DUPLICATE KEY UPDATE
-      ORGNZT_NM = VALUES(ORGNZT_NM),
-      ORGNZT_DC = VALUES(ORGNZT_DC)
-  </insert>
+	<insert id="insertOrganization" parameterType="egovframework.example.bat.domain.employee.EmployeeInfo">
+		INSERT INTO comtnorgnztinfo (ORGNZT_ID, ORGNZT_NM, ORGNZT_DC)
+				VALUES (#{orgnztId}, #{orgnztNm}, #{orgnztDc})
+			ON DUPLICATE KEY UPDATE
+				ORGNZT_NM = VALUES(ORGNZT_NM),
+				ORGNZT_DC = VALUES(ORGNZT_DC)
+	</insert>
 
-  <insert id="insertEmployee" parameterType="egovframework.example.bat.domain.employee.EmployeeInfo">
-    INSERT INTO comtnemplyrinfo
-    (EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)
-    VALUES
-    (#{emplyrId}, #{orgnztId}, #{userNm}, #{sexdstnCode}, #{brthdy}, #{mbtlnum}, #{emailAdres}, #{ofcpsNm}, #{emplyrSttusCode}, #{regDttm}, #{modDttm})
-    ON DUPLICATE KEY UPDATE
-      ORGNZT_ID = VALUES(ORGNZT_ID),
-      USER_NM = VALUES(USER_NM),
-      SEXDSTN_CODE = VALUES(SEXDSTN_CODE),
-      BRTHDY = VALUES(BRTHDY),
-      MBTLNUM = VALUES(MBTLNUM),
-      EMAIL_ADRES = VALUES(EMAIL_ADRES),
-      OFCPS_NM = VALUES(OFCPS_NM),
-      EMPLYR_STTUS_CODE = VALUES(EMPLYR_STTUS_CODE),
-      REG_DTTM = VALUES(REG_DTTM),
-      MOD_DTTM = VALUES(MOD_DTTM)
-  </insert>
+	<insert id="insertEmployee" parameterType="egovframework.example.bat.domain.employee.EmployeeInfo">
+		INSERT INTO comtnemplyrinfo
+			(EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)
+		VALUES
+			(#{emplyrId}, #{orgnztId}, #{userNm}, #{sexdstnCode}, #{brthdy}, #{mbtlnum}, #{emailAdres}, #{ofcpsNm}, #{emplyrSttusCode}, #{regDttm}, #{modDttm})
+		ON DUPLICATE KEY UPDATE
+			ORGNZT_ID = VALUES(ORGNZT_ID),
+			USER_NM = VALUES(USER_NM),
+			SEXDSTN_CODE = VALUES(SEXDSTN_CODE),
+			BRTHDY = VALUES(BRTHDY),
+			MBTLNUM = VALUES(MBTLNUM),
+			EMAIL_ADRES = VALUES(EMAIL_ADRES),
+			OFCPS_NM = VALUES(OFCPS_NM),
+			EMPLYR_STTUS_CODE = VALUES(EMPLYR_STTUS_CODE),
+			REG_DTTM = VALUES(REG_DTTM),
+			MOD_DTTM = VALUES(MOD_DTTM)
+	</insert>
 
 </mapper>

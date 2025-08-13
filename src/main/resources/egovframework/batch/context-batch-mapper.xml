@@ -14,6 +14,7 @@
                         <list>
                                 <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL.xml</value>
                                 <!-- <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL_mysql.xml</value> -->
+                                <value>classpath:/egovframework/mapper/example/bat/Employee_SQL.xml</value>
                         </list>
                 </property>
         </bean>
@@ -27,6 +28,7 @@
                         <list>
                                 <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL.xml</value>
                                 <!-- <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL_mysql.xml</value> -->
+                                <value>classpath:/egovframework/mapper/example/bat/Employee_SQL.xml</value>
                         </list>
                 </property>
         </bean>

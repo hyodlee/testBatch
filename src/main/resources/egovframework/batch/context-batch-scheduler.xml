@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
-	<import resource="context-batch-job-launcher.xml" />
+        <import resource="context-batch-job-launcher.xml" />
 
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="triggers">
-			<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-				<property name="jobDetail" ref="jobDetail" />
-				<!-- <property name="cronExpression" value="0/10 * * * * ?" /> -->
-				<property name="cronExpression" value="0 * * * * ?" />
-			</bean>
-		</property>
-	</bean>
-	
+        <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+                <property name="triggers">
+                        <list>
+                                <bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+                                        <property name="jobDetail" ref="jobDetail" />
+                                        <!-- <property name="cronExpression" value="0/10 * * * * ?" /> -->
+                                        <property name="cronExpression" value="0 * * * * ?" />
+                                </bean>
+                                <bean id="remoteToLocalCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+                                        <property name="jobDetail" ref="remoteToLocalJobDetail" />
+                                        <property name="cronExpression" value="0 0 * * * ?" />
+                                </bean>
+                        </list>
+                </property>
+        </bean>
+
 </beans>

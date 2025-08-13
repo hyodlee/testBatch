@@ -15,4 +15,17 @@
 		</property>
 	</bean>
 	
+        <bean id="remoteToLocalJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+                <property name="jobClass" value="egovframework.example.bat.scheduler.support.EgovJobLauncherDetails" />
+                <property name="group" value="quartz-batch" />
+                <property name="jobDataAsMap">
+                        <map>
+                                <!-- 원격 DB 데이터를 로컬로 적재하기 위한 작업 이름 설정 -->
+                                <entry key="jobName" value="remoteToLocalJob" />
+                                <entry key="jobLocator" value-ref="jobRegistry" />
+                                <entry key="jobLauncher" value-ref="jobLauncher" />
+                        </map>
+                </property>
+        </bean>
+
 </beans>

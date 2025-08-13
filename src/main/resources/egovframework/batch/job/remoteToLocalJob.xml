@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-3.0.xsd">
+
+    <import resource="abstract/eGovBase.xml" />
+
+    <!-- commit-interval 값은 일반적으로 500~1000으로 설정함 -->
+    <job id="remoteToLocalJob" parent="eGovBaseJob" xmlns="http://www.springframework.org/schema/batch">
+        <step id="remoteToLocalStep" parent="eGovBaseStep">
+            <tasklet>
+                <chunk reader="remoteToLocalJob.remoteToLocalStep.mybatisItemReader"
+                       writer="remoteToLocalJob.remoteToLocalStep.mybatisItemWriter"
+                       commit-interval="500" />
+            </tasklet>
+        </step>
+    </job>
+
+    <bean id="remoteToLocalJob.remoteToLocalStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
+        <!-- 원격 DB 읽기를 위해 remote SqlSessionFactory 사용 -->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-remote" />
+        <property name="queryId" value="Employee.selectEmployeeList" />
+        <property name="pageSize" value="#{100}" />
+    </bean>
+
+    <bean id="remoteToLocalJob.remoteToLocalStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
+        <!-- 로컬 DB 적재를 위해 local SqlSessionFactory 사용 -->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-local" />
+        <property name="statementId" value="Employee.insertEmployee" />
+    </bean>
+
+</beans>

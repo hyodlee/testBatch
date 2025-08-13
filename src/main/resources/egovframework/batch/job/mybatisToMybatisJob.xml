@@ -11,25 +11,25 @@
 		<step id="mybatisToMybatisStep" parent="eGovBaseStep">
 			<tasklet>
 				<chunk reader="mybatisToIbatisJob.mybatisToIbatisStep.mybatisItemReader"
-                    processor="mybatisToIbatisJob.mybatisToIbatisStep.itemProcessor"
-					writer="mybatisToIbatisJob.mybatisToIbatisStep.mybatisItemWriter"
-                    commit-interval="500" />
+                       processor="mybatisToIbatisJob.mybatisToIbatisStep.itemProcessor"
+                       writer="mybatisToIbatisJob.mybatisToIbatisStep.mybatisItemWriter"
+                       commit-interval="500" />
 			</tasklet>
 		</step>
 	</job>
 
-        <bean id="mybatisToIbatisJob.mybatisToIbatisStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
-                <!-- 원격 DB 읽기를 위해 remote SqlSessionFactory 사용 -->
-                <property name="sqlSessionFactory" ref="sqlSessionFactory-remote" />
-                <property name="queryId" value="Customer.getAllCustomerCredits" />
-                <property name="pageSize" value="#{100}" />
-        </bean>
+    <bean id="mybatisToIbatisJob.mybatisToIbatisStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
+        <!-- 원격 DB 읽기를 위해 remote SqlSessionFactory 사용 -->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-remote" />
+        <property name="queryId" value="Customer.getAllCustomerCredits" />
+        <property name="pageSize" value="#{100}" />
+    </bean>
 
-        <bean id="mybatisToIbatisJob.mybatisToIbatisStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
-                <!-- 로컬 DB 적재를 위해 local SqlSessionFactory 사용 -->
-                <property name="sqlSessionFactory" ref="sqlSessionFactory-local" />
-                <property name="statementId" value="Customer.updateCredit" />
-        </bean>
+    <bean id="mybatisToIbatisJob.mybatisToIbatisStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
+        <!-- 로컬 DB 적재를 위해 local SqlSessionFactory 사용 -->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-local" />
+        <property name="statementId" value="Customer.updateCredit" />
+    </bean>
 
 	<bean id="mybatisToIbatisJob.mybatisToIbatisStep.itemProcessor" class="egovframework.example.bat.domain.trade.CustomerCreditIncreaseProcessor" />
 

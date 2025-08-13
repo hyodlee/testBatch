@@ -15,7 +15,7 @@
                      -->
                     <bean id="remoteToLocalCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
                         <property name="jobDetail" ref="remoteToLocalJobDetail" />
-                        <property name="cronExpression" value="0 0 * * * ?" />
+                        <property name="cronExpression" value="0 * * * * ?" />
                     </bean>
                 </list>
 		    </property>

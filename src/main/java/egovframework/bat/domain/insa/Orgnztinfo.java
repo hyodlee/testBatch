@@ -1,4 +1,4 @@
-package egovframework.example.bat.domain.insa;
+package egovframework.bat.domain.insa;
 
 import lombok.Data;
 

@@ -3,7 +3,7 @@
 
 <mapper namespace="Employee">
 
-	<select id="selectOrgnztList" resultType="egovframework.example.bat.domain.insa.Orgnztinfo">
+	<select id="selectOrgnztList" resultType="egovframework.bat.domain.insa.Orgnztinfo">
 		SELECT
 			 ORGNZT_ID,
 			 ORGNZT_NM,
@@ -11,7 +11,7 @@
 		FROM COMTNORGNZTINFO
 	</select>
 
-	<select id="selectEmployeeList" resultType="egovframework.example.bat.domain.insa.EmployeeInfo">
+	<select id="selectEmployeeList" resultType="egovframework.bat.domain.insa.EmployeeInfo">
 		SELECT
 			 EMPLYR_ID,
 			 ORGNZT_ID,
@@ -27,7 +27,7 @@
 		FROM COMTNEMPLYRINFO
 	</select>
 
-	<insert id="insertOrganization" parameterType="egovframework.example.bat.domain.insa.EmployeeInfo">
+	<insert id="insertOrganization" parameterType="egovframework.bat.domain.insa.EmployeeInfo">
 		INSERT INTO COMTNORGNZTINFO (ORGNZT_ID, ORGNZT_NM, ORGNZT_DC)
 				VALUES (#{orgnztId}, #{orgnztNm}, #{orgnztDc})
 			ON DUPLICATE KEY UPDATE
@@ -35,7 +35,7 @@
 				ORGNZT_DC = VALUES(ORGNZT_DC)
 	</insert>
 
-	<insert id="insertEmployee" parameterType="egovframework.example.bat.domain.insa.EmployeeInfo">
+	<insert id="insertEmployee" parameterType="egovframework.bat.domain.insa.EmployeeInfo">
 		INSERT INTO COMTNEMPLYRINFO
 			(EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)
 		VALUES

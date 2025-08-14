@@ -1,4 +1,4 @@
-package egovframework.example.bat.domain.employee;
+package egovframework.example.bat.domain.insa;
 
 import java.util.Date;
 
@@ -12,8 +12,6 @@ public class EmployeeInfo {
 
     private String emplyrId;		/** 업무사용자ID */
     private String orgnztId;		/** 조직ID */
-    private String orgnztNm;		/** 조직명 */
-    private String orgnztDc;		/** 조직설명 */
     private String userNm;			/** 사용자명 */
     private String sexdstnCode;		/** 성별코드 */
     private String brthdy;			/** 생일 */

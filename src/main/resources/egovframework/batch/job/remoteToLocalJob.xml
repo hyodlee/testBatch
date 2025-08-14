@@ -11,7 +11,7 @@
         <step id="remoteToLocalStep" parent="eGovBaseStep">
             <tasklet>
                 <chunk reader="remoteToLocalJob.remoteToLocalStep.mybatisItemReader"
-                       writer="remoteToLocalJob.remoteToLocalStep.mybatisItemWriter"
+                       writer="remoteToLocalJob.remoteToLocalStep.compositeWriter"
                        commit-interval="500" />
             </tasklet>
         </step>
@@ -28,6 +28,25 @@
         <!-- 로컬 DB 적재를 위해 local SqlSessionFactory 사용 -->
         <property name="sqlSessionFactory" ref="sqlSessionFactory-local" />
         <property name="statementId" value="Employee.insertEmployee" />
+    </bean>
+
+    <!-- 조직 정보를 먼저 적재하기 위한 Writer -->
+    <bean id="remoteToLocalJob.remoteToLocalStep.orgItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
+        <!-- 로컬 DB 적재를 위해 local SqlSessionFactory 사용 -->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-local" />
+        <!-- 조직 정보 저장을 위한 statementId 설정 -->
+        <property name="statementId" value="Employee.insertOrganization" />
+    </bean>
+
+    <!-- 조직/직원 순으로 실행될 Composite Writer -->
+    <bean id="remoteToLocalJob.remoteToLocalStep.compositeWriter" class="org.springframework.batch.item.support.CompositeItemWriter">
+        <!-- delegate Writer 순서를 지정하여 조직 후 직원 순으로 실행 -->
+        <property name="delegates">
+            <list>
+                <ref bean="remoteToLocalJob.remoteToLocalStep.orgItemWriter" />
+                <ref bean="remoteToLocalJob.remoteToLocalStep.mybatisItemWriter" />
+            </list>
+        </property>
     </bean>
 
 </beans>

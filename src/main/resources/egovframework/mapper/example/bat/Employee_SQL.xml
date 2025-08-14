@@ -3,6 +3,14 @@
 
 <mapper namespace="Employee">
 
+	<select id="selectOrgnztList" resultType="egovframework.example.bat.domain.insa.Orgnztinfo">
+		SELECT
+			 ORGNZT_ID,
+			 ORGNZT_NM,
+			 ORGNZT_DC
+		FROM COMTNORGNZTINFO
+	</select>
+
 	<select id="selectEmployeeList" resultType="egovframework.example.bat.domain.insa.EmployeeInfo">
 		SELECT
 			 EMPLYR_ID,

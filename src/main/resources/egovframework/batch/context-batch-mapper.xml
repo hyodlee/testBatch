@@ -13,7 +13,7 @@
 	        <property name="mapperLocations">
 	            <list>
 	                <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL.xml</value>
-	                <value>classpath:/egovframework/mapper/example/bat/Employee_SQL.xml</value>
+	                <value>classpath:/egovframework/mapper/example/bat/Insa_SQL.xml</value>
 	            </list>
 	        </property>
         </bean>
@@ -26,7 +26,7 @@
 	        <property name="mapperLocations">
 	            <list>
 	                <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL.xml</value>
-	                <value>classpath:/egovframework/mapper/example/bat/Employee_SQL.xml</value>
+	                <value>classpath:/egovframework/mapper/example/bat/Insa_SQL.xml</value>
 	            </list>
 	        </property>
         </bean>

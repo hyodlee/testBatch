@@ -3,7 +3,7 @@
 
 <mapper namespace="Employee">
 
-	<select id="selectEmployeeList" resultType="egovframework.example.bat.domain.employee.EmployeeInfo">
+	<select id="selectEmployeeList" resultType="egovframework.example.bat.domain.insa.EmployeeInfo">
 		SELECT
 			 EMPLYR_ID,
 			 ORGNZT_ID,
@@ -19,7 +19,7 @@
 		FROM COMTNEMPLYRINFO
 	</select>
 
-	<insert id="insertOrganization" parameterType="egovframework.example.bat.domain.employee.EmployeeInfo">
+	<insert id="insertOrganization" parameterType="egovframework.example.bat.domain.insa.EmployeeInfo">
 		INSERT INTO COMTNORGNZTINFO (ORGNZT_ID, ORGNZT_NM, ORGNZT_DC)
 				VALUES (#{orgnztId}, #{orgnztNm}, #{orgnztDc})
 			ON DUPLICATE KEY UPDATE
@@ -27,7 +27,7 @@
 				ORGNZT_DC = VALUES(ORGNZT_DC)
 	</insert>
 
-	<insert id="insertEmployee" parameterType="egovframework.example.bat.domain.employee.EmployeeInfo">
+	<insert id="insertEmployee" parameterType="egovframework.example.bat.domain.insa.EmployeeInfo">
 		INSERT INTO COMTNEMPLYRINFO
 			(EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)
 		VALUES

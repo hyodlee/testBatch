@@ -19,6 +19,7 @@
         <step id="remoteToLocalStep" parent="eGovBaseStep">
             <tasklet>
                 <chunk reader="remoteToLocalJob.remoteToLocalStep.mybatisItemReader"
+                       processor="employeeInfoProcessor"
                        writer="remoteToLocalJob.remoteToLocalStep.mybatisItemWriter"
                        commit-interval="500" />
             </tasklet>
@@ -50,5 +51,8 @@
         <property name="sqlSessionFactory" ref="sqlSessionFactory-local" />
         <property name="statementId" value="Employee.insertEmployee" />
     </bean>
+
+    <!-- ESNTL_ID와 SOURCE_SYSTEM을 세팅하는 프로세서 -->
+    <bean id="employeeInfoProcessor" class="egovframework.bat.domain.insa.EmployeeInfoProcessor" />
 
 </beans>

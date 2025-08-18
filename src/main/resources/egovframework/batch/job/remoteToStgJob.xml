@@ -34,7 +34,7 @@
 
     <bean id="remoteToStgJob.remoteToStgOrgnztStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
         <!-- STG DB에 조직 정보 적재 -->
-        <property name="sqlSessionFactory" ref="sqlSessionFactory-stg" />
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-stg-remote" />
         <property name="statementId" value="Employee.insertOrganization" />
     </bean>
 
@@ -47,7 +47,7 @@
 
     <bean id="remoteToStgJob.remoteToStgStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
         <!-- STG DB 적재를 위해 stg SqlSessionFactory 사용 -->
-        <property name="sqlSessionFactory" ref="sqlSessionFactory-stg" />
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-stg-remote" />
         <property name="statementId" value="Employee.insertEmployeeLegacy" />
     </bean>
 

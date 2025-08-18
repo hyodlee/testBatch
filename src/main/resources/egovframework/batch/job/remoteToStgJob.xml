@@ -39,7 +39,7 @@
     </bean>
 
     <bean id="remoteToStgJob.remoteToStgStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
-        <!-- 원격 DB 읽기를 위해 remote SqlSessionFactory 사용 -->
+        <!-- 원격 DB에서 ESNTL_ID와 SOURCE_SYSTEM을 제외한 사원 정보를 조회 -->
         <property name="sqlSessionFactory" ref="sqlSessionFactory-remote" />
         <property name="queryId" value="Employee.selectEmployeeList" />
         <property name="pageSize" value="#{100}" />

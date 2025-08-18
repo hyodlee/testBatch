@@ -11,21 +11,23 @@
 		FROM COMTNORGNZTINFO
 	</select>
 
-	<select id="selectEmployeeList" resultType="egovframework.bat.domain.insa.EmployeeInfo">
-		SELECT
-			 EMPLYR_ID,
-			 ORGNZT_ID,
-			 USER_NM,
-			 SEXDSTN_CODE,
-			 BRTHDY,
-			 MBTLNUM,
-			 EMAIL_ADRES,
-			 OFCPS_NM,
-			 EMPLYR_STTUS_CODE,
-			 REG_DTTM,
-			 MOD_DTTM
-		FROM COMTNEMPLYRINFO
-	</select>
+        <select id="selectEmployeeList" resultType="egovframework.bat.domain.insa.EmployeeInfo">
+                SELECT
+                         ESNTL_ID,
+                         SOURCE_SYSTEM,
+                         EMPLYR_ID,
+                         ORGNZT_ID,
+                         USER_NM,
+                         SEXDSTN_CODE,
+                         BRTHDY,
+                         MBTLNUM,
+                         EMAIL_ADRES,
+                         OFCPS_NM,
+                         EMPLYR_STTUS_CODE,
+                         REG_DTTM,
+                         MOD_DTTM
+                FROM COMTNEMPLYRINFO
+        </select>
 
 	<insert id="insertOrganization" parameterType="egovframework.bat.domain.insa.EmployeeInfo">
 		INSERT INTO COMTNORGNZTINFO (ORGNZT_ID, ORGNZT_NM, ORGNZT_DC)
@@ -50,6 +52,25 @@
                         OFCPS_NM = VALUES(OFCPS_NM),
                         EMPLYR_STTUS_CODE = VALUES(EMPLYR_STTUS_CODE),
                         SOURCE_SYSTEM = VALUES(SOURCE_SYSTEM),
+                        REG_DTTM = VALUES(REG_DTTM),
+                        MOD_DTTM = VALUES(MOD_DTTM)
+        </insert>
+
+        <!-- ESNTL_ID와 SOURCE_SYSTEM을 사용하지 않는 구버전용 쿼리 -->
+        <insert id="insertEmployeeLegacy" parameterType="egovframework.bat.domain.insa.EmployeeInfo">
+                INSERT INTO COMTNEMPLYRINFO
+                        (EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)
+                VALUES
+                        (#{emplyrId}, #{orgnztId}, #{userNm}, #{sexdstnCode}, #{brthdy}, #{mbtlnum}, #{emailAdres}, #{ofcpsNm}, #{emplyrSttusCode}, #{regDttm}, #{modDttm})
+                ON DUPLICATE KEY UPDATE
+                        ORGNZT_ID = VALUES(ORGNZT_ID),
+                        USER_NM = VALUES(USER_NM),
+                        SEXDSTN_CODE = VALUES(SEXDSTN_CODE),
+                        BRTHDY = VALUES(BRTHDY),
+                        MBTLNUM = VALUES(MBTLNUM),
+                        EMAIL_ADRES = VALUES(EMAIL_ADRES),
+                        OFCPS_NM = VALUES(OFCPS_NM),
+                        EMPLYR_STTUS_CODE = VALUES(EMPLYR_STTUS_CODE),
                         REG_DTTM = VALUES(REG_DTTM),
                         MOD_DTTM = VALUES(MOD_DTTM)
         </insert>

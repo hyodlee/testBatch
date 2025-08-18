@@ -1,20 +1,35 @@
 package egovframework.bat.domain.insa;
 
-import java.util.UUID;
-
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import lombok.RequiredArgsConstructor;
 
 /**
- * ESNTL_ID와 SOURCE_SYSTEM 값을 세팅하는 프로세서
+ * ESNTL_ID를 생성하는 프로세서
  */
+@Component
+@StepScope
+@RequiredArgsConstructor
 public class EmployeeInfoProcessor implements ItemProcessor<EmployeeInfo, EmployeeInfo> {
+
+    /** ESNTL_ID 생성기 */
+    private final EsntlIdGenerator esntlIdGenerator;
+
+    /**
+     * 원천 시스템 식별 값. 잡 파라미터나 설정에서 주입된다.
+     */
+    @Value("#{jobParameters['sourceSystem']}")
+    private String sourceSystem;
 
     @Override
     public EmployeeInfo process(EmployeeInfo item) throws Exception {
-        // 고유ID를 UUID로 생성
-        item.setEsntlId(UUID.randomUUID().toString());
-        // 원천시스템 값을 STG로 설정
-        item.setSourceSystem("STG");
+        // 원천 시스템에 해당하는 프리픽스를 조회
+        String prefix = SourceSystemPrefix.getPrefix(sourceSystem);
+        // 프리픽스로 ESNTL_ID 생성
+        item.setEsntlId(esntlIdGenerator.generate(prefix));
         return item;
     }
 }

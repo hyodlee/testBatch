@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/batch D:\DEV\xsd\spring-batch-3.0.xsd">
+        <!-- http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-3.0.xsd"> -->
+
+    <import resource="abstract/eGovBase.xml" />
+
+    <!-- commit-interval 값은 일반적으로 500~1000으로 설정함 -->
+    <job id="remoteToStgJob" parent="eGovBaseJob" xmlns="http://www.springframework.org/schema/batch">
+        <!-- 조직 정보를 먼저 복사한 후 사원 정보를 복사 -->
+        <step id="remoteToStgOrgnztStep" parent="eGovBaseStep" next="remoteToStgStep">
+            <tasklet>
+                <chunk reader="remoteToStgJob.remoteToStgOrgnztStep.mybatisItemReader"
+                       writer="remoteToStgJob.remoteToStgOrgnztStep.mybatisItemWriter"
+                       commit-interval="500" />
+            </tasklet>
+        </step>
+        <step id="remoteToStgStep" parent="eGovBaseStep">
+            <tasklet>
+                <chunk reader="remoteToStgJob.remoteToStgStep.mybatisItemReader"
+                       writer="remoteToStgJob.remoteToStgStep.mybatisItemWriter"
+                       commit-interval="500" />
+            </tasklet>
+        </step>
+    </job>
+
+    <bean id="remoteToStgJob.remoteToStgOrgnztStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
+        <!-- 원격 DB에서 조직 정보 목록을 조회 -->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-remote" />
+        <property name="queryId" value="Employee.selectOrgnztList" />
+        <property name="pageSize" value="#{100}" />
+    </bean>
+
+    <bean id="remoteToStgJob.remoteToStgOrgnztStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
+        <!-- STG DB에 조직 정보 적재 -->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-stg" />
+        <property name="statementId" value="Employee.insertOrganization" />
+    </bean>
+
+    <bean id="remoteToStgJob.remoteToStgStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
+        <!-- 원격 DB 읽기를 위해 remote SqlSessionFactory 사용 -->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-remote" />
+        <property name="queryId" value="Employee.selectEmployeeList" />
+        <property name="pageSize" value="#{100}" />
+    </bean>
+
+    <bean id="remoteToStgJob.remoteToStgStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
+        <!-- STG DB 적재를 위해 stg SqlSessionFactory 사용 -->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-stg" />
+        <property name="statementId" value="Employee.insertEmployeeLegacy" />
+    </bean>
+
+</beans>

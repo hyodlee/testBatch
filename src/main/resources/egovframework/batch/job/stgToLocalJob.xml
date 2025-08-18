@@ -47,7 +47,7 @@
     </bean>
 
     <bean id="stgToLocalJob.stgToLocalStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
-        <!-- 로컬 DB 적재를 위해 local SqlSessionFactory 사용 -->
+        <!-- STG -> Local 이관 단계에서는 ESNTL_ID와 SOURCE_SYSTEM을 포함한 insertEmployee 사용 -->
         <property name="sqlSessionFactory" ref="sqlSessionFactory-local" />
         <property name="statementId" value="Employee.insertEmployee" />
     </bean>

@@ -53,8 +53,10 @@ public class EgovBootApplication implements CommandLineRunner {
 		/*
 		 * 2. DB 실행 예제(DB To DB)에서 사용 할 Batch Job이 기술 된 xml파일 경로들(jobPaths)
 		 */
-		jobPaths.add("/egovframework/batch/job/mybatisToMybatisJob.xml");
-        jobPaths.add("/egovframework/batch/job/remoteToLocalJob.xml");
+        jobPaths.add("/egovframework/batch/job/mybatisToMybatisJob.xml");
+        // 원격 시스템에서 STG로, 이어서 STG에서 Local로 이관하는 두 배치를 등록
+        jobPaths.add("/egovframework/batch/job/remoteToStgJob.xml");
+        jobPaths.add("/egovframework/batch/job/stgToLocalJob.xml");
 
 		/*
 		 * EgovSchedulerRunner에 contextPath, schedulerJobPath, jobPaths를 인수로 넘겨서 실행한다.

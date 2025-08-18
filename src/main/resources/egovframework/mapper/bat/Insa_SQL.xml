@@ -13,8 +13,8 @@
 
         <select id="selectEmployeeList" resultType="egovframework.bat.domain.insa.EmployeeInfo">
                 SELECT
-                        ESNTL_ID,
-                        EMPLYR_ID,
+                         ESNTL_ID,
+                         EMPLYR_ID,
                          ORGNZT_ID,
                          USER_NM,
                          SEXDSTN_CODE,

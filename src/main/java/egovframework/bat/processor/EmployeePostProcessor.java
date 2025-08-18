@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import egovframework.bat.domain.insa.EmployeeInfo;
 import egovframework.bat.domain.insa.EsntlIdGenerator;
+import egovframework.bat.domain.insa.SourceSystemPrefix;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -19,7 +20,8 @@ public class EmployeePostProcessor implements ItemProcessor<EmployeeInfo, Employ
 
     @Override
     public EmployeeInfo process(EmployeeInfo item) {
-        item.setEsntlId(esntlIdGenerator.generate());
+        String prefix = SourceSystemPrefix.getPrefix(item.getSourceSystem());
+        item.setEsntlId(esntlIdGenerator.generate(prefix));
         item.setSourceSystem(SOURCE_SYSTEM);
         return item;
     }

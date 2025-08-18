@@ -15,15 +15,27 @@ public class EsntlIdGenerator {
     private final JdbcTemplate jdbcTemplate;
 
     /**
-     * COMTNEMPLYRINFO에서 최대 ESNTL_ID를 조회하여 1을 더한 값을 반환한다.
+     * 주어진 프리픽스로 시작하는 ESNTL_ID의 최대값을 조회하여 다음 번호를 생성한다.
      *
-     * @return 새로운 ESNTL_ID
+     * @param prefix ESNTL_ID에 붙일 프리픽스
+     * @return 새로 생성된 ESNTL_ID
      */
-    public String generate() {
-        Long nextId = jdbcTemplate.queryForObject(
-            "SELECT COALESCE(MAX(CAST(ESNTL_ID AS UNSIGNED)),0) + 1 FROM COMTNEMPLYRINFO",
-            Long.class);
-        return String.valueOf(nextId);
+    public String generate(String prefix) {
+        String maxId = jdbcTemplate.queryForObject(
+            "SELECT MAX(ESNTL_ID) FROM COMTNEMPLYRINFO WHERE ESNTL_ID LIKE ?",
+            String.class,
+            prefix + "%");
+
+        long nextNo = 1L;
+        if (maxId != null) {
+            String numberPart = maxId.substring(prefix.length());
+            try {
+                nextNo = Long.parseLong(numberPart) + 1;
+            } catch (NumberFormatException e) {
+                nextNo = 1L;
+            }
+        }
+        return prefix + nextNo;
     }
 }
 

@@ -22,7 +22,6 @@ public class EmployeeInfo {
     private String emplyrSttusCode;     /** 사용자상태코드 */
     private Date regDttm;               /** 등록일자 */
     private Date modDttm;               /** 수정일자 */
-    private String sourceSystem;        /** 소스시스템 */
 
 }
 

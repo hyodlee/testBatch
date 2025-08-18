@@ -24,6 +24,14 @@
         <property name="password" value="${Globals.Remote.Password}"/>
     </bean>
 
+    <!-- 스테이징 DB 데이터소스 -->
+    <bean id="dataSource-stg" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${Globals.Stg.DriverClassName}"/>
+        <property name="url" value="${Globals.Stg.Url}" />
+        <property name="username" value="${Globals.Stg.UserName}"/>
+        <property name="password" value="${Globals.Stg.Password}"/>
+    </bean>
+
     <bean id="dataSource-local" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${Globals.Local.DriverClassName}"/>
         <property name="url" value="${Globals.Local.Url}" />

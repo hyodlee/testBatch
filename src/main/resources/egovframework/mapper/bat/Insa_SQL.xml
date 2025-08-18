@@ -35,22 +35,23 @@
 				ORGNZT_DC = VALUES(ORGNZT_DC)
 	</insert>
 
-	<insert id="insertEmployee" parameterType="egovframework.bat.domain.insa.EmployeeInfo">
-		INSERT INTO COMTNEMPLYRINFO
-			(EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)
-		VALUES
-			(#{emplyrId}, #{orgnztId}, #{userNm}, #{sexdstnCode}, #{brthdy}, #{mbtlnum}, #{emailAdres}, #{ofcpsNm}, #{emplyrSttusCode}, #{regDttm}, #{modDttm})
-		ON DUPLICATE KEY UPDATE
-			ORGNZT_ID = VALUES(ORGNZT_ID),
-			USER_NM = VALUES(USER_NM),
-			SEXDSTN_CODE = VALUES(SEXDSTN_CODE),
-			BRTHDY = VALUES(BRTHDY),
-			MBTLNUM = VALUES(MBTLNUM),
-			EMAIL_ADRES = VALUES(EMAIL_ADRES),
-			OFCPS_NM = VALUES(OFCPS_NM),
-			EMPLYR_STTUS_CODE = VALUES(EMPLYR_STTUS_CODE),
-			REG_DTTM = VALUES(REG_DTTM),
-			MOD_DTTM = VALUES(MOD_DTTM)
-	</insert>
+        <insert id="insertEmployee" parameterType="egovframework.bat.domain.insa.EmployeeInfo">
+                INSERT INTO COMTNEMPLYRINFO
+                        (ESNTL_ID, SOURCE_SYSTEM, EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)
+                VALUES
+                        (#{esntlId}, #{sourceSystem}, #{emplyrId}, #{orgnztId}, #{userNm}, #{sexdstnCode}, #{brthdy}, #{mbtlnum}, #{emailAdres}, #{ofcpsNm}, #{emplyrSttusCode}, #{regDttm}, #{modDttm})
+                ON DUPLICATE KEY UPDATE
+                        ORGNZT_ID = VALUES(ORGNZT_ID),
+                        USER_NM = VALUES(USER_NM),
+                        SEXDSTN_CODE = VALUES(SEXDSTN_CODE),
+                        BRTHDY = VALUES(BRTHDY),
+                        MBTLNUM = VALUES(MBTLNUM),
+                        EMAIL_ADRES = VALUES(EMAIL_ADRES),
+                        OFCPS_NM = VALUES(OFCPS_NM),
+                        EMPLYR_STTUS_CODE = VALUES(EMPLYR_STTUS_CODE),
+                        SOURCE_SYSTEM = VALUES(SOURCE_SYSTEM),
+                        REG_DTTM = VALUES(REG_DTTM),
+                        MOD_DTTM = VALUES(MOD_DTTM)
+        </insert>
 
 </mapper>

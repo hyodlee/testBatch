@@ -10,7 +10,7 @@ import lombok.Data;
 @Data
 public class EmployeeInfo {
 
-    private String esntlId;            /** 고유ID */
+    private String esntlId;             /** 고유ID */
     private String emplyrId;            /** 업무사용자ID */
     private String orgnztId;            /** 조직ID */
     private String userNm;              /** 사용자명 */

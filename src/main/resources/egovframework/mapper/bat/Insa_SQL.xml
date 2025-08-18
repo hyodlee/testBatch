@@ -37,6 +37,7 @@
 				ORGNZT_DC = VALUES(ORGNZT_DC)
 	</insert>
 
+        <!-- STG -> Local 이관 시 사용하며 ESNTL_ID와 SOURCE_SYSTEM을 포함한 쿼리 -->
         <insert id="insertEmployee" parameterType="egovframework.bat.domain.insa.EmployeeInfo">
                 INSERT INTO COMTNEMPLYRINFO
                         (ESNTL_ID, SOURCE_SYSTEM, EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)
@@ -56,7 +57,7 @@
                         MOD_DTTM = VALUES(MOD_DTTM)
         </insert>
 
-        <!-- ESNTL_ID와 SOURCE_SYSTEM을 사용하지 않는 구버전용 쿼리 -->
+        <!-- 원격 -> STG 이관 시 사용하며 ESNTL_ID와 SOURCE_SYSTEM을 제외한 쿼리 -->
         <insert id="insertEmployeeLegacy" parameterType="egovframework.bat.domain.insa.EmployeeInfo">
                 INSERT INTO COMTNEMPLYRINFO
                         (EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)

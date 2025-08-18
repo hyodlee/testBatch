@@ -25,6 +25,7 @@ public class EmployeePostProcessor implements ItemProcessor<EmployeeInfo, Employ
     public EmployeeInfo process(EmployeeInfo item) {
         // 전달받은 프리픽스를 이용해 ESNTL_ID 생성
         item.setEsntlId(esntlIdGenerator.generate(prefix));
+
         return item;
     }
 }

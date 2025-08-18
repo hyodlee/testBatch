@@ -14,7 +14,6 @@
         <select id="selectEmployeeList" resultType="egovframework.bat.domain.insa.EmployeeInfo">
                 SELECT
                          ESNTL_ID,
-                         SOURCE_SYSTEM,
                          EMPLYR_ID,
                          ORGNZT_ID,
                          USER_NM,
@@ -37,12 +36,12 @@
 				ORGNZT_DC = VALUES(ORGNZT_DC)
 	</insert>
 
-        <!-- STG -> Local 이관 시 사용하며 ESNTL_ID와 SOURCE_SYSTEM을 포함한 쿼리 -->
+        <!-- STG -> Local 이관 시 사용하며 ESNTL_ID를 포함한 쿼리 -->
         <insert id="insertEmployee" parameterType="egovframework.bat.domain.insa.EmployeeInfo">
                 INSERT INTO COMTNEMPLYRINFO
-                        (ESNTL_ID, SOURCE_SYSTEM, EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)
+                        (ESNTL_ID, EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)
                 VALUES
-                        (#{esntlId}, #{sourceSystem}, #{emplyrId}, #{orgnztId}, #{userNm}, #{sexdstnCode}, #{brthdy}, #{mbtlnum}, #{emailAdres}, #{ofcpsNm}, #{emplyrSttusCode}, #{regDttm}, #{modDttm})
+                        (#{esntlId}, #{emplyrId}, #{orgnztId}, #{userNm}, #{sexdstnCode}, #{brthdy}, #{mbtlnum}, #{emailAdres}, #{ofcpsNm}, #{emplyrSttusCode}, #{regDttm}, #{modDttm})
                 ON DUPLICATE KEY UPDATE
                         ORGNZT_ID = VALUES(ORGNZT_ID),
                         USER_NM = VALUES(USER_NM),
@@ -52,12 +51,11 @@
                         EMAIL_ADRES = VALUES(EMAIL_ADRES),
                         OFCPS_NM = VALUES(OFCPS_NM),
                         EMPLYR_STTUS_CODE = VALUES(EMPLYR_STTUS_CODE),
-                        SOURCE_SYSTEM = VALUES(SOURCE_SYSTEM),
                         REG_DTTM = VALUES(REG_DTTM),
                         MOD_DTTM = VALUES(MOD_DTTM)
         </insert>
 
-        <!-- 원격 -> STG 이관 시 사용하며 ESNTL_ID와 SOURCE_SYSTEM을 제외한 쿼리 -->
+        <!-- 원격 -> STG 이관 시 사용하며 ESNTL_ID를 제외한 쿼리 -->
         <insert id="insertEmployeeLegacy" parameterType="egovframework.bat.domain.insa.EmployeeInfo">
                 INSERT INTO COMTNEMPLYRINFO
                         (EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)

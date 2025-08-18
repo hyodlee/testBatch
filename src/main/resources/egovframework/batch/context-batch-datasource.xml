@@ -17,11 +17,11 @@
     </bean>
 
     <!-- 데이터소스 설정 -->
-    <bean id="dataSource-remote" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="${Globals.Remote.DriverClassName}"/>
-        <property name="url" value="${Globals.Remote.Url}" />
-        <property name="username" value="${Globals.Remote.UserName}"/>
-        <property name="password" value="${Globals.Remote.Password}"/>
+    <bean id="dataSource-remote1" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${Globals.Remote1.DriverClassName}"/>
+        <property name="url" value="${Globals.Remote1.Url}" />
+        <property name="username" value="${Globals.Remote1.UserName}"/>
+        <property name="password" value="${Globals.Remote1.Password}"/>
     </bean>
 
     <!-- 스테이징 DB 데이터소스 -->

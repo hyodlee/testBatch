@@ -12,7 +12,7 @@
                 FROM COMTNORGNZTINFO
         </select>
 
-        <!-- 원격 DB에서 STG 이관 시 ESNTL_ID와 SOURCE_SYSTEM을 제외하여 조회 -->
+        <!-- remote1 DB에서 STG 이관 시 ESNTL_ID와 SOURCE_SYSTEM을 제외하여 조회 -->
         <select id="selectEmployeeList" resultType="egovframework.bat.domain.insa.EmployeeInfo">
                 SELECT
                          EMPLYR_ID,
@@ -38,7 +38,7 @@
                                 ORGNZT_DC = VALUES(ORGNZT_DC)
         </insert>
 
-        <!-- 원격 -> STG 이관 시 사용 (ESNTL_ID 제외) -->
+        <!-- remote1 -> STG 이관 시 사용 (ESNTL_ID 제외) -->
         <insert id="insertEmployeeLegacy" parameterType="egovframework.bat.domain.insa.EmployeeInfo">
                 INSERT INTO COMTNEMPLYRINFO
                         (EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)

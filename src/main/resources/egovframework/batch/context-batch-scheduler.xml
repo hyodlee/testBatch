@@ -4,10 +4,10 @@
 
         <import resource="context-batch-job-launcher.xml" />
 
-        <!-- 원격 → 스테이징 및 스테이징 → 로컬 작업의 순차 실행을 위한 트리거 정의 -->
+        <!-- remote1 → 스테이징 및 스테이징 → 로컬 작업의 순차 실행을 위한 트리거 정의 -->
 
-        <bean id="remoteToStgCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-            <property name="jobDetail" ref="remoteToStgJobDetail" />
+        <bean id="remote1ToStgCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+            <property name="jobDetail" ref="remote1ToStgJobDetail" />
             <property name="cronExpression" value="0 * * * * ?" />
         </bean>
 
@@ -16,7 +16,7 @@
             <property name="cronExpression" value="0 * * * * ?" />
         </bean>
 
-        <!-- remoteToStg 작업 완료 후 stgToLocal 작업을 수행하도록 체이닝 -->
+        <!-- remote1ToStg 작업 완료 후 stgToLocal 작업을 수행하도록 체이닝 -->
         <bean id="jobChainingJobListener" class="org.quartz.listeners.JobChainingJobListener">
             <constructor-arg value="jobChainingListener" />
         </bean>
@@ -26,7 +26,7 @@
             <property name="arguments">
                 <list>
                     <bean class="org.quartz.JobKey">
-                        <constructor-arg value="remoteToStgJobDetail" />
+                        <constructor-arg value="remote1ToStgJobDetail" />
                         <constructor-arg value="quartz-batch" />
                     </bean>
                     <bean class="org.quartz.JobKey">
@@ -40,7 +40,7 @@
         <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
             <property name="triggers">
                 <list>
-                    <ref bean="remoteToStgCronTrigger" />
+                    <ref bean="remote1ToStgCronTrigger" />
                     <ref bean="stgToLocalCronTrigger" />
                 </list>
             </property>

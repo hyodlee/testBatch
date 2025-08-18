@@ -19,8 +19,8 @@
 	</job>
 
     <bean id="mybatisToIbatisJob.mybatisToIbatisStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
-        <!-- 원격 DB 읽기를 위해 remote SqlSessionFactory 사용 -->
-        <property name="sqlSessionFactory" ref="sqlSessionFactory-remote" />
+        <!-- remote1 DB 읽기를 위해 remote1 SqlSessionFactory 사용 -->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-remote1" />
         <property name="queryId" value="Customer.getAllCustomerCredits" />
         <property name="pageSize" value="#{100}" />
     </bean>

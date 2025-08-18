@@ -11,7 +11,25 @@
 		FROM COMTNORGNZTINFO
 	</select>
 
+        <!-- 원격 및 STG 조회 시 사용하며 ESNTL_ID와 SOURCE_SYSTEM을 제외한 쿼리 -->
         <select id="selectEmployeeList" resultType="egovframework.bat.domain.insa.EmployeeInfo">
+                SELECT
+                         EMPLYR_ID,
+                         ORGNZT_ID,
+                         USER_NM,
+                         SEXDSTN_CODE,
+                         BRTHDY,
+                         MBTLNUM,
+                         EMAIL_ADRES,
+                         OFCPS_NM,
+                         EMPLYR_STTUS_CODE,
+                         REG_DTTM,
+                         MOD_DTTM
+                FROM COMTNEMPLYRINFO
+        </select>
+
+        <!-- 로컬 DB 조회 시 사용하며 ESNTL_ID와 SOURCE_SYSTEM을 포함한 쿼리 -->
+        <select id="selectEmployeeListLocal" resultType="egovframework.bat.domain.insa.EmployeeInfo">
                 SELECT
                          ESNTL_ID,
                          EMPLYR_ID,

@@ -16,8 +16,8 @@
         </property>
     </bean>
 
-    <!-- 데이터소스 설정 -->
-    <bean id="dataSource-remote" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
+    <!-- 원격1 DB 데이터소스 -->
+    <bean id="dataSource-remote1" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
         <property name="driverClassName" value="${Globals.Remote.DriverClassName}"/>
         <property name="url" value="${Globals.Remote.Url}" />
         <property name="username" value="${Globals.Remote.UserName}"/>

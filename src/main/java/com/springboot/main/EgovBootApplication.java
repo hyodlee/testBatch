@@ -34,7 +34,7 @@ public class EgovBootApplication implements CommandLineRunner {
 	public static void main(String[] args) {
 		//SpringApplication.run(EgovBootApplication.class, args);
 
-		System.out.println("##### EgovSampleBootApplication Start #####");
+		LOGGER.info("##### EgovSampleBootApplication Start #####");
 
 		SpringApplication springApplication = new SpringApplication(EgovBootApplication.class);
 		springApplication.setWebApplicationType(WebApplicationType.NONE);
@@ -42,7 +42,7 @@ public class EgovBootApplication implements CommandLineRunner {
 		springApplication.setBannerMode(Banner.Mode.CONSOLE);
 		springApplication.run(args);
 		
-		System.out.println("##### EgovSampleBootApplication End #####");
+		LOGGER.info("##### EgovSampleBootApplication End #####");
 	}
 	
 	@Override

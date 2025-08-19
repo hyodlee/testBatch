@@ -12,10 +12,9 @@
                 FROM COMTNORGNZTINFO
         </select>
 
-        <!-- STG DB에서 로컬 DB로 이관할 사원 목록 조회 (ESNTL_ID 포함) -->
+        <!-- STG DB에서 로컬 DB로 이관할 사원 목록 조회 (ESNTL_ID는 로컬 적재 시 생성) -->
         <select id="selectEmployeeListLocal" resultType="egovframework.bat.domain.insa.EmployeeInfo">
                 SELECT
-                         ESNTL_ID,
                          EMPLYR_ID,
                          ORGNZT_ID,
                          USER_NM,

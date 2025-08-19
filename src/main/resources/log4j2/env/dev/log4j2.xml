@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
 <!-- 개발 환경용 로그 설정 -->
-<Configuration status="WARN">
+<Configuration>
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT">
       <PatternLayout pattern="%d %-5p [%c{1}] %m%n"/>

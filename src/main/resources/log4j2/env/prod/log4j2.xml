@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
 <!-- 운영 환경용 로그 설정 -->
-<Configuration status="WARN">
+<Configuration>
   <Appenders>
     <RollingFile name="File" fileName="/var/log/app/prod.log" filePattern="/var/log/app/prod-%d{yyyy-MM-dd}.log.gz">
       <PatternLayout pattern="%d %-5p [%c{1}] %m%n"/>

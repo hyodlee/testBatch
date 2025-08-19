@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
 <!-- 로컬 환경용 로그 설정 -->
-<Configuration status="WARN">
+<Configuration>
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT">
       <PatternLayout pattern="%d %-5p [%c{1}] %m%n"/>
     </Console>
   </Appenders>
   <Loggers>
-    <Root level="DEBUG">
+    <!-- <Root level="DEBUG"> -->
+    <Root level="INFO">
       <AppenderRef ref="Console"/>
     </Root>
   </Loggers>

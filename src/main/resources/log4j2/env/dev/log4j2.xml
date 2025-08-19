@@ -14,6 +14,19 @@
     </RollingFile>
   </Appenders>
   <Loggers>
+    <!-- 프레임워크 패키지 로그 레벨 설정 -->
+    <Logger name="egovframework" level="DEBUG" additivity="false">
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="File"/>
+    </Logger>
+    <Logger name="org.egovframe" level="DEBUG" additivity="false">
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="File"/>
+    </Logger>
+    <Logger name="org.springframework" level="INFO" additivity="false">
+      <AppenderRef ref="Console"/>
+      <AppenderRef ref="File"/>
+    </Logger>
     <Root level="INFO">
       <AppenderRef ref="Console"/>
       <AppenderRef ref="File"/>

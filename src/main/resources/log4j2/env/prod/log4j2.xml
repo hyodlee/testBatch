@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 운영 환경용 로그 설정 -->
+<Configuration status="WARN">
+  <Appenders>
+    <RollingFile name="File" fileName="/var/log/app/prod.log" filePattern="/var/log/app/prod-%d{yyyy-MM-dd}.log.gz">
+      <PatternLayout pattern="%d %-5p [%c{1}] %m%n"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy interval="1"/>
+      </Policies>
+    </RollingFile>
+  </Appenders>
+  <Loggers>
+    <Root level="WARN">
+      <AppenderRef ref="File"/>
+    </Root>
+  </Loggers>
+</Configuration>

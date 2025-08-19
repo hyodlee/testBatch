@@ -22,6 +22,7 @@ import java.util.Map.Entry;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionException;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
@@ -90,13 +91,15 @@ public class EgovJobLauncherDetails extends QuartzJobBean {
 
 		LOGGER.warn("Quartz trigger firing with Spring Batch jobName={}", jobName);
 
-		JobParameters jobParameters = getJobParametersFromJobMap(jobDataMap);
-		try {
-			jobLauncher.run(jobLocator.getJob(jobName), jobParameters);
-		} catch (JobExecutionException e) {
-			LOGGER.error("Could not execute job.", e);
-		}
-	}
+                JobParameters jobParameters = getJobParametersFromJobMap(jobDataMap);
+                try {
+                        LOGGER.info("{} 작업 시작", jobName); // 작업 시작 로그
+                        JobExecution jobExecution = jobLauncher.run(jobLocator.getJob(jobName), jobParameters);
+                        LOGGER.info("{} 작업 종료, 상태: {}", jobName, jobExecution.getStatus()); // 작업 종료 로그
+                } catch (JobExecutionException e) {
+                        LOGGER.error("Could not execute job.", e);
+                }
+        }
 
 	/*
 	 * Copy parameters that are of the correct type over to

@@ -14,5 +14,5 @@ logging:
   #   '[org.springframework]': DEBUG
   #   root: DEBUG
   # 활성 프로파일에 따라 log4j2 설정 파일을 로드
-  config: classpath:log4j2/env/${spring.profiles.active:local}/log4j2.xml
+  #config: classpath:log4j2/env/${spring.profiles.active:local}/log4j2.xml
 

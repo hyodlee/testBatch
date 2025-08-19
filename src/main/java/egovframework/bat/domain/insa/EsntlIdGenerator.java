@@ -1,5 +1,6 @@
 package egovframework.bat.domain.insa;
 
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -12,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class EsntlIdGenerator {
 
+    /** 로컬 DB 접근용 JdbcTemplate */
+    @Qualifier("jdbcTemplateLocal")
     private final JdbcTemplate jdbcTemplate;
 
     /**

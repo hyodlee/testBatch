@@ -2,6 +2,9 @@
 spring:
   main:
     allow-bean-definition-overriding: true
+  output:
+    ansi:
+      enabled: never   # ANSI 색상 끄기    
 
 logging:
   level:

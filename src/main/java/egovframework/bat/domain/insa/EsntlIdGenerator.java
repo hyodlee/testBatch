@@ -63,7 +63,9 @@ public class EsntlIdGenerator {
             }
         }
         // ESNTL_ID 숫자 부분을 7자리로 0으로 패딩한다.
-        return String.format("%s%07d", prefix, nextNo);
+        String formattedNumber = String.format("%07d", nextNo);
+        // 프리픽스와 포맷된 숫자를 결합하여 최종 ESNTL_ID를 생성한다.
+        return prefix + formattedNumber;
     }
 }
 

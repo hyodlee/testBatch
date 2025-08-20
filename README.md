@@ -55,3 +55,11 @@ mvn -Pprod package    # 운영 환경 빌드
 - `src/main/java/egovframework/example/bat/scheduler/support/EgovJobLauncherDetails.java`: Quartz 스케줄러에서 배치 Job을 실행하는 지원 클래스
 - `src/main/resources/egovframework/batch/context-batch-mapper.xml`: 예제 SQL 매퍼와 데이터소스가 등록된 설정 파일
 - `src/main/resources/egovframework/batch/context-scheduler-job.xml`: 예제 Job을 스케줄러에 등록하기 위한 설정 파일
+
+## 새로운 배치 작업 추가 매뉴얼
+
+1. Job 설정 파일 작성: `src/main/resources/egovframework/batch/job/insa/newSampleJob.xml` - 새 작업의 단계와 흐름을 정의합니다.
+2. 매퍼 XML 작성: `src/main/resources/egovframework/mapper/bat/insa_new_sample.xml` - 데이터 조회와 저장 SQL을 작성합니다.
+3. 도메인 클래스 생성: `src/main/java/egovframework/bat/domain/insa/NewSample.java` - 배치에서 사용할 데이터 구조를 정의합니다.
+4. 프로세서 클래스 구현: `src/main/java/egovframework/bat/domain/insa/NewSampleProcessor.java` - 도메인 데이터를 가공하는 로직을 구현합니다.
+5. 테스트 코드 추가: `src/test/java/egovframework/bat/domain/insa/NewSampleProcessorTest.java` - 주요 기능이 예상대로 동작하는지 검증합니다.

@@ -7,14 +7,14 @@
 
         <!-- chunk 기반 공통 스텝 -->
         <step id="eGovBaseStep" abstract="true"  xmlns="http://www.springframework.org/schema/batch">
-                <tasklet allow-start-if-complete="false" transaction-manager="transactionManager">
-                                <chunk/>
-                </tasklet>
+        	<tasklet allow-start-if-complete="false" transaction-manager="transactionManager">
+				<chunk/>
+        	</tasklet>
         </step>
 
         <!-- Tasklet 전용 공통 스텝 -->
         <step id="eGovTaskletStep" abstract="true" xmlns="http://www.springframework.org/schema/batch">
-                <tasklet allow-start-if-complete="false" transaction-manager="transactionManager"/>
+        	<tasklet allow-start-if-complete="false" transaction-manager="transactionManager"/>
         </step>
 
 </beans>

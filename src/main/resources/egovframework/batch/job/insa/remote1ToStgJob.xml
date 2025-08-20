@@ -56,7 +56,7 @@
     </bean>
     
     <!-- STG 테이블을 비우는 Tasklet -->
-    <bean id="truncateStgTablesTasklet" class="egovframework.bat.tasklet.insa.TruncateStgTablesTasklet">
+    <bean id="truncateStgTablesTasklet" class="egovframework.bat.insa.tasklet.TruncateStgTablesTasklet">
         <property name="sqlSessionFactory" ref="sqlSessionFactory-remote1-to-stg" />
     </bean>
 

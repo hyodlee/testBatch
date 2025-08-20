@@ -46,12 +46,24 @@
 	</repositories>
 
 	<dependencies>
-		<!-- spring boot dependency start -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-		<!-- spring boot dependency end -->
+                <!-- spring boot dependency start -->
+                <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-web</artifactId>
+                        <!-- 기본 로깅을 사용하지 않기 위해 spring-boot-starter-logging 제외 -->
+                        <exclusions>
+                                <exclusion>
+                                        <groupId>org.springframework.boot</groupId>
+                                        <artifactId>spring-boot-starter-logging</artifactId>
+                                </exclusion>
+                        </exclusions>
+                </dependency>
+                <!-- Log4j2 사용을 위한 의존성 명시 -->
+                <dependency>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-log4j2</artifactId>
+                </dependency>
+                <!-- spring boot dependency end -->
 		<dependency>
 			<groupId>org.egovframe.rte</groupId>
 			<artifactId>org.egovframe.rte.bat.core</artifactId>

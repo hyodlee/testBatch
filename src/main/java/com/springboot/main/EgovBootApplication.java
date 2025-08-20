@@ -55,8 +55,8 @@ public class EgovBootApplication implements CommandLineRunner {
 		 */
         jobPaths.add("/egovframework/batch/job/example/mybatisToMybatisJob.xml");
         // remote1 시스템에서 STG로, 이어서 STG에서 Local로 이관하는 두 배치를 등록
-        jobPaths.add("/egovframework/batch/job/remote1ToStgJob.xml");
-        jobPaths.add("/egovframework/batch/job/stgToLocalJob.xml");
+        jobPaths.add("/egovframework/batch/job/insa/remote1ToStgJob.xml");
+        jobPaths.add("/egovframework/batch/job/insa/stgToLocalJob.xml");
 
 		/*
 		 * EgovSchedulerRunner에 contextPath, schedulerJobPath, jobPaths를 인수로 넘겨서 실행한다.

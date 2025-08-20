@@ -49,10 +49,10 @@ mvn -Pprod package    # 운영 환경 빌드
 `src/main/resources/egovframework/batch/job/example` 디렉터리는 예제 배치 Job 설정을 모아둔 곳입니다. 예제 Job과 관련된 주요 파일은 다음과 같습니다.
 
 - `src/main/resources/egovframework/batch/job/example/mybatisToMybatisJob.xml`: MyBatis 간 데이터 이동을 정의한 배치 Job 설정 파일
-- `src/main/resources/egovframework/mapper/example/bat/Egov_Example_SQL.xml`: 예제 배치를 위한 SQL 매퍼 파일
-- `src/main/java/egovframework/example/bat/domain/trade/CustomerCredit.java`: 고객 신용 정보를 담는 도메인 클래스
-- `src/main/java/egovframework/example/bat/domain/trade/CustomerCreditIncreaseProcessor.java`: 신용 증가 로직을 처리하는 배치 프로세서
-- `src/main/java/egovframework/example/bat/scheduler/support/EgovJobLauncherDetails.java`: Quartz 스케줄러에서 배치 Job을 실행하는 지원 클래스
+- `src/main/resources/egovframework/mapper/example/Egov_Example_SQL.xml`: 예제 배치를 위한 SQL 매퍼 파일
+- `src/main/java/egovframework/example/domain/trade/CustomerCredit.java`: 고객 신용 정보를 담는 도메인 클래스
+- `src/main/java/egovframework/example/domain/trade/CustomerCreditIncreaseProcessor.java`: 신용 증가 로직을 처리하는 배치 프로세서
+- `src/main/java/egovframework/example/scheduler/support/EgovJobLauncherDetails.java`: Quartz 스케줄러에서 배치 Job을 실행하는 지원 클래스
 - `src/main/resources/egovframework/batch/context-batch-mapper.xml`: 예제 SQL 매퍼와 데이터소스가 등록된 설정 파일
 - `src/main/resources/egovframework/batch/context-scheduler-job.xml`: 예제 Job을 스케줄러에 등록하기 위한 설정 파일
 

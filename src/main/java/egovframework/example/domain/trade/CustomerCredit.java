@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package egovframework.example.bat.domain.trade;
+package egovframework.example.domain.trade;
 
 import java.math.BigDecimal;
 

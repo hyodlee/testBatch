@@ -11,7 +11,7 @@
         <property name="configLocation" value="classpath:/egovframework/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">
             <list>
-                <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL.xml</value>
+                <value>classpath:/egovframework/mapper/example/Egov_Example_SQL.xml</value>
                 <value>classpath:/egovframework/mapper/insa/insa_remote1_to_stg.xml</value>
             </list>
         </property>
@@ -23,7 +23,7 @@
         <property name="configLocation" value="classpath:/egovframework/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">
             <list>
-                <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL.xml</value>
+                <value>classpath:/egovframework/mapper/example/Egov_Example_SQL.xml</value>
                 <value>classpath:/egovframework/mapper/insa/insa_remote1_to_stg.xml</value>
             </list>
         </property>
@@ -35,7 +35,7 @@
         <property name="configLocation" value="classpath:/egovframework/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">
             <list>
-                <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL.xml</value>
+                <value>classpath:/egovframework/mapper/example/Egov_Example_SQL.xml</value>
                 <value>classpath:/egovframework/mapper/insa/insa_stg_to_local.xml</value>
             </list>
         </property>
@@ -47,7 +47,7 @@
         <property name="configLocation" value="classpath:/egovframework/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">
             <list>
-                <value>classpath:/egovframework/mapper/example/bat/Egov_Example_SQL.xml</value>
+                <value>classpath:/egovframework/mapper/example/Egov_Example_SQL.xml</value>
                 <value>classpath:/egovframework/mapper/insa/insa_stg_to_local.xml</value>
             </list>
         </property>

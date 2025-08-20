@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
 	<bean id="jobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-		<property name="jobClass" value="egovframework.example.bat.scheduler.support.EgovJobLauncherDetails" />
+		<property name="jobClass" value="egovframework.example.scheduler.support.EgovJobLauncherDetails" />
 		<property name="group" value="quartz-batch" />
 		<property name="jobDataAsMap">
 			<map>
@@ -16,7 +16,7 @@
 	</bean>
 	
     <bean id="remote1ToStgJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass" value="egovframework.example.bat.scheduler.support.EgovJobLauncherDetails" />
+        <property name="jobClass" value="egovframework.example.scheduler.support.EgovJobLauncherDetails" />
         <property name="group" value="quartz-batch" />
         <property name="jobDataAsMap">
             <map>
@@ -29,7 +29,7 @@
     </bean>
 
     <bean id="stgToLocalJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
-        <property name="jobClass" value="egovframework.example.bat.scheduler.support.EgovJobLauncherDetails" />
+        <property name="jobClass" value="egovframework.example.scheduler.support.EgovJobLauncherDetails" />
         <property name="group" value="quartz-batch" />
         <property name="jobDataAsMap">
             <map>

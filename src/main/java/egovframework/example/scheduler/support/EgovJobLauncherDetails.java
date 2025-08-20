@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package egovframework.example.bat.scheduler.support;
+package egovframework.example.scheduler.support;
 
 import java.util.Date;
 import java.util.Map;

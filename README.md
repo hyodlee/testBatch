@@ -11,3 +11,18 @@ mvn -Pprod package    # 운영 환경 빌드
 각 프로필은 해당 환경의 `globals-<프로필>.properties` 파일을 사용하여 `globals.properties`를 생성합니다.
 
 배치 잡 실행 시 `sourceSystem` 파라미터를 생략하면 `LND` 프리픽스로 ESNTL_ID가 생성됩니다.
+
+## 인사 배치 잡 디렉터리(`insa`)
+
+`src/main/resources/egovframework/batch/job/insa` 디렉터리는 인사 관련 배치 Job 설정을 모아두는 곳입니다. 현재 포함된 Job은 다음과 같습니다.
+
+- `remote1ToStgJob`
+- `stgToLocalJob`
+
+### Job 추가 규칙
+
+새로운 인사 배치 Job을 추가할 때는 다음 규칙을 지킵니다.
+
+- 설정 파일: `src/main/resources/egovframework/batch/job/insa`에 `<Source>To<Target>Job.xml` 형태로 저장합니다. 파일명은 lowerCamelCase를 사용하며 반드시 `Job.xml`으로 끝납니다.
+- 관련 도메인 클래스: `src/main/java/egovframework/bat/domain/insa` 아래에 작성하고 패키지 구조를 유지합니다.
+- 테스트 코드: `src/test/java/egovframework/bat/domain/insa`에 동일한 패키지 구조로 작성합니다.

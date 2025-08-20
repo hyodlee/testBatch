@@ -12,6 +12,18 @@ mvn -Pprod package    # 운영 환경 빌드
 
 배치 잡 실행 시 `sourceSystem` 파라미터를 생략하면 `LND` 프리픽스로 ESNTL_ID가 생성됩니다.
 
+## Spring Batch 처리 방식: Chunk와 Tasklet
+
+Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
+
+- **Chunk 지향 처리**
+  - ItemReader, ItemProcessor, ItemWriter를 조합하여 데이터를 일정 크기(chunk) 단위로 읽고 처리한 뒤 한 번에 커밋합니다.
+  - 대량 데이터 처리에 적합하며, 트랜잭션은 각 chunk마다 걸립니다.
+
+- **Tasklet 기반 처리**
+  - 단일 Tasklet을 실행하는 간단한 Step 구조로, 반복이 필요 없는 작업에 적합합니다.
+  - 파일 이동, 디렉터리 정리 등 단순 작업을 구현할 때 사용합니다.
+
 ## 인사 배치 잡 디렉터리(`insa`)
 
 `src/main/resources/egovframework/batch/job/insa` 디렉터리는 인사 관련 배치 Job 설정을 모아두는 곳입니다. 현재 포함된 Job은 다음과 같습니다.

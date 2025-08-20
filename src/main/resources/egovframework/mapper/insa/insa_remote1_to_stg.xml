@@ -4,7 +4,7 @@
 <mapper namespace="Employee">
 
         <!-- 조직 정보 목록 조회 -->
-        <select id="selectOrgnztList" resultType="egovframework.bat.domain.insa.Orgnztinfo">
+        <select id="selectOrgnztList" resultType="egovframework.bat.insa.domain.Orgnztinfo">
                 SELECT
                          ORGNZT_ID,
                          ORGNZT_NM,
@@ -13,7 +13,7 @@
         </select>
 
         <!-- remote1 DB에서 STG 이관 시 ESNTL_ID와 SOURCE_SYSTEM을 제외하여 조회 -->
-        <select id="selectEmployeeList" resultType="egovframework.bat.domain.insa.EmployeeInfo">
+        <select id="selectEmployeeList" resultType="egovframework.bat.insa.domain.EmployeeInfo">
                 SELECT
                          EMPLYR_ID,
                          ORGNZT_ID,
@@ -30,13 +30,13 @@
         </select>
 
        <!-- STG DB에 조직 정보 적재 (STG 대상 테이블이 사전 TRUNCATE되므로 중복 갱신 없음) -->
-       <insert id="insertOrganization" parameterType="egovframework.bat.domain.insa.EmployeeInfo">
+       <insert id="insertOrganization" parameterType="egovframework.bat.insa.domain.EmployeeInfo">
                INSERT INTO COMTNORGNZTINFO (ORGNZT_ID, ORGNZT_NM, ORGNZT_DC)
                VALUES (#{orgnztId}, #{orgnztNm}, #{orgnztDc})
        </insert>
 
        <!-- remote1 -> STG 이관 시 사용 (ESNTL_ID 제외, STG 대상 테이블이 사전 TRUNCATE되므로 중복 갱신 없음) -->
-       <insert id="insertEmployeeLegacy" parameterType="egovframework.bat.domain.insa.EmployeeInfo">
+       <insert id="insertEmployeeLegacy" parameterType="egovframework.bat.insa.domain.EmployeeInfo">
                INSERT INTO COMTNEMPLYRINFO
                        (EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)
                VALUES

@@ -44,7 +44,6 @@
         <property name="dataSource" ref="dataSource-local" />
     </bean>
 
-    <alias name="dataSource-stg" alias="egov.dataSource"/>
     <alias name="dataSource-stg" alias="dataSource"/>
 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" lazy-init="true">

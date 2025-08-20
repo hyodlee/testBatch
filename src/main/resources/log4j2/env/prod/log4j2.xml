@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<!-- 운영 환경용 로그 설정 -->
+<Configuration>
+    <Appenders>
+    <RollingFile name="File" fileName="/var/log/app/prod.log" filePattern="/var/log/app/prod-%d{yyyy-MM-dd}.log.gz">
+      <PatternLayout pattern="%d %-5p [%c{1}] %m%n"/>
+      <Policies>
+        <TimeBasedTriggeringPolicy interval="1"/>
+      </Policies>
+    </RollingFile>
+    </Appenders>
+    <Loggers>
+      <!-- 프레임워크 패키지 로그 레벨 설정 -->
+      <Logger name="egovframework" level="DEBUG" additivity="false">
+        <AppenderRef ref="File"/>
+      </Logger>
+      <Logger name="org.egovframe" level="DEBUG" additivity="false">
+        <AppenderRef ref="File"/>
+      </Logger>
+      <Logger name="org.springframework" level="INFO" additivity="false">
+        <AppenderRef ref="File"/>
+      </Logger>
+      <Root level="WARN">
+        <AppenderRef ref="File"/>
+      </Root>
+    </Loggers>
+  </Configuration>

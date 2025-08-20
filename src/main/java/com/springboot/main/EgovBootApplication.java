@@ -34,7 +34,7 @@ public class EgovBootApplication implements CommandLineRunner {
 	public static void main(String[] args) {
 		//SpringApplication.run(EgovBootApplication.class, args);
 
-		System.out.println("##### EgovSampleBootApplication Start #####");
+		LOGGER.info("##### EgovSampleBootApplication Start #####");
 
 		SpringApplication springApplication = new SpringApplication(EgovBootApplication.class);
 		springApplication.setWebApplicationType(WebApplicationType.NONE);
@@ -42,7 +42,7 @@ public class EgovBootApplication implements CommandLineRunner {
 		springApplication.setBannerMode(Banner.Mode.CONSOLE);
 		springApplication.run(args);
 		
-		System.out.println("##### EgovSampleBootApplication End #####");
+		LOGGER.info("##### EgovSampleBootApplication End #####");
 	}
 	
 	@Override
@@ -51,16 +51,12 @@ public class EgovBootApplication implements CommandLineRunner {
 		List<String> jobPaths = new ArrayList<String>();
 
 		/*
-		 * 1. DB 실행 예제(DB To File)에서 사용 할 Batch Job이 기술 된 xml파일 경로들(jobPaths)
-		 */
-		jobPaths.add("/egovframework/batch/job/mybatisToDelimitedJob.xml");
-		jobPaths.add("/egovframework/batch/job/mybatisToFixedLengthJob.xml");
-
-		/*
 		 * 2. DB 실행 예제(DB To DB)에서 사용 할 Batch Job이 기술 된 xml파일 경로들(jobPaths)
 		 */
-		jobPaths.add("/egovframework/batch/job/mybatisToMybatisJob.xml");
-		jobPaths.add("/egovframework/batch/job/jdbcToJdbcJob.xml");
+        jobPaths.add("/egovframework/batch/job/example/mybatisToMybatisJob.xml");
+        // remote1 시스템에서 STG로, 이어서 STG에서 Local로 이관하는 두 배치를 등록
+        jobPaths.add("/egovframework/batch/job/insa/remote1ToStgJob.xml");
+        jobPaths.add("/egovframework/batch/job/insa/stgToLocalJob.xml");
 
 		/*
 		 * EgovSchedulerRunner에 contextPath, schedulerJobPath, jobPaths를 인수로 넘겨서 실행한다.
@@ -68,10 +64,11 @@ public class EgovBootApplication implements CommandLineRunner {
 		 * schedulerJobPath: Scheduler의 Trigger가 수행할 SchedulerJob(ex: QuartzJob)이 기술된 xml파일 경로
 		 * jobPaths: Batch Job이 기술 된 xml 파일 경로들
 		 * delayTime: Scheduler 실행을 위해 ApplicationContext를 종료를 지연시키는 시간(실행시간)
-		 *            (기본 30000 milliseconds: 30초)
+		 *            (기본 30000 milliseconds: 30초) -> Long.MAX_VALUE (약 2.9억 년(292,471,208년))
 		 */
 		EgovSchedulerRunner egovSchedulerRunner = new EgovSchedulerRunner("/egovframework/batch/context-batch-scheduler.xml", "/egovframework/batch/context-scheduler-job.xml",
-				jobPaths, 30000);
+//				jobPaths, 30000);
+				jobPaths, Long.MAX_VALUE);
 		egovSchedulerRunner.start();
 		
     }

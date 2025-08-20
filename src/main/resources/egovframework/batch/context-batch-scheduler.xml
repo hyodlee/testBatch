@@ -1,16 +1,54 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
-	<import resource="context-batch-job-launcher.xml" />
+        <import resource="context-batch-job-launcher.xml" />
 
-	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-		<property name="triggers">
-			<bean id="cronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-				<property name="jobDetail" ref="jobDetail" />
-				<property name="cronExpression" value="0/10 * * * * ?" />
-			</bean>
-		</property>
-	</bean>
-	
+        <!-- remote1 → 스테이징 및 스테이징 → 로컬 작업의 순차 실행을 위한 트리거 정의 -->
+
+        <bean id="remote1ToStgCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+            <property name="jobDetail" ref="remote1ToStgJobDetail" />
+            <property name="cronExpression" value="0 * * * * ?" />
+        </bean>
+
+        <bean id="stgToLocalCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+            <property name="jobDetail" ref="stgToLocalJobDetail" />
+            <property name="cronExpression" value="0 * * * * ?" />
+        </bean>
+
+        <!-- remote1ToStg 작업 완료 후 stgToLocal 작업을 수행하도록 체이닝 -->
+        <bean id="jobChainingJobListener" class="org.quartz.listeners.JobChainingJobListener">
+            <constructor-arg value="jobChainingListener" />
+        </bean>
+        <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
+            <property name="targetObject" ref="jobChainingJobListener" />
+            <property name="targetMethod" value="addJobChainLink" />
+            <property name="arguments">
+                <list>
+                    <bean class="org.quartz.JobKey">
+                        <constructor-arg value="remote1ToStgJobDetail" />
+                        <constructor-arg value="quartz-batch" />
+                    </bean>
+                    <bean class="org.quartz.JobKey">
+                        <constructor-arg value="stgToLocalJobDetail" />
+                        <constructor-arg value="quartz-batch" />
+                    </bean>
+                </list>
+            </property>
+        </bean>
+
+        <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+            <property name="triggers">
+                <list>
+                    <ref bean="remote1ToStgCronTrigger" />
+                    <ref bean="stgToLocalCronTrigger" />
+                </list>
+            </property>
+            <property name="globalJobListeners">
+                <list>
+                    <ref bean="jobChainingJobListener" />
+                </list>
+            </property>
+        </bean>
+
 </beans>

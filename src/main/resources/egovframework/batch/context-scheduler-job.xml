@@ -7,11 +7,38 @@
 		<property name="group" value="quartz-batch" />
 		<property name="jobDataAsMap">
 			<map>
-				<entry key="jobName" value="mybatisToDelimitedJob" />
+				<!-- DB에서 DB로 데이터 이동을 위한 작업 이름 설정 (샘플) -->
+				<entry key="jobName" value="mybatisToMybatisJob" />
 				<entry key="jobLocator" value-ref="jobRegistry" />
 				<entry key="jobLauncher" value-ref="jobLauncher" />
 			</map>
 		</property>
 	</bean>
 	
+    <bean id="remote1ToStgJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="egovframework.example.bat.scheduler.support.EgovJobLauncherDetails" />
+        <property name="group" value="quartz-batch" />
+        <property name="jobDataAsMap">
+            <map>
+                <!-- remote1 DB 데이터를 스테이징 DB로 적재하기 위한 작업 이름 설정 (가이드) -->
+                <entry key="jobName" value="remote1ToStgJob" />
+                <entry key="jobLocator" value-ref="jobRegistry" />
+                <entry key="jobLauncher" value-ref="jobLauncher" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="stgToLocalJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="egovframework.example.bat.scheduler.support.EgovJobLauncherDetails" />
+        <property name="group" value="quartz-batch" />
+        <property name="jobDataAsMap">
+            <map>
+                <!-- 스테이징 DB 데이터를 로컬로 적재하기 위한 작업 이름 설정 (가이드) -->
+                <entry key="jobName" value="stgToLocalJob" />
+                <entry key="jobLocator" value-ref="jobRegistry" />
+                <entry key="jobLauncher" value-ref="jobLauncher" />
+            </map>
+        </property>
+    </bean>
+
 </beans>

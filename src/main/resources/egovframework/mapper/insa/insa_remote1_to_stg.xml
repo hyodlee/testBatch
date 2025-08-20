@@ -29,33 +29,19 @@
                 FROM COMTNEMPLYRINFO
         </select>
 
-        <!-- STG DB에 조직 정보 적재 -->
-        <insert id="insertOrganization" parameterType="egovframework.bat.domain.insa.EmployeeInfo">
-                INSERT INTO COMTNORGNZTINFO (ORGNZT_ID, ORGNZT_NM, ORGNZT_DC)
-                                VALUES (#{orgnztId}, #{orgnztNm}, #{orgnztDc})
-                        ON DUPLICATE KEY UPDATE
-                                ORGNZT_NM = VALUES(ORGNZT_NM),
-                                ORGNZT_DC = VALUES(ORGNZT_DC)
-        </insert>
+       <!-- STG DB에 조직 정보 적재 (STG 대상 테이블이 사전 TRUNCATE되므로 중복 갱신 없음) -->
+       <insert id="insertOrganization" parameterType="egovframework.bat.domain.insa.EmployeeInfo">
+               INSERT INTO COMTNORGNZTINFO (ORGNZT_ID, ORGNZT_NM, ORGNZT_DC)
+               VALUES (#{orgnztId}, #{orgnztNm}, #{orgnztDc})
+       </insert>
 
-        <!-- remote1 -> STG 이관 시 사용 (ESNTL_ID 제외) -->
-        <insert id="insertEmployeeLegacy" parameterType="egovframework.bat.domain.insa.EmployeeInfo">
-                INSERT INTO COMTNEMPLYRINFO
-                        (EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)
-                VALUES
-                        (#{emplyrId}, #{orgnztId}, #{userNm}, #{sexdstnCode}, #{brthdy}, #{mbtlnum}, #{emailAdres}, #{ofcpsNm}, #{emplyrSttusCode}, #{regDttm}, #{modDttm})
-                ON DUPLICATE KEY UPDATE
-                        ORGNZT_ID = VALUES(ORGNZT_ID),
-                        USER_NM = VALUES(USER_NM),
-                        SEXDSTN_CODE = VALUES(SEXDSTN_CODE),
-                        BRTHDY = VALUES(BRTHDY),
-                        MBTLNUM = VALUES(MBTLNUM),
-                        EMAIL_ADRES = VALUES(EMAIL_ADRES),
-                        OFCPS_NM = VALUES(OFCPS_NM),
-                        EMPLYR_STTUS_CODE = VALUES(EMPLYR_STTUS_CODE),
-                        REG_DTTM = VALUES(REG_DTTM),
-                        MOD_DTTM = VALUES(MOD_DTTM)
-        </insert>
+       <!-- remote1 -> STG 이관 시 사용 (ESNTL_ID 제외, STG 대상 테이블이 사전 TRUNCATE되므로 중복 갱신 없음) -->
+       <insert id="insertEmployeeLegacy" parameterType="egovframework.bat.domain.insa.EmployeeInfo">
+               INSERT INTO COMTNEMPLYRINFO
+                       (EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)
+               VALUES
+                       (#{emplyrId}, #{orgnztId}, #{userNm}, #{sexdstnCode}, #{brthdy}, #{mbtlnum}, #{emailAdres}, #{ofcpsNm}, #{emplyrSttusCode}, #{regDttm}, #{modDttm})
+       </insert>
 
         <!-- 스테이징 테이블 초기화: 조직 정보 -->
         <update id="truncateOrgnztInfo">

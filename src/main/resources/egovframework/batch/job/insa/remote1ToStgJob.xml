@@ -8,6 +8,10 @@
 
     <!-- commit-interval 값은 일반적으로 500~1000으로 설정함 -->
     <job id="remote1ToStgJob" parent="eGovBaseJob" xmlns="http://www.springframework.org/schema/batch">
+        <!-- STG 테이블 초기화 후 조직 정보, 사원 정보 순으로 이관 -->
+        <step id="truncateStgTablesStep" parent="eGovBaseStep" next="remote1ToStgOrgnztStep">
+            <tasklet ref="truncateStgTablesTasklet" />
+        </step>
         <!-- 조직 정보를 먼저 복사한 후 사원 정보를 복사 -->
         <step id="remote1ToStgOrgnztStep" parent="eGovBaseStep" next="remote1ToStgStep">
             <tasklet>
@@ -49,6 +53,11 @@
         <!-- STG DB 적재를 위해 stg SqlSessionFactory 사용 -->
         <property name="sqlSessionFactory" ref="sqlSessionFactory-remote1-to-stg" />
         <property name="statementId" value="Employee.insertEmployeeLegacy" />
+    </bean>
+    
+    <!-- STG 테이블을 비우는 Tasklet -->
+    <bean id="truncateStgTablesTasklet" class="egovframework.bat.tasklet.insa.TruncateStgTablesTasklet">
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-remote1-to-stg" />
     </bean>
 
 </beans>

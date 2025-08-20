@@ -57,4 +57,14 @@
                         MOD_DTTM = VALUES(MOD_DTTM)
         </insert>
 
+        <!-- 스테이징 테이블 초기화: 조직 정보 -->
+        <update id="truncateOrgnztInfo">
+                TRUNCATE TABLE migstg.comtnorgnztinfo
+        </update>
+
+        <!-- 스테이징 테이블 초기화: 사원 정보 -->
+        <update id="truncateEmplyrInfo">
+                TRUNCATE TABLE migstg.comtnemplyrinfo
+        </update>
+
 </mapper>

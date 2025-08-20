@@ -9,3 +9,5 @@ mvn -Pprod package    # 운영 환경 빌드
 ```
 
 각 프로필은 해당 환경의 `globals-<프로필>.properties` 파일을 사용하여 `globals.properties`를 생성합니다.
+
+배치 잡 실행 시 `sourceSystem` 파라미터를 생략하면 `LND` 프리픽스로 ESNTL_ID가 생성됩니다.

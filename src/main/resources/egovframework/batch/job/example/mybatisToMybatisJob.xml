@@ -31,6 +31,6 @@
         <property name="statementId" value="Customer.updateCredit" />
     </bean>
 
-	<bean id="mybatisToIbatisJob.mybatisToIbatisStep.itemProcessor" class="egovframework.example.bat.domain.trade.CustomerCreditIncreaseProcessor" />
+	<bean id="mybatisToIbatisJob.mybatisToIbatisStep.itemProcessor" class="egovframework.example.domain.trade.CustomerCreditIncreaseProcessor" />
 
 </beans>

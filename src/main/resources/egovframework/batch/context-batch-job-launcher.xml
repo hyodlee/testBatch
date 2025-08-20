@@ -48,7 +48,7 @@
 		p:dataSource-ref="dataSource" p:transactionManager-ref="transactionManager" p:lobHandler-ref="lobHandler"
 		p:incrementerFactory-ref="cubridDatabaseTypeFactory" p:databaseType="oracle" />
  
-	<bean id="cubridDatabaseTypeFactory" class="egovframework.example.bat.jdbc.cubrid.incrementer.CubridDataFieldMaxValueIncrementerFactory">
+	<bean id="cubridDatabaseTypeFactory" class="egovframework.example.jdbc.cubrid.incrementer.CubridDataFieldMaxValueIncrementerFactory">
 		<constructor-arg index="0" ref="dataSource"/>
 	</bean> 
 	 -->

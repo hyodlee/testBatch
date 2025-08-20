@@ -1,4 +1,4 @@
-package egovframework.bat.domain.insa;
+package egovframework.bat.insa.domain;
 
 import static org.junit.Assert.assertEquals;
 

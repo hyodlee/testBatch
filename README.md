@@ -19,6 +19,23 @@ mvn -Pprod package    # 운영 환경 빌드
 - `remote1ToStgJob`
 - `stgToLocalJob`
 
+다음은 관련된 주요 파일들입니다.
+
+- 잡 설정:
+  - `src/main/resources/egovframework/batch/job/insa/remote1ToStgJob.xml`: 원격 시스템에서 스테이징으로 데이터를 전송하는 Job 설정 파일
+  - `src/main/resources/egovframework/batch/job/insa/stgToLocalJob.xml`: 스테이징에서 로컬로 데이터를 이동하는 Job 설정 파일
+- 매퍼 파일:
+  - `src/main/resources/egovframework/mapper/bat/insa_remote1_to_stg.xml`: 원격→스테이징 데이터 이동을 위한 SQL 매퍼
+  - `src/main/resources/egovframework/mapper/bat/insa_stg_to_local.xml`: 스테이징→로컬 데이터 이동을 위한 SQL 매퍼
+- 도메인 및 유틸 클래스:
+  - `src/main/java/egovframework/bat/domain/insa/SourceSystemPrefix.java`: 시스템 구분을 위한 접두어 상수 정의 클래스
+  - `src/main/java/egovframework/bat/domain/insa/EmployeeInfoProcessor.java`: 직원 정보를 처리하는 배치 프로세서
+  - `src/main/java/egovframework/bat/domain/insa/EsntlIdGenerator.java`: ESNTL_ID를 생성하는 유틸리티 클래스
+  - `src/main/java/egovframework/bat/domain/insa/EmployeeInfo.java`: 직원 정보를 담는 도메인 클래스
+  - `src/main/java/egovframework/bat/domain/insa/Orgnztinfo.java`: 조직 정보를 표현하는 도메인 클래스
+- 테스트 코드:
+  - `src/test/java/egovframework/bat/domain/insa/EsntlIdGeneratorTest.java`: ESNTL_ID 생성 로직을 검증하는 테스트
+
 ### Job 추가 규칙
 
 새로운 인사 배치 Job을 추가할 때는 다음 규칙을 지킵니다.

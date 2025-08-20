@@ -45,7 +45,6 @@
 		</repository>
 		<repository>
 			<id>cubrid</id>
-			<name>CUBRID Maven Repository</name>
 			<url>https://maven.cubrid.org/</url>
 			<releases>
 				<enabled>true</enabled>

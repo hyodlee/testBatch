@@ -7,53 +7,53 @@
     <import resource="../abstract/eGovBase.xml" />
 
     <!-- commit-interval 값은 일반적으로 500~1000으로 설정함 -->
-    <job id="stgToLocalJob" parent="eGovBaseJob" xmlns="http://www.springframework.org/schema/batch">
+    <job id="insaStgToLocalJob" parent="eGovBaseJob" xmlns="http://www.springframework.org/schema/batch">
         <!-- 조직 정보를 먼저 복사한 후 사원 정보를 복사 -->
         <step id="stgToLocalOrgnztStep" parent="eGovBaseStep" next="stgToLocalStep">
             <tasklet>
-                <chunk reader="stgToLocalJob.stgToLocalOrgnztStep.mybatisItemReader"
-                       writer="stgToLocalJob.stgToLocalOrgnztStep.mybatisItemWriter"
+                <chunk reader="insaStgToLocalJob.stgToLocalOrgnztStep.mybatisItemReader"
+                       writer="insaStgToLocalJob.stgToLocalOrgnztStep.mybatisItemWriter"
                        commit-interval="500" />
             </tasklet>
         </step>
         <step id="stgToLocalStep" parent="eGovBaseStep">
             <tasklet>
-                <chunk reader="stgToLocalJob.stgToLocalStep.mybatisItemReader"
-                       processor="stgToLocalJob.stgToLocalStep.itemProcessor"
-                       writer="stgToLocalJob.stgToLocalStep.mybatisItemWriter"
+                <chunk reader="insaStgToLocalJob.stgToLocalStep.mybatisItemReader"
+                       processor="insaStgToLocalJob.stgToLocalStep.itemProcessor"
+                       writer="insaStgToLocalJob.stgToLocalStep.mybatisItemWriter"
                        commit-interval="500" />
             </tasklet>
         </step>
     </job>
 
-    <bean id="stgToLocalJob.stgToLocalOrgnztStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
+    <bean id="insaStgToLocalJob.stgToLocalOrgnztStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
         <!-- 스테이징 DB에서 조직 정보 목록을 조회 -->
         <property name="sqlSessionFactory" ref="sqlSessionFactory-stg-local" />
         <property name="queryId" value="Employee.selectOrgnztList" />
         <property name="pageSize" value="#{100}" />
     </bean>
 
-    <bean id="stgToLocalJob.stgToLocalOrgnztStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
+    <bean id="insaStgToLocalJob.stgToLocalOrgnztStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
         <!-- 로컬 DB에 조직 정보 적재 -->
         <property name="sqlSessionFactory" ref="sqlSessionFactory-local" />
         <property name="statementId" value="Employee.insertOrganization" />
     </bean>
 
-    <bean id="stgToLocalJob.stgToLocalStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
+    <bean id="insaStgToLocalJob.stgToLocalStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
         <!-- 스테이징 DB에서 사원 정보를 조회 (ESNTL_ID는 로컬 적재 시 생성) -->
         <property name="sqlSessionFactory" ref="sqlSessionFactory-stg-local" />
         <property name="queryId" value="Employee.selectEmployeeListLocal" />
         <property name="pageSize" value="#{100}" />
     </bean>
 
-    <bean id="stgToLocalJob.stgToLocalStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
+    <bean id="insaStgToLocalJob.stgToLocalStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
         <!-- STG -> Local 이관 단계에서는 ESNTL_ID를 포함한 insertEmployee 사용 -->
         <property name="sqlSessionFactory" ref="sqlSessionFactory-local" />
         <property name="statementId" value="Employee.insertEmployee" />
     </bean>
 
     <!-- jobParameters를 사용하기 위해 스텝 스코프로 지정 -->
-    <bean id="stgToLocalJob.stgToLocalStep.itemProcessor"
+    <bean id="insaStgToLocalJob.stgToLocalStep.itemProcessor"
           class="egovframework.bat.insa.processor.EmployeeInfoProcessor"
           scope="step" />
 

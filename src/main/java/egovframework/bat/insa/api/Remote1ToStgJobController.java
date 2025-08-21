@@ -24,7 +24,7 @@ public class Remote1ToStgJobController {
     private final JobLauncher jobLauncher;
 
     // Remote1 데이터를 중간 저장소로 옮기는 배치 잡
-    private final Job remote1ToStgJob;
+    private final Job insaRemote1ToStgJob;
 
     /**
      * Remote1 데이터를 중간 저장소로 옮기는 배치 잡을 실행한다.
@@ -43,7 +43,7 @@ public class Remote1ToStgJobController {
         }
 
         JobParameters jobParameters = builder.toJobParameters();
-        JobExecution execution = jobLauncher.run(remote1ToStgJob, jobParameters);
+        JobExecution execution = jobLauncher.run(insaRemote1ToStgJob, jobParameters);
         return execution.getStatus();
     }
 }

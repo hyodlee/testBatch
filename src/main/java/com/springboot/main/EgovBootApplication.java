@@ -36,9 +36,9 @@ public class EgovBootApplication implements CommandLineRunner {
 
 		LOGGER.info("##### EgovSampleBootApplication Start #####");
 
-                SpringApplication springApplication = new SpringApplication(EgovBootApplication.class);
-                springApplication.setWebApplicationType(WebApplicationType.SERVLET); // 웹 환경에서 동작하도록 설정
-                springApplication.setHeadless(false);
+        SpringApplication springApplication = new SpringApplication(EgovBootApplication.class);
+        springApplication.setWebApplicationType(WebApplicationType.SERVLET); // 웹 환경에서 동작하도록 설정
+        springApplication.setHeadless(false);
 		springApplication.setBannerMode(Banner.Mode.CONSOLE);
 		springApplication.run(args);
 		

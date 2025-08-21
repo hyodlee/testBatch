@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-package egovframework.bat.example.domain;
+package egovframework.bat.example.processor;
 
 import java.math.BigDecimal;
 
 import org.springframework.batch.item.ItemProcessor;
+import egovframework.bat.example.domain.CustomerCredit;
 
 /**
  * @author 배치실행개발팀

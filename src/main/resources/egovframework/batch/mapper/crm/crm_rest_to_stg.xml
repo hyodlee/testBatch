@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Customer">
+
+    <!-- STG 테이블 초기화 -->
+    <update id="truncateCrmStg">
+        TRUNCATE TABLE MIGSTG.CRM_CUSTOMER
+    </update>
+
+    <!-- REST 데이터 적재 -->
+    <insert id="insertCustomerStg" parameterType="egovframework.bat.crm.domain.CustomerInfo">
+        INSERT INTO MIGSTG.CRM_CUSTOMER
+            (CUSTOMER_ID, NAME, EMAIL, PHONE, REG_DTTM, MOD_DTTM)
+        VALUES
+            (#{customerId}, #{name}, #{email}, #{phone}, #{regDttm}, #{modDttm})
+    </insert>
+
+</mapper>

@@ -1,6 +1,8 @@
 package egovframework.bat.crm.api;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
@@ -19,6 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RestToStgJobController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestToStgJobController.class);
+
     // 스프링 배치 잡 실행기
     private final JobLauncher jobLauncher;
 
@@ -33,12 +37,19 @@ public class RestToStgJobController {
      */
     @PostMapping("/crm-rest-to-stg")
     public BatchStatus runCrmRestToStgJob() throws Exception {
+        LOGGER.info("CRM REST 배치 실행 요청 수신");
         JobParameters jobParameters = new JobParametersBuilder()
             .addLong("timestamp", System.currentTimeMillis())
             .toJobParameters();
 
-        JobExecution execution = jobLauncher.run(crmRestToStgJob, jobParameters);
-        return execution.getStatus();
+        try {
+            JobExecution execution = jobLauncher.run(crmRestToStgJob, jobParameters);
+            LOGGER.info("CRM REST 배치 실행 완료: {}", execution.getStatus());
+            return execution.getStatus();
+        } catch (Exception e) {
+            LOGGER.error("CRM REST 배치 실행 실패", e);
+            throw e;
+        }
     }
 }
 

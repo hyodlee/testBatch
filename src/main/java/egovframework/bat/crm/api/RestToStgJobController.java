@@ -1,0 +1,44 @@
+package egovframework.bat.crm.api;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.batch.core.BatchStatus;
+import org.springframework.batch.core.Job;
+import org.springframework.batch.core.JobExecution;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * CRM REST API 데이터를 STG 테이블로 적재하는 배치 잡을 수동 실행하기 위한 컨트롤러.
+ */
+@RestController
+@RequestMapping("/api/batch")
+@RequiredArgsConstructor
+public class RestToStgJobController {
+
+    // 스프링 배치 잡 실행기
+    private final JobLauncher jobLauncher;
+
+    // CRM REST 데이터를 STG 테이블에 적재하는 배치 잡
+    private final Job crmRestToStgJob;
+
+    /**
+     * CRM REST API 데이터를 STG 테이블로 적재하는 배치 잡을 실행한다.
+     *
+     * @return 배치 잡 실행 결과 상태
+     * @throws Exception 배치 실행 중 발생한 예외
+     */
+    @PostMapping("/crm-rest-to-stg")
+    public BatchStatus runCrmRestToStgJob() throws Exception {
+        JobParameters jobParameters = new JobParametersBuilder()
+            .addLong("timestamp", System.currentTimeMillis())
+            .toJobParameters();
+
+        JobExecution execution = jobLauncher.run(crmRestToStgJob, jobParameters);
+        return execution.getStatus();
+    }
+}
+

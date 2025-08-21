@@ -87,18 +87,18 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 
 ## 완전 새로운 배치 작업 추가시 매뉴얼
 
-1. Job 설정 파일 작성: `src/main/resources/egovframework/batch/job/erp/NewErpJob.xml` - 새 작업의 단계와 흐름을 정의합니다.
-2. 매퍼 XML 작성: `src/main/resources/egovframework/batch/mapper/erp/erp_new_sample.xml` - 데이터 조회와 저장 SQL을 작성합니다.
-3. 도메인 클래스 생성: `src/main/java/egovframework/bat/domain/erp/NewErp.java` - 배치에서 사용할 데이터 구조를 정의합니다.
-4. 프로세서 클래스 구현: `src/main/java/egovframework/bat/domain/erp/NewErpProcessor.java` - 도메인 데이터를 가공하는 로직을 구현합니다.
-5. (선택) 테스트 코드 추가: `src/test/java/egovframework/bat/domain/erp/NewErpProcessorTest.java` - 주요 기능이 예상대로 동작하는지 검증합니다.
+1. Job 설정 파일 작성: `src/main/resources/egovframework/batch/job/crm/NewCrmJob.xml` - 새 작업의 단계와 흐름을 정의합니다.
+2. 매퍼 XML 작성: `src/main/resources/egovframework/batch/mapper/crm/crm_new_sample.xml` - 데이터 조회와 저장 SQL을 작성합니다.
+3. 도메인 클래스 생성: `src/main/java/egovframework/bat/domain/crm/NewCrm.java` - 배치에서 사용할 데이터 구조를 정의합니다.
+4. 프로세서 클래스 구현: `src/main/java/egovframework/bat/domain/crm/NewCrmProcessor.java` - 도메인 데이터를 가공하는 로직을 구현합니다.
+5. (선택) 테스트 코드 추가: `src/test/java/egovframework/bat/domain/crm/NewCrmProcessorTest.java` - 주요 기능이 예상대로 동작하는지 검증합니다.
 
 예시 파일 구조:
 
-- `src/main/resources/egovframework/batch/job/erp/NewErpJob.xml`
-- `src/main/resources/egovframework/batch/mapper/erp/erp_new_sample.xml`
-- `src/main/java/egovframework/bat/domain/erp/NewErp.java`
-- `src/main/java/egovframework/bat/domain/erp/NewErpProcessor.java`
-- `src/test/java/egovframework/bat/domain/erp/NewErpProcessorTest.java`
+- `src/main/resources/egovframework/batch/job/crm/NewCrmJob.xml`
+- `src/main/resources/egovframework/batch/mapper/crm/crm_new_sample.xml`
+- `src/main/java/egovframework/bat/domain/crm/NewCrm.java`
+- `src/main/java/egovframework/bat/domain/crm/NewCrmProcessor.java`
+- `src/test/java/egovframework/bat/domain/crm/NewCrmProcessorTest.java`
 
-ERP 배치는 자원관리 도메인에 초점을 맞추며, 주요 필드로 자원ID, 자원명, 사용량 등이 포함됩니다. 이는 사번, 조직 정보 등 인사 중심 배치와 구별되는 특징입니다.
+CRM 배치는 고객 관계 도메인에 초점을 맞추며, 주요 필드로 고객ID, 고객명, 상호작용 내역 등이 포함됩니다. 이는 사번, 조직 정보 등 인사 중심 배치와 구별되는 특징입니다.

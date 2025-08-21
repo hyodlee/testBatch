@@ -54,7 +54,7 @@
 
     <!-- jobParameters를 사용하기 위해 스텝 스코프로 지정 -->
     <bean id="stgToLocalJob.stgToLocalStep.itemProcessor"
-          class="egovframework.bat.insa.domain.EmployeeInfoProcessor"
+          class="egovframework.bat.insa.processor.EmployeeInfoProcessor"
           scope="step" />
 
 </beans>

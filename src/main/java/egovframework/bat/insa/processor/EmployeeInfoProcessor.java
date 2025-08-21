@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import egovframework.bat.insa.domain.EmployeeInfo;
-import egovframework.bat.insa.util.EsntlIdGenerator;
-import egovframework.bat.insa.util.SourceSystemPrefix;
+import egovframework.bat.insa.common.EsntlIdGenerator;
+import egovframework.bat.insa.common.SourceSystemPrefix;
 import lombok.RequiredArgsConstructor;
 
 /**

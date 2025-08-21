@@ -1,6 +1,7 @@
 package egovframework.bat.crm.tasklet;
 
 import egovframework.bat.crm.domain.CustomerInfo;
+import egovframework.bat.notification.NotificationSender;
 import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,25 +34,38 @@ public class FetchCrmDataTasklet implements Tasklet {
     /** 데이터 적재용 JdbcTemplate */
     private final JdbcTemplate jdbcTemplate;
 
+    /** 장애 알림 전송기 목록 */
+    private final List<NotificationSender> notificationSenders;
+
     /** 고객 정보를 조회할 API URL */
     @Value("${crm.api.url}")
     private String apiUrl;
 
     public FetchCrmDataTasklet(RestTemplateBuilder restTemplateBuilder,
-                               @Qualifier("jdbcTemplateLocal") JdbcTemplate jdbcTemplate) {
+                               @Qualifier("jdbcTemplateLocal") JdbcTemplate jdbcTemplate,
+                               List<NotificationSender> notificationSenders) {
         this.restTemplate = restTemplateBuilder.build();
         this.jdbcTemplate = jdbcTemplate;
+        this.notificationSenders = notificationSenders;
     }
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
+        LOGGER.info("CRM 고객 데이터 수집 시작");
         // 1. 외부 API 호출
         List<CustomerInfo> customers = fetchCustomers();
         LOGGER.info("조회된 고객 수: {}", customers.size());
 
         // 2. STG 테이블에 데이터 적재
-        insertCustomers(customers);
+        try {
+            insertCustomers(customers);
+        } catch (Exception e) {
+            LOGGER.error("STG 테이블 적재 실패", e);
+            notifyFailure("고객 데이터 적재 실패: " + e.getMessage());
+            throw e;
+        }
 
+        LOGGER.info("CRM 고객 데이터 수집 완료");
         return RepeatStatus.FINISHED;
     }
 
@@ -62,11 +76,25 @@ public class FetchCrmDataTasklet implements Tasklet {
      * @return 고객 정보 목록
      */
     private List<CustomerInfo> fetchCustomers() {
-        CustomerInfo[] response = restTemplate.getForObject(apiUrl, CustomerInfo[].class);
-        if (response == null) {
-            return Collections.emptyList();
+        int maxAttempts = 3;
+        for (int attempt = 1; attempt <= maxAttempts; attempt++) {
+            try {
+                LOGGER.info("CRM API 호출 시도: {} / {}", attempt, maxAttempts);
+                CustomerInfo[] response = restTemplate.getForObject(apiUrl, CustomerInfo[].class);
+                if (response == null) {
+                    LOGGER.error("CRM API 응답이 비어있음");
+                    return Collections.emptyList();
+                }
+                return Arrays.asList(response);
+            } catch (Exception e) {
+                LOGGER.error("CRM API 호출 실패: 시도 {} / {}", attempt, maxAttempts, e);
+                if (attempt == maxAttempts) {
+                    saveFailedCall(e);
+                    notifyFailure("CRM API 호출 실패: " + e.getMessage());
+                }
+            }
         }
-        return Arrays.asList(response);
+        return Collections.emptyList();
     }
 
     /**
@@ -86,6 +114,31 @@ public class FetchCrmDataTasklet implements Tasklet {
             ps.setTimestamp(5, customer.getRegDttm() == null ? null : new Timestamp(customer.getRegDttm().getTime()));
             ps.setTimestamp(6, customer.getModDttm() == null ? null : new Timestamp(customer.getModDttm().getTime()));
         });
+    }
+
+    /**
+     * 실패한 REST 호출 정보를 저장한다.
+     *
+     * @param e 발생한 예외
+     */
+    private void saveFailedCall(Exception e) {
+        String sql = "INSERT INTO crm_api_fail_log (api_url, error_message, reg_dttm) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, apiUrl, e.getMessage(), new Timestamp(System.currentTimeMillis()));
+    }
+
+    /**
+     * 장애 알림을 전송한다.
+     *
+     * @param message 전송할 메시지
+     */
+    private void notifyFailure(String message) {
+        for (NotificationSender sender : notificationSenders) {
+            try {
+                sender.send(message);
+            } catch (Exception e) {
+                LOGGER.error("알림 전송 실패", e);
+            }
+        }
     }
 }
 

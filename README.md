@@ -57,6 +57,27 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 - 공통 클래스: `src/main/java/egovframework/bat/insa/util` 아래에 작성하고 패키지 구조를 유지합니다.
 - 테스트 코드: `src/test/java/egovframework/bat/insa/domain` 및 `src/test/java/egovframework/bat/insa/util`에 동일한 패키지 구조로 작성합니다.
 
+## CRM 배치 잡 디렉터리(`crm`)
+
+`src/main/resources/egovframework/batch/job/crm` 디렉터리는 CRM 관련 배치 Job 설정을 모아두는 곳입니다. 현재 포함된 Job은 다음과 같습니다.
+
+- `crmRestToStgJob`
+- `crmStgToLocalJob`
+
+다음은 관련된 주요 파일들입니다.
+
+- 잡 설정:
+  - `src/main/resources/egovframework/batch/job/crm/restToStgJob.xml`: CRM REST API에서 데이터를 조회하여 STG에 적재하는 Job 설정 파일
+  - `src/main/resources/egovframework/batch/job/crm/stgToLocalJob.xml`: STG에 적재된 CRM 데이터를 로컬 DB로 이관하는 Job 설정 파일
+- 매퍼 파일:
+  - `src/main/resources/egovframework/batch/mapper/crm/crm_rest_to_stg.xml`: CRM REST 데이터→STG 적재를 위한 SQL 매퍼
+  - `src/main/resources/egovframework/batch/mapper/crm/crm_stg_to_local.xml`: STG→로컬 데이터 이동을 위한 SQL 매퍼
+- 공통, 도메인 및 유틸 클래스:
+  - `src/main/java/egovframework/bat/crm/tasklet/FetchCrmDataTasklet.java`: CRM 시스템에서 고객 정보를 조회하여 STG에 적재하는 Tasklet
+  - `src/main/java/egovframework/bat/crm/processor/CustomerInfoProcessor.java`: CRM 고객 정보를 처리하는 배치 프로세서
+  - `src/main/java/egovframework/bat/crm/domain/CustomerInfo.java`: CRM 고객 정보를 담는 도메인 클래스
+  - `src/main/java/egovframework/bat/crm/api/RestToStgJobController.java`: CRM REST 배치를 수동 실행하는 컨트롤러
+
 ## 예제 배치 잡 디렉터리(`example`)
 
 `src/main/resources/egovframework/batch/job/example` 디렉터리는 예제 배치 Job 설정을 모아둔 곳입니다. 예제 Job과 관련된 주요 파일은 다음과 같습니다.
@@ -75,6 +96,14 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 
 - **URL**: `POST /api/batch/mybatis`
 - **파라미터**: `userId` (선택)
+- **응답**: 실행 결과 `BatchStatus`
+
+### CRM 배치 잡 실행 API
+
+`RestToStgJobController`를 통해 CRM 배치를 REST로 호출할 수 있습니다.
+
+- **URL**: `POST /api/batch/crm-rest-to-stg`
+- **파라미터**: 없음
 - **응답**: 실행 결과 `BatchStatus`
 
 ### 인사 배치 잡 실행 API

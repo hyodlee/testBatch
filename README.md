@@ -77,6 +77,14 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 - **파라미터**: `userId` (선택)
 - **응답**: 실행 결과 `BatchStatus`
 
+### 인사 배치 잡 실행 API
+
+`remote1ToStgJob`을 REST로 호출할 수 있습니다.
+
+- **URL**: `POST /api/batch/remote1-to-stg`
+- **파라미터**: `sourceSystem` (선택)
+- **응답**: 실행 결과 `BatchStatus`
+
 ## 완전 새로운 배치 작업 추가시 매뉴얼
 
 1. Job 설정 파일 작성: `src/main/resources/egovframework/batch/job/erp/NewErpJob.xml` - 새 작업의 단계와 흐름을 정의합니다.

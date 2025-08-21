@@ -1,4 +1,4 @@
-package egovframework.bat.insa.domain;
+package egovframework.bat.insa.util;
 
 import java.sql.Connection;
 import java.sql.SQLException;

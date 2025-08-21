@@ -1,4 +1,4 @@
-package egovframework.bat.insa.domain;
+package egovframework.bat.insa.common;
 
 import java.util.Arrays;
 

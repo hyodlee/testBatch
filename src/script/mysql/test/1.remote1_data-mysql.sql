@@ -1,6 +1,7 @@
 -- 깨끗이 시작
 DROP TABLE IF EXISTS comtnemplyrinfo;
 DROP TABLE IF EXISTS comtnorgnztinfo;
+DROP TABLE IF EXISTS crm_customer;
 
 -- 조직 테이블
 CREATE TABLE `comtnorgnztinfo` (
@@ -55,3 +56,21 @@ INSERT INTO comtnemplyrinfo
 ('9304104422','ORGNZT_0000000000002','문지현','F','19930410','010-3000-0001','moonjh@example.com','팀장','P','2025-08-08 09:10:00','2025-08-08 09:10:00'),
 ('8609075522','ORGNZT_0000000000002','배성민','M','19860907','010-3000-0002','baesm@example.com','대리','P','2025-08-08 09:10:00','2025-08-08 09:10:00'),
 ('9901012233','ORGNZT_0000000000002','안소희','F','19990101','010-3000-0003','ansohee@example.com','사원','P','2025-08-08 09:10:00','2025-08-08 09:10:00');
+
+-- CRM 고객 테이블
+CREATE TABLE `crm_customer` (
+  `CUSTOMER_ID` varchar(20) NOT NULL COMMENT '고객ID',
+  `NAME` varchar(100) NOT NULL COMMENT '고객명',
+  `EMAIL` varchar(100) DEFAULT NULL COMMENT '이메일',
+  `PHONE` varchar(20) DEFAULT NULL COMMENT '전화번호',
+  `REG_DTTM` datetime NOT NULL COMMENT '등록일시',
+  `MOD_DTTM` datetime DEFAULT NULL COMMENT '수정일시',
+  PRIMARY KEY (`CUSTOMER_ID`),
+  UNIQUE KEY `CRM_CUSTOMER_PK` (`CUSTOMER_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='CRM 고객 정보';
+
+-- CRM 고객 샘플 (3명)
+INSERT INTO crm_customer (CUSTOMER_ID, NAME, EMAIL, PHONE, REG_DTTM, MOD_DTTM) VALUES
+  ('CUST_0000000000001','홍길동','hong@example.com','010-4000-0001','2025-08-08 10:00:00','2025-08-08 10:00:00'),
+  ('CUST_0000000000002','김영희','kim@example.com','010-4000-0002','2025-08-08 10:05:00','2025-08-08 10:05:00'),
+  ('CUST_0000000000003','박철수','park@example.com','010-4000-0003','2025-08-08 10:10:00','2025-08-08 10:10:00');

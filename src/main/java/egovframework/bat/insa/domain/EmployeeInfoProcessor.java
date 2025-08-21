@@ -1,5 +1,6 @@
 package egovframework.bat.insa.domain;
 
+import egovframework.bat.insa.common.SourceSystemPrefix;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Value;

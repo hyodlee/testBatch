@@ -28,14 +28,14 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 
 `src/main/resources/egovframework/batch/job/insa` 디렉터리는 인사 관련 배치 Job 설정을 모아두는 곳입니다. 현재 포함된 Job은 다음과 같습니다.
 
-- `remote1ToStgJob`
-- `stgToLocalJob`
+- `insaRemote1ToStgJob`
+- `insaStgToLocalJob`
 
 다음은 관련된 주요 파일들입니다.
 
 - 잡 설정:
-  - `src/main/resources/egovframework/batch/job/insa/remote1ToStgJob.xml`: 원격 시스템에서 스테이징으로 데이터를 전송하는 Job 설정 파일
-  - `src/main/resources/egovframework/batch/job/insa/stgToLocalJob.xml`: 스테이징에서 로컬로 데이터를 이동하는 Job 설정 파일
+  - `src/main/resources/egovframework/batch/job/insa/insaRemote1ToStgJob.xml`: 원격 시스템에서 스테이징으로 데이터를 전송하는 Job 설정 파일
+  - `src/main/resources/egovframework/batch/job/insa/insaStgToLocalJob.xml`: 스테이징에서 로컬로 데이터를 이동하는 Job 설정 파일
 - 매퍼 파일:
   - `src/main/resources/egovframework/batch/mapper/insa/insa_remote1_to_stg.xml`: 원격→스테이징 데이터 이동을 위한 SQL 매퍼
   - `src/main/resources/egovframework/batch/mapper/insa/insa_stg_to_local.xml`: 스테이징→로컬 데이터 이동을 위한 SQL 매퍼
@@ -79,7 +79,7 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 
 ### 인사 배치 잡 실행 API
 
-`remote1ToStgJob`을 REST로 호출할 수 있습니다.
+`insaRemote1ToStgJob`을 REST로 호출할 수 있습니다.
 
 - **URL**: `POST /api/batch/remote1-to-stg`
 - **파라미터**: `sourceSystem` (선택)

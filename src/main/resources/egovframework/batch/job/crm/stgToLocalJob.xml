@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/batch D:\\DEV\\xsd\\spring-batch-3.0.xsd">
+
+    <import resource="../abstract/eGovBase.xml" />
+
+    <!-- STG에 적재된 CRM 고객 정보를 로컬 DB로 이관하는 잡 -->
+    <job id="crmStgToLocalJob" parent="eGovBaseJob" xmlns="http://www.springframework.org/schema/batch">
+        <step id="stgToLocalStep" parent="eGovBaseStep">
+            <tasklet>
+                <chunk reader="crmStgToLocalJob.stgToLocalStep.mybatisItemReader"
+                       processor="crmStgToLocalJob.stgToLocalStep.itemProcessor"
+                       writer="crmStgToLocalJob.stgToLocalStep.mybatisItemWriter"
+                       commit-interval="500" />
+            </tasklet>
+        </step>
+    </job>
+
+    <bean id="crmStgToLocalJob.stgToLocalStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
+        <!-- STG DB에서 CRM 고객 정보를 조회 -->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-crm-stg-local" />
+        <property name="queryId" value="Customer.selectCustomerList" />
+        <property name="pageSize" value="#{100}" />
+    </bean>
+
+    <bean id="crmStgToLocalJob.stgToLocalStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
+        <!-- 로컬 DB에 CRM 고객 정보 적재 -->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-crm-local" />
+        <property name="statementId" value="Customer.insertCustomerLocal" />
+    </bean>
+
+    <!-- 고객 정보 후처리를 위한 프로세서 -->
+    <bean id="crmStgToLocalJob.stgToLocalStep.itemProcessor"
+          class="egovframework.bat.crm.processor.CustomerInfoProcessor"
+          scope="step" />
+
+</beans>

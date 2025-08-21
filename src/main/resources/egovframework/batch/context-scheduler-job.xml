@@ -41,4 +41,30 @@
         </property>
     </bean>
 
+    <bean id="crmRestToStgJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="egovframework.bat.scheduler.EgovQuartzJobLauncher" />
+        <property name="group" value="quartz-batch" />
+        <property name="jobDataAsMap">
+            <map>
+                <!-- CRM 데이터를 REST API로 조회하여 STG에 적재하는 잡 -->
+                <entry key="jobName" value="crmRestToStgJob" />
+                <entry key="jobLocator" value-ref="jobRegistry" />
+                <entry key="jobLauncher" value-ref="jobLauncher" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="crmStgToLocalJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="egovframework.bat.scheduler.EgovQuartzJobLauncher" />
+        <property name="group" value="quartz-batch" />
+        <property name="jobDataAsMap">
+            <map>
+                <!-- STG에 있는 CRM 고객 정보를 로컬 DB로 이관하는 잡 -->
+                <entry key="jobName" value="crmStgToLocalJob" />
+                <entry key="jobLocator" value-ref="jobRegistry" />
+                <entry key="jobLauncher" value-ref="jobLauncher" />
+            </map>
+        </property>
+    </bean>
+
 </beans>

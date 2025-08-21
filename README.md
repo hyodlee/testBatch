@@ -64,7 +64,7 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 - `src/main/resources/egovframework/mapper/example/Egov_Example_SQL.xml`: 예제 배치를 위한 SQL 매퍼 파일
 - `src/main/java/egovframework/bat/example/domain/CustomerCredit.java`: 고객 신용 정보를 담는 도메인 클래스
 - `src/main/java/egovframework/bat/example/domain/CustomerCreditIncreaseProcessor.java`: 신용 증가 로직을 처리하는 배치 프로세서
-- `src/main/java/egovframework/scheduler/support/EgovJobLauncherDetails.java`: Quartz 스케줄러에서 배치 Job을 실행하는 지원 클래스
+- `src/main/java/egovframework/bat/scheduler/support/EgovJobLauncherDetails.java`: Quartz 스케줄러에서 배치 Job을 실행하는 지원 클래스
 - `src/main/resources/egovframework/batch/context-batch-mapper.xml`: 예제 SQL 매퍼와 데이터소스가 등록된 설정 파일
 - `src/main/resources/egovframework/batch/context-scheduler-job.xml`: 예제 Job을 스케줄러에 등록하기 위한 설정 파일
 

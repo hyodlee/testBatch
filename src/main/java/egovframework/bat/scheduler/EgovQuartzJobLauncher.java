@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package egovframework.example.bat.scheduler.support;
+package egovframework.bat.scheduler;
 
 import java.util.Date;
 import java.util.Map;
@@ -31,6 +31,8 @@ import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 /**
+ * Quartz 스케줄러에서 Spring Batch Job을 실행하는 클래스입니다.
+ *
  * @author 배치실행개발팀
  * @since 2012. 07.25
  * @version 1.0
@@ -44,14 +46,14 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
  *  </pre>
  */
 
-public class EgovJobLauncherDetails extends QuartzJobBean {
+public class EgovQuartzJobLauncher extends QuartzJobBean {
 
 	/**
 	 * Special key in job data map for the name of a job to run.
 	 */
 	static final String JOB_NAME = "jobName";
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(EgovJobLauncherDetails.class);
+        private static final Logger LOGGER = LoggerFactory.getLogger(EgovQuartzJobLauncher.class);
 
 	private JobLocator jobLocator;
 

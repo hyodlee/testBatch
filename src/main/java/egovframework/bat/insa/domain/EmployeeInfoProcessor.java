@@ -1,4 +1,4 @@
-package egovframework.bat.domain.insa;
+package egovframework.bat.insa.domain;
 
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;

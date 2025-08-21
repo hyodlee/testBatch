@@ -69,6 +69,14 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 - `src/main/resources/egovframework/batch/context-batch-mapper.xml`: 예제 SQL 매퍼와 데이터소스가 등록된 설정 파일
 - `src/main/resources/egovframework/batch/context-scheduler-job.xml`: 예제 Job을 스케줄러에 등록하기 위한 설정 파일
 
+### 예제 배치 잡 실행 API
+
+`ExampleJobController`를 통해 MyBatis 예제 잡을 REST로 호출할 수 있습니다.
+
+- **URL**: `POST /api/batch/mybatis`
+- **파라미터**: `userId` (선택)
+- **응답**: 실행 결과 `BatchStatus`
+
 ## 완전 새로운 배치 작업 추가시 매뉴얼
 
 1. Job 설정 파일 작성: `src/main/resources/egovframework/batch/job/erp/NewErpJob.xml` - 새 작업의 단계와 흐름을 정의합니다.

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/batch")
 @RequiredArgsConstructor
-public class MybatisJobController {
+public class ExampleJobController {
 
     // 스프링 배치 잡 실행기
     private final JobLauncher jobLauncher;

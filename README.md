@@ -41,7 +41,7 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
   - `src/main/resources/egovframework/batch/mapper/insa/insa_stg_to_local.xml`: 스테이징→로컬 데이터 이동을 위한 SQL 매퍼
 - 도메인 및 유틸 클래스:
   - `src/main/java/egovframework/bat/insa/domain/SourceSystemPrefix.java`: 시스템 구분을 위한 접두어 상수 정의 클래스
-  - `src/main/java/egovframework/bat/insa/domain/EmployeeInfoProcessor.java`: 직원 정보를 처리하는 배치 프로세서
+  - `src/main/java/egovframework/bat/insa/processor/EmployeeInfoProcessor.java`: 직원 정보를 처리하는 배치 프로세서
   - `src/main/java/egovframework/bat/insa/domain/EsntlIdGenerator.java`: ESNTL_ID를 생성하는 유틸리티 클래스
   - `src/main/java/egovframework/bat/insa/domain/EmployeeInfo.java`: 직원 정보를 담는 도메인 클래스
   - `src/main/java/egovframework/bat/insa/domain/Orgnztinfo.java`: 조직 정보를 표현하는 도메인 클래스

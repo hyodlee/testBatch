@@ -216,22 +216,11 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<excludes>
-					<exclude>egovframework/batch/properties/env/**</exclude>
-					<exclude>log4j2/env/**</exclude>
-					<exclude>application/env/**</exclude>
-				</excludes>
-				<filtering>false</filtering>
+                                        <exclude>log4j2/env/**</exclude>
+                                        <exclude>application/env/**</exclude>
+                                </excludes>
+                                <filtering>false</filtering>
 			</resource>
-
-			<!-- 환경별 리소스: env/${env} 폴더의 globals.properties만 클래스패스에 포함 -->
-            <resource>
-                <directory>src/main/resources/egovframework/batch/properties/env/${env}</directory>
-                <targetPath>egovframework/batch/properties</targetPath>
-                <includes>
-                    <include>globals.properties</include>
-                </includes>
-                <filtering>false</filtering>
-            </resource>
             <!-- 환경별 log4j2 설정 파일 포함 -->
             <resource>
                 <directory>src/main/resources/log4j2/env/${env}</directory>

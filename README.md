@@ -86,7 +86,7 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 
 `src/main/resources/egovframework/batch/job/example` 디렉터리는 예제 배치 Job 설정을 모아둔 곳입니다. 예제 Job과 관련된 주요 파일은 다음과 같습니다.
 
-- `src/main/resources/egovframework/batch/job/example/mybatisToMybatisJob.xml`: MyBatis 간 데이터 이동을 정의한 배치 Job 설정 파일(잡 ID: `mybatisToMybatisSampleJob`)
+- `src/main/resources/egovframework/batch/job/example/mybatisToMybatisSampleJob.xml`: MyBatis 간 데이터 이동을 정의한 배치 Job 설정 파일(잡 ID: `mybatisToMybatisSampleJob`)
 - `src/main/resources/egovframework/batch/mapper/example/Egov_Example_SQL.xml`: 예제 배치를 위한 SQL 매퍼 파일
 - `src/main/java/egovframework/bat/example/domain/CustomerCredit.java`: 고객 신용 정보를 담는 도메인 클래스
 - `src/main/java/egovframework/bat/example/processor/CustomerCreditIncreaseProcessor.java`: 신용 증가 로직을 처리하는 배치 프로세서

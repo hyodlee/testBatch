@@ -12,8 +12,4 @@
                 <context:include-filter type="annotation" expression="org.springframework.stereotype.Component"/>
                 <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
         </context:component-scan>
-
-    <!-- RestTemplateBuilder 빈 등록 -->
-    <bean id="restTemplateBuilder" class="org.springframework.boot.web.client.RestTemplateBuilder"/>
-
 </beans>

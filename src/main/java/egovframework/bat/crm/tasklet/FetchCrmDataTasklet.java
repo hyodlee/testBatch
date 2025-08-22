@@ -38,7 +38,7 @@ public class FetchCrmDataTasklet implements Tasklet {
     private final List<NotificationSender> notificationSenders;
 
     /** 차량 정보를 조회할 API URL */
-    @Value("${crm.api.url}")
+    @Value("${Globals.Crm.ApiUrl}")
     private String apiUrl;
 
     public FetchCrmDataTasklet(RestTemplateBuilder restTemplateBuilder,

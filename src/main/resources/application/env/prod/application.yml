@@ -1,4 +1,10 @@
 spring:
+  main:
+    # Spring Framework 5.*에서 같은 이름의 빈을 등록할 때 발생하는 BeanDefinitionOverrideException 방지
+    allow-bean-definition-overriding: true
+  output:
+    ansi:
+      enabled: never   # ANSI 색상 끄기, Eclipse 콘솔의 ANSI Support 체크박스 끄기
   profiles:
     active: prod
   datasource:
@@ -22,6 +28,16 @@ spring:
       url: "jdbc:cubrid:192.168.20.20:33000:egovremote1_prod:::"
       username: prodread
       password: prodread!1234
+
+logging:
+  # 기존 로그 레벨 설정을 주석 처리하여 log4j2 설정만 사용하도록 함
+  # level:
+  #   '[org.egovframe]': DEBUG
+  #   '[egovframework]': DEBUG
+  #   '[org.springframework]': DEBUG
+  #   root: DEBUG
+  # POM.xml에서 활성 프로파일에 따라 log4j2.xml파일을 루트 폴더로 복사하고 있음
+  config: classpath:log4j2.xml
 
 erp:
   # ERP 시스템 API URL

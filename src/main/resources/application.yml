@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: local
   main:
     # Spring Framework 5.*에서 같은 이름의 빈을 등록할 때 발생하는 BeanDefinitionOverrideException 방지
     allow-bean-definition-overriding: true

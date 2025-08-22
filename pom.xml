@@ -213,6 +213,7 @@
 				<excludes>
 					<exclude>egovframework/batch/properties/env/**</exclude>
 					<exclude>log4j2/env/**</exclude>
+					<exclude>application/env/**</exclude>
 				</excludes>
 				<filtering>false</filtering>
 			</resource>
@@ -233,6 +234,15 @@
                 <includes>
                     <include>log4j2.xml</include>
                 </includes>
+            </resource>
+            <!-- 환경별 application.yml 복사 -->
+            <resource>
+                <directory>src/main/resources/application/env/${env}</directory>
+                <targetPath>.</targetPath>
+                <includes>
+                    <include>application.yml</include>
+                </includes>
+                <filtering>false</filtering>
             </resource>
         </resources>
 

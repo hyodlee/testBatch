@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: local
   datasource:
     # 로컬 개발용 MySQL
     egovlocal_mysql:

@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: prod
   datasource:
     # 운영 서버 MySQL
     egovlocal_mysql:

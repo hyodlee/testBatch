@@ -10,10 +10,10 @@ import lombok.Data;
 @Data
 public class VehicleInfo {
 
-    private String customerId;    /** 차량ID (EsntlIdGenerator 등을 통해 생성) */
-    private String name;          /** 차량명 */
-    private String email;         /** 이메일 */
-    private String phone;         /** 전화번호 */
+    private String vehicleId;     /** 차량ID (EsntlIdGenerator 등을 통해 생성) */
+    private String model;         /** 모델명 */
+    private String manufacturer;  /** 제조사 */
+    private String color;         /** 색상 */
     private Date regDttm;         /** 등록일시 */
     private Date modDttm;         /** 수정일시 */
 }

@@ -16,7 +16,7 @@ public class WebClientConfig {
      * @return WebClient.Builder 인스턴스
      */
     @Bean
-    public WebClient.Builder webClientBuilder() {
+    WebClient.Builder webClientBuilder() {
         return WebClient.builder();
     }
 }

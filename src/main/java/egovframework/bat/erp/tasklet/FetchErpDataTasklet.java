@@ -37,7 +37,7 @@ public class FetchErpDataTasklet implements Tasklet {
     private final List<NotificationSender> notificationSenders;
 
     /** 차량 정보를 조회할 API URL */
-    @Value("${Globals.Erp.ApiUrl}")
+    @Value("${erp.api-url}")
     private String apiUrl;
 
     public FetchErpDataTasklet(WebClient.Builder builder,

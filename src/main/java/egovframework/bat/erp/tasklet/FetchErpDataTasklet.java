@@ -14,10 +14,9 @@ import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 /**
  * ERP 시스템에서 차량 정보를 조회하여 STG 테이블에 적재하는 Tasklet.
@@ -28,8 +27,8 @@ public class FetchErpDataTasklet implements Tasklet {
     /** 로거 */
     private static final Logger LOGGER = LoggerFactory.getLogger(FetchErpDataTasklet.class);
 
-    /** 외부 API 호출용 RestTemplate */
-    private final RestTemplate restTemplate;
+    /** 비동기 호출을 위한 WebClient */
+    private final WebClient webClient;
 
     /** 데이터 적재용 JdbcTemplate */
     private final JdbcTemplate jdbcTemplate;
@@ -41,10 +40,11 @@ public class FetchErpDataTasklet implements Tasklet {
     @Value("${Globals.Erp.ApiUrl}")
     private String apiUrl;
 
-    public FetchErpDataTasklet(RestTemplateBuilder restTemplateBuilder,
+    public FetchErpDataTasklet(WebClient.Builder builder,
                                @Qualifier("jdbcTemplateLocal") JdbcTemplate jdbcTemplate,
                                List<NotificationSender> notificationSenders) {
-        this.restTemplate = restTemplateBuilder.build();
+        // WebClient 생성
+        this.webClient = builder.build();
         this.jdbcTemplate = jdbcTemplate;
         this.notificationSenders = notificationSenders;
     }
@@ -80,7 +80,12 @@ public class FetchErpDataTasklet implements Tasklet {
         for (int attempt = 1; attempt <= maxAttempts; attempt++) {
             try {
                 LOGGER.info("ERP API 호출 시도: {} / {}", attempt, maxAttempts);
-                VehicleInfo[] response = restTemplate.getForObject(apiUrl, VehicleInfo[].class);
+                // WebClient를 사용하여 ERP API 호출
+                VehicleInfo[] response = webClient.get()
+                        .uri(apiUrl)
+                        .retrieve()
+                        .bodyToMono(VehicleInfo[].class)
+                        .block(); // 배치 특성상 동기 처리
                 if (response == null) {
                     LOGGER.error("ERP API 응답이 비어있음");
                     return Collections.emptyList();

@@ -1,12 +1,16 @@
 package egovframework.bat.insa.api;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +24,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class Remote1ToStgJobController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Remote1ToStgJobController.class);
+
     // 스프링 배치 잡 실행기
     private final JobLauncher jobLauncher;
 
@@ -31,10 +37,10 @@ public class Remote1ToStgJobController {
      *
      * @param sourceSystem 데이터를 제공하는 시스템 이름 (선택)
      * @return 배치 잡 실행 결과 상태
-     * @throws Exception 배치 실행 중 발생한 예외
      */
     @PostMapping("/remote1-to-stg")
-    public BatchStatus runRemote1ToStgJob(@RequestParam(value = "sourceSystem", required = false) String sourceSystem) throws Exception {
+    public ResponseEntity<BatchStatus> runRemote1ToStgJob(
+        @RequestParam(value = "sourceSystem", required = false) String sourceSystem) {
         JobParametersBuilder builder = new JobParametersBuilder()
             .addLong("timestamp", System.currentTimeMillis());
 
@@ -43,8 +49,15 @@ public class Remote1ToStgJobController {
         }
 
         JobParameters jobParameters = builder.toJobParameters();
-        JobExecution execution = jobLauncher.run(insaRemote1ToStgJob, jobParameters);
-        return execution.getStatus();
+
+        try {
+            JobExecution execution = jobLauncher.run(insaRemote1ToStgJob, jobParameters);
+            return ResponseEntity.ok(execution.getStatus());
+        } catch (Exception e) {
+            LOGGER.error("Remote1 배치 실행 실패", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(BatchStatus.FAILED);
+        }
     }
 }
 

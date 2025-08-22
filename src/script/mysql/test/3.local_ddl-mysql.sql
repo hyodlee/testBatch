@@ -1,7 +1,7 @@
 -- 깨끗이 시작
 DROP TABLE IF EXISTS comtnemplyrinfo;
 DROP TABLE IF EXISTS comtnorgnztinfo;
-DROP TABLE IF EXISTS crm_customer;
+DROP TABLE IF EXISTS erp_vehicle;
 
 -- 조직 테이블
 CREATE TABLE `comtnorgnztinfo` (
@@ -31,14 +31,14 @@ CREATE TABLE `comtnemplyrinfo` (
   KEY `COMTNEMPLYRINFO_i01` (`ORGNZT_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='업무사용자정보';
 
--- CRM 고객 테이블
-CREATE TABLE `crm_customer` (
-  `CUSTOMER_ID` varchar(20) NOT NULL COMMENT '고객ID',
-  `NAME` varchar(100) NOT NULL COMMENT '고객명',
-  `EMAIL` varchar(100) DEFAULT NULL COMMENT '이메일',
-  `PHONE` varchar(20) DEFAULT NULL COMMENT '전화번호',
+-- ERP 차량 테이블
+CREATE TABLE `erp_vehicle` (
+  `VEHICLE_ID` varchar(20) NOT NULL COMMENT '차량ID',
+  `MODEL` varchar(100) NOT NULL COMMENT '차량모델',
+  `MANUFACTURER` varchar(100) NOT NULL COMMENT '제조사',
+  `PRICE` decimal(15,2) DEFAULT NULL COMMENT '가격',
   `REG_DTTM` datetime NOT NULL COMMENT '등록일시',
   `MOD_DTTM` datetime DEFAULT NULL COMMENT '수정일시',
-  PRIMARY KEY (`CUSTOMER_ID`),
-  UNIQUE KEY `CRM_CUSTOMER_PK` (`CUSTOMER_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='CRM 고객 정보';
+  PRIMARY KEY (`VEHICLE_ID`),
+  UNIQUE KEY `ERP_VEHICLE_PK` (`VEHICLE_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='ERP 차량 정보';

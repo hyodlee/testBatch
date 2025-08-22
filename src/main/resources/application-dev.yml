@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    # 개발 서버 MySQL
+    egovlocal_mysql:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://dev.mysql.example.com:3306/egovdev
+      username: devuser
+      password: devpass
+
+    # 스테이징 MySQL (주 데이터베이스)
+    migstg_mysql:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://dev.mysql.example.com:3306/migstg
+      username: migdev
+      password: dev!1234
+
+    # 원격1 CUBRID
+    egovremote1_cubrid:
+      driver-class-name: cubrid.jdbc.driver.CUBRIDDriver
+      url: jdbc:cubrid:192.168.10.10:33000:egovremote1_dev:::
+      username: devread
+      password: devread!1234

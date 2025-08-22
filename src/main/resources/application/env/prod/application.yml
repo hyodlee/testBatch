@@ -5,14 +5,14 @@ spring:
     # 운영 서버 MySQL
     egovlocal-mysql:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://prod.mysql.example.com:3306/egovprod
+      url: jdbc:mysql://prod.mysql.example.com:3306/egovprod?useSSL=false&serverTimezone=UTC
       username: produser
       password: prodpass
 
     # 스테이징 MySQL (주 데이터베이스)
     migstg-mysql:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://prod.mysql.example.com:3306/migstg
+      url: jdbc:mysql://prod.mysql.example.com:3306/migstg?useSSL=false&serverTimezone=UTC
       username: migprod
       password: prod!1234
 

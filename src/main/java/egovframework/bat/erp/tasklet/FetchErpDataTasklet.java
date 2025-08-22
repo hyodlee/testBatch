@@ -128,7 +128,7 @@ public class FetchErpDataTasklet implements Tasklet {
      * @param e 발생한 예외
      */
     private void saveFailedCall(Exception e) {
-        String sql = "INSERT INTO erp_api_fail_log (api_url, error_message, reg_dttm) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO migstg.erp_api_fail_log (api_url, error_message, reg_dttm) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, apiUrl, e.getMessage(), new Timestamp(System.currentTimeMillis()));
     }
 

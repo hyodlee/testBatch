@@ -9,7 +9,7 @@
             VEHICLE_ID    AS vehicleId,
             MODEL         AS model,
             MANUFACTURER  AS manufacturer,
-            COLOR         AS color,
+            PRICE         AS price,
             REG_DTTM      AS regDttm,
             MOD_DTTM      AS modDttm
         FROM MIGSTG.ERP_VEHICLE
@@ -18,13 +18,13 @@
     <!-- 로컬 DB에 차량 정보 적재 -->
     <insert id="insertVehicleLocal" parameterType="egovframework.bat.erp.domain.VehicleInfo">
         INSERT INTO ERP_VEHICLE
-            (VEHICLE_ID, MODEL, MANUFACTURER, COLOR, REG_DTTM, MOD_DTTM)
+            (VEHICLE_ID, MODEL, MANUFACTURER, PRICE, REG_DTTM, MOD_DTTM)
         VALUES
-            (#{vehicleId}, #{model}, #{manufacturer}, #{color}, #{regDttm}, #{modDttm})
+            (#{vehicleId}, #{model}, #{manufacturer}, #{price}, #{regDttm}, #{modDttm})
         ON DUPLICATE KEY UPDATE
             MODEL = VALUES(MODEL),
             MANUFACTURER = VALUES(MANUFACTURER),
-            COLOR = VALUES(COLOR),
+            PRICE = VALUES(PRICE),
             REG_DTTM = VALUES(REG_DTTM),
             MOD_DTTM = VALUES(MOD_DTTM)
     </insert>

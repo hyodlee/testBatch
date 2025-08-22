@@ -9,13 +9,14 @@ public final class DummyErpApiInfo {
 
     /** 더미 ERP REST API 엔드포인트 */
     public static final String DUMMY_ENDPOINT =
-        "https://dummy-erp.example.com/api/v1/customers";
+        "https://dummy-erp.example.com/api/v1/vehicles";
 
     /** 더미 응답 JSON (테스트용) */
     public static final String DUMMY_RESPONSE = "{\\n"
-        + "  \\\"id\\\": \\\"DUMMY-CUSTOMER-0001\\\",\\n"
-        + "  \\\"name\\\": \\\"테스트 더미 고객\\\",\\n"
-        + "  \\\"email\\\": \\\"dummy-customer@example.com\\\",\\n"
+        + "  \\\"vehicleId\\\": \\\"DUMMY-VEHICLE-0001\\\",\\n"
+        + "  \\\"model\\\": \\\"테스트 더미 차량\\\",\\n"
+        + "  \\\"manufacturer\\\": \\\"더미 제조사\\\",\\n"
+        + "  \\\"price\\\": 1000000,\\n"
         + "  \\\"created_at\\\": \\\"2024-05-10T09:00:00Z\\\"\\n"
         + "}";
 }

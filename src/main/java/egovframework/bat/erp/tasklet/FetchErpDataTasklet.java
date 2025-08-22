@@ -103,14 +103,14 @@ public class FetchErpDataTasklet implements Tasklet {
      * @param vehicles 차량 정보 목록
      */
     private void insertVehicles(List<VehicleInfo> vehicles) {
-        String sql = "INSERT INTO MIGSTG.ERP_VEHICLE (vehicle_id, model, manufacturer, color, reg_dttm, mod_dttm) "
+        String sql = "INSERT INTO MIGSTG.ERP_VEHICLE (vehicle_id, model, manufacturer, price, reg_dttm, mod_dttm) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.batchUpdate(sql, vehicles, vehicles.size(), (ps, vehicle) -> {
             ps.setString(1, vehicle.getVehicleId());
             ps.setString(2, vehicle.getModel());
             ps.setString(3, vehicle.getManufacturer());
-            ps.setString(4, vehicle.getColor());
+            ps.setBigDecimal(4, vehicle.getPrice());
             ps.setTimestamp(5, vehicle.getRegDttm() == null ? null : new Timestamp(vehicle.getRegDttm().getTime()));
             ps.setTimestamp(6, vehicle.getModDttm() == null ? null : new Timestamp(vehicle.getModDttm().getTime()));
         });

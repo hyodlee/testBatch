@@ -1,6 +1,7 @@
 package egovframework.bat.erp.domain;
 
 import java.util.Date;
+import java.math.BigDecimal;
 
 import lombok.Data;
 
@@ -13,7 +14,7 @@ public class VehicleInfo {
     private String vehicleId;     /** 차량ID (EsntlIdGenerator 등을 통해 생성) */
     private String model;         /** 모델명 */
     private String manufacturer;  /** 제조사 */
-    private String color;         /** 색상 */
+    private BigDecimal price;     /** 가격 */
     private Date regDttm;         /** 등록일시 */
     private Date modDttm;         /** 수정일시 */
 }

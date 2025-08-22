@@ -42,3 +42,8 @@ logging:
 erp:
   # ERP 시스템 API URL
   api-url: http://localhost:8080/api/erp
+
+# 기본 데이터소스 설정
+app:
+  datasource:
+    primary: dataSource-stg

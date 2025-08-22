@@ -10,6 +10,8 @@ import org.springframework.context.annotation.ImportResource;
  */
 @Configuration
 @ImportResource({
+    // 데이터소스 및 트랜잭션 매니저 설정
+    "classpath:/egovframework/batch/context-batch-datasource.xml",
     // 배치 잡 실행기 관련 기본 설정
     "classpath:/egovframework/batch/context-batch-job-launcher.xml",
     // ERP REST -> STG 배치 잡 설정을 로딩하여 Job 빈을 등록

@@ -5,7 +5,6 @@
 			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 			http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-3.0.xsd">
 
-        <import resource="classpath:/egovframework/batch/context-batch-datasource.xml" />
         <import resource="classpath:/egovframework/batch/context-batch-mapper.xml" />
         <!-- 공통 설정(컴포넌트 스캔 등)을 포함하여 Bean 등록 누락 방지 -->
         <import resource="classpath:/egovframework/batch/context-common.xml" />

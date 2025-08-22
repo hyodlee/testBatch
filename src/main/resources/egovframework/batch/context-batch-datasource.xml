@@ -8,35 +8,27 @@
 
 	<context:annotation-config />
 
-	<bean id="egov.propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="locations">
-            <list>
-                <value>classpath:/egovframework/batch/properties/globals.properties</value>
-            </list>
-        </property>
-    </bean>
-
     <!-- 데이터소스 설정 -->
     <bean id="dataSource-remote1" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="${Globals.Remote1.DriverClassName}"/>
-        <property name="url" value="${Globals.Remote1.Url}" />
-        <property name="username" value="${Globals.Remote1.UserName}"/>
-        <property name="password" value="${Globals.Remote1.Password}"/>
+        <property name="driverClassName" value="${spring.datasource.egovremote1_cubrid.driver-class-name}"/>
+        <property name="url" value="${spring.datasource.egovremote1_cubrid.url}" />
+        <property name="username" value="${spring.datasource.egovremote1_cubrid.username}"/>
+        <property name="password" value="${spring.datasource.egovremote1_cubrid.password}"/>
     </bean>
 
     <!-- 스테이징 DB 데이터소스 -->
     <bean id="dataSource-stg" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="${Globals.Stg.DriverClassName}"/>
-        <property name="url" value="${Globals.Stg.Url}" />
-        <property name="username" value="${Globals.Stg.UserName}"/>
-        <property name="password" value="${Globals.Stg.Password}"/>
+        <property name="driverClassName" value="${spring.datasource.migstg_mysql.driver-class-name}"/>
+        <property name="url" value="${spring.datasource.migstg_mysql.url}" />
+        <property name="username" value="${spring.datasource.migstg_mysql.username}"/>
+        <property name="password" value="${spring.datasource.migstg_mysql.password}"/>
     </bean>
 
     <bean id="dataSource-local" class="org.apache.commons.dbcp2.BasicDataSource" destroy-method="close">
-        <property name="driverClassName" value="${Globals.Local.DriverClassName}"/>
-        <property name="url" value="${Globals.Local.Url}" />
-        <property name="username" value="${Globals.Local.UserName}"/>
-        <property name="password" value="${Globals.Local.Password}"/>
+        <property name="driverClassName" value="${spring.datasource.egovlocal_mysql.driver-class-name}"/>
+        <property name="url" value="${spring.datasource.egovlocal_mysql.url}" />
+        <property name="username" value="${spring.datasource.egovlocal_mysql.username}"/>
+        <property name="password" value="${spring.datasource.egovlocal_mysql.password}"/>
     </bean>
 
     <!-- 로컬 데이터소스를 사용하는 JdbcTemplate -->

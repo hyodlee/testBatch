@@ -7,7 +7,8 @@
 	<import resource="../abstract/eGovBase.xml" />
 
 	<!-- commit-interval 값은 일반적으로 500~1000으로 설정함 -->
-	<job id="mybatisToMybatisJob" parent="eGovBaseJob" xmlns="http://www.springframework.org/schema/batch">
+        <!-- 중복 등록을 피하기 위해 잡 이름을 변경하였다 -->
+        <job id="mybatisToMybatisSampleJob" parent="eGovBaseJob" xmlns="http://www.springframework.org/schema/batch">
 		<step id="mybatisToMybatisStep" parent="eGovBaseStep">
 			<tasklet>
 				<chunk reader="mybatisToIbatisJob.mybatisToIbatisStep.mybatisItemReader"

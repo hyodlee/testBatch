@@ -9,6 +9,7 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +31,8 @@ public class ExampleJobController {
     private final JobLauncher jobLauncher;
 
     // MyBatis 데이터를 MyBatis 데이터베이스로 옮기는 배치 잡
-    private final Job mybatisToMybatisJob;
+    // 동일 이름의 중복 등록을 방지하기 위해 잡 이름을 변경하였다
+    private final @Qualifier("mybatisToMybatisSampleJob") Job mybatisToMybatisSampleJob;
 
     /**
      * 마이바티스 배치 잡을 실행한다.
@@ -51,7 +53,8 @@ public class ExampleJobController {
         JobParameters jobParameters = builder.toJobParameters();
 
         try {
-            JobExecution execution = jobLauncher.run(mybatisToMybatisJob, jobParameters);
+            // 변경된 잡 이름으로 실행한다
+            JobExecution execution = jobLauncher.run(mybatisToMybatisSampleJob, jobParameters);
             return ResponseEntity.ok(execution.getStatus());
         } catch (Exception e) {
             LOGGER.error("마이바티스 배치 실행 실패", e);

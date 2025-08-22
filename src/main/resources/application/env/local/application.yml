@@ -22,3 +22,7 @@ spring:
       url: "jdbc:cubrid:192.168.0.10:33000:egovremote1:::"
       username: readuser
       password: read!1234
+
+erp:
+  # ERP 시스템 API URL
+  api-url: http://localhost:8080/api/erp

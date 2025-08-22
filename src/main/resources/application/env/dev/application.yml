@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: dev
   datasource:
     # 개발 서버 MySQL
     egovlocal_mysql:

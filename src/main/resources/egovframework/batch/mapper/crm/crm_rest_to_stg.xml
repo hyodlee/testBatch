@@ -9,7 +9,7 @@
     </update>
 
     <!-- REST 데이터 적재 -->
-    <insert id="insertCustomerStg" parameterType="egovframework.bat.crm.domain.CustomerInfo">
+    <insert id="insertCustomerStg" parameterType="egovframework.bat.crm.domain.VehicleInfo">
         INSERT INTO MIGSTG.CRM_CUSTOMER
             (CUSTOMER_ID, NAME, EMAIL, PHONE, REG_DTTM, MOD_DTTM)
         VALUES

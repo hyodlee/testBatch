@@ -25,8 +25,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *  2021.11.25   신용호                 최초 생성
  *  
  *  </pre>
- */
+*/
 
+@SpringBootApplication // 스프링 부트 애플리케이션으로 선언
 public class EgovBootApplication implements CommandLineRunner {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EgovBootApplication.class);

@@ -8,7 +8,8 @@
 		<property name="jobDataAsMap">
 			<map>
 				<!-- DB에서 DB로 데이터 이동을 위한 작업 이름 설정 (샘플) -->
-				<entry key="jobName" value="mybatisToMybatisJob" />
+                                <!-- 변경된 잡 이름을 사용하도록 수정 -->
+                                <entry key="jobName" value="mybatisToMybatisSampleJob" />
 				<entry key="jobLocator" value-ref="jobRegistry" />
 				<entry key="jobLauncher" value-ref="jobLauncher" />
 			</map>

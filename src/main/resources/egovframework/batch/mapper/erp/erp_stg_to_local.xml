@@ -4,7 +4,7 @@
 <mapper namespace="Customer">
 
     <!-- STG에서 로컬로 이관할 고객 목록 조회 -->
-    <select id="selectCustomerList" resultType="egovframework.bat.crm.domain.VehicleInfo">
+    <select id="selectCustomerList" resultType="egovframework.bat.erp.domain.VehicleInfo">
         SELECT
             CUSTOMER_ID,
             NAME,
@@ -16,7 +16,7 @@
     </select>
 
     <!-- 로컬 DB에 고객 정보 적재 -->
-    <insert id="insertCustomerLocal" parameterType="egovframework.bat.crm.domain.VehicleInfo">
+    <insert id="insertCustomerLocal" parameterType="egovframework.bat.erp.domain.VehicleInfo">
         INSERT INTO CRM_CUSTOMER
             (CUSTOMER_ID, NAME, EMAIL, PHONE, REG_DTTM, MOD_DTTM)
         VALUES

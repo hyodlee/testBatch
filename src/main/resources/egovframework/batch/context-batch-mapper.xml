@@ -53,38 +53,38 @@
         </property>
     </bean>
 
-    <!-- CRM REST->STG 적재용 SqlSessionFactory -->
-    <bean id="sqlSessionFactory-crm-to-stg" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <!-- ERP REST->STG 적재용 SqlSessionFactory -->
+    <bean id="sqlSessionFactory-erp-to-stg" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource-stg"/>
         <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">
             <list>
                 <value>classpath:/egovframework/batch/mapper/example/Egov_Example_SQL.xml</value>
-                <value>classpath:/egovframework/batch/mapper/crm/crm_rest_to_stg.xml</value>
+                <value>classpath:/egovframework/batch/mapper/erp/erp_rest_to_stg.xml</value>
             </list>
         </property>
     </bean>
 
-    <!-- CRM STG 조회용 SqlSessionFactory -->
-    <bean id="sqlSessionFactory-crm-stg-local" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <!-- ERP STG 조회용 SqlSessionFactory -->
+    <bean id="sqlSessionFactory-erp-stg-local" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource-stg"/>
         <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">
             <list>
                 <value>classpath:/egovframework/batch/mapper/example/Egov_Example_SQL.xml</value>
-                <value>classpath:/egovframework/batch/mapper/crm/crm_stg_to_local.xml</value>
+                <value>classpath:/egovframework/batch/mapper/erp/erp_stg_to_local.xml</value>
             </list>
         </property>
     </bean>
 
-    <!-- CRM 로컬 적재용 SqlSessionFactory -->
-    <bean id="sqlSessionFactory-crm-local" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <!-- ERP 로컬 적재용 SqlSessionFactory -->
+    <bean id="sqlSessionFactory-erp-local" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource-local"/>
         <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">
             <list>
                 <value>classpath:/egovframework/batch/mapper/example/Egov_Example_SQL.xml</value>
-                <value>classpath:/egovframework/batch/mapper/crm/crm_stg_to_local.xml</value>
+                <value>classpath:/egovframework/batch/mapper/erp/erp_stg_to_local.xml</value>
             </list>
         </property>
     </bean>

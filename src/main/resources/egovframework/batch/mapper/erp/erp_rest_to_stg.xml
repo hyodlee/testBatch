@@ -4,12 +4,12 @@
 <mapper namespace="Customer">
 
     <!-- STG 테이블 초기화 -->
-    <update id="truncateCrmStg">
+    <update id="truncateErpStg">
         TRUNCATE TABLE MIGSTG.CRM_CUSTOMER
     </update>
 
     <!-- REST 데이터 적재 -->
-    <insert id="insertCustomerStg" parameterType="egovframework.bat.crm.domain.VehicleInfo">
+    <insert id="insertCustomerStg" parameterType="egovframework.bat.erp.domain.VehicleInfo">
         INSERT INTO MIGSTG.CRM_CUSTOMER
             (CUSTOMER_ID, NAME, EMAIL, PHONE, REG_DTTM, MOD_DTTM)
         VALUES

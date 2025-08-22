@@ -11,6 +11,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.ComponentScan;
 
 /**
  * @author 배치실행개발팀
@@ -26,8 +27,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  *  
  *  </pre>
 */
-
 @SpringBootApplication // 스프링 부트 애플리케이션으로 선언
+@ComponentScan(basePackages = {"com.springboot.main", "egovframework.bat"}) // 스캔할 패키지 지정
 public class EgovBootApplication implements CommandLineRunner {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EgovBootApplication.class);

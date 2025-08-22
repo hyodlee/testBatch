@@ -17,7 +17,7 @@ public class MultiDataSourceConfig {
     // 스테이징 MySQL (Primary)
     @Primary
     @Bean(name = "migstgDataSource")
-    @ConfigurationProperties("spring.datasource.migstg_mysql")
+    @ConfigurationProperties("spring.datasource.migstg-mysql")
     public DataSource migstgDataSource() {
         return DataSourceBuilder.create().build();
     }
@@ -29,7 +29,7 @@ public class MultiDataSourceConfig {
 
     // 운영용 MySQL
     @Bean(name = "egovlocalDataSource")
-    @ConfigurationProperties("spring.datasource.egovlocal_mysql")
+    @ConfigurationProperties("spring.datasource.egovlocal-mysql")
     public DataSource egovlocalDataSource() {
         return DataSourceBuilder.create().build();
     }
@@ -41,7 +41,7 @@ public class MultiDataSourceConfig {
 
     // Remote1 CUBRID
     @Bean(name = "egovremote1CubridDataSource")
-    @ConfigurationProperties("spring.datasource.egovremote1_cubrid")
+    @ConfigurationProperties("spring.datasource.egovremote1-cubrid")
     public DataSource egovremote1CubridDataSource() {
         return DataSourceBuilder.create().build();
     }

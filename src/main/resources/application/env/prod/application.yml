@@ -3,21 +3,21 @@ spring:
     active: prod
   datasource:
     # 운영 서버 MySQL
-    egovlocal_mysql:
+    egovlocal-mysql:
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://prod.mysql.example.com:3306/egovprod
       username: produser
       password: prodpass
 
     # 스테이징 MySQL (주 데이터베이스)
-    migstg_mysql:
+    migstg-mysql:
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://prod.mysql.example.com:3306/migstg
       username: migprod
       password: prod!1234
 
     # 원격1 CUBRID
-    egovremote1_cubrid:
+    egovremote1-cubrid:
       driver-class-name: cubrid.jdbc.driver.CUBRIDDriver
       url: "jdbc:cubrid:192.168.20.20:33000:egovremote1_prod:::"
       username: prodread

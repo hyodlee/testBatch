@@ -73,9 +73,9 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
   - `src/main/resources/egovframework/batch/mapper/crm/crm_rest_to_stg.xml`: CRM REST 데이터→STG 적재를 위한 SQL 매퍼
   - `src/main/resources/egovframework/batch/mapper/crm/crm_stg_to_local.xml`: STG→로컬 데이터 이동을 위한 SQL 매퍼
 - 공통, 도메인 및 유틸 클래스:
-  - `src/main/java/egovframework/bat/crm/tasklet/FetchCrmDataTasklet.java`: CRM 시스템에서 고객 정보를 조회하여 STG에 적재하는 Tasklet
-  - `src/main/java/egovframework/bat/crm/processor/CustomerInfoProcessor.java`: CRM 고객 정보를 처리하는 배치 프로세서
-  - `src/main/java/egovframework/bat/crm/domain/CustomerInfo.java`: CRM 고객 정보를 담는 도메인 클래스
+  - `src/main/java/egovframework/bat/crm/tasklet/FetchCrmDataTasklet.java`: CRM 시스템에서 차량 정보를 조회하여 STG에 적재하는 Tasklet
+  - `src/main/java/egovframework/bat/crm/processor/VehicleInfoProcessor.java`: CRM 차량 정보를 처리하는 배치 프로세서
+  - `src/main/java/egovframework/bat/crm/domain/VehicleInfo.java`: CRM 차량 정보를 담는 도메인 클래스
   - `src/main/java/egovframework/bat/crm/api/RestToStgJobController.java`: CRM REST 배치를 수동 실행하는 컨트롤러
 
 ## 예제 배치 잡 디렉터리(`example`)

@@ -1,6 +1,6 @@
 package egovframework.bat.crm.tasklet;
 
-import egovframework.bat.crm.domain.CustomerInfo;
+import egovframework.bat.crm.domain.VehicleInfo;
 import egovframework.bat.notification.NotificationSender;
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -20,7 +20,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * CRM 시스템에서 고객 정보를 조회하여 STG 테이블에 적재하는 Tasklet.
+ * CRM 시스템에서 차량 정보를 조회하여 STG 테이블에 적재하는 Tasklet.
  */
 @Component
 public class FetchCrmDataTasklet implements Tasklet {
@@ -37,7 +37,7 @@ public class FetchCrmDataTasklet implements Tasklet {
     /** 장애 알림 전송기 목록 */
     private final List<NotificationSender> notificationSenders;
 
-    /** 고객 정보를 조회할 API URL */
+    /** 차량 정보를 조회할 API URL */
     @Value("${crm.api.url}")
     private String apiUrl;
 
@@ -51,36 +51,36 @@ public class FetchCrmDataTasklet implements Tasklet {
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        LOGGER.info("CRM 고객 데이터 수집 시작");
+        LOGGER.info("CRM 차량 데이터 수집 시작");
         // 1. 외부 API 호출
-        List<CustomerInfo> customers = fetchCustomers();
-        LOGGER.info("조회된 고객 수: {}", customers.size());
+        List<VehicleInfo> vehicles = fetchVehicles();
+        LOGGER.info("조회된 차량 수: {}", vehicles.size());
 
         // 2. STG 테이블에 데이터 적재
         try {
-            insertCustomers(customers);
+            insertVehicles(vehicles);
         } catch (Exception e) {
             LOGGER.error("STG 테이블 적재 실패", e);
-            notifyFailure("고객 데이터 적재 실패: " + e.getMessage());
+            notifyFailure("차량 데이터 적재 실패: " + e.getMessage());
             throw e;
         }
 
-        LOGGER.info("CRM 고객 데이터 수집 완료");
+        LOGGER.info("CRM 차량 데이터 수집 완료");
         return RepeatStatus.FINISHED;
     }
 
     /**
-     * CRM API를 호출하여 고객 목록을 조회한다.
-     * JSON/XML 응답은 CustomerInfo 배열로 자동 매핑된다.
-     * 
-     * @return 고객 정보 목록
+     * CRM API를 호출하여 차량 목록을 조회한다.
+     * JSON/XML 응답은 VehicleInfo 배열로 자동 매핑된다.
+     *
+     * @return 차량 정보 목록
      */
-    private List<CustomerInfo> fetchCustomers() {
+    private List<VehicleInfo> fetchVehicles() {
         int maxAttempts = 3;
         for (int attempt = 1; attempt <= maxAttempts; attempt++) {
             try {
                 LOGGER.info("CRM API 호출 시도: {} / {}", attempt, maxAttempts);
-                CustomerInfo[] response = restTemplate.getForObject(apiUrl, CustomerInfo[].class);
+                VehicleInfo[] response = restTemplate.getForObject(apiUrl, VehicleInfo[].class);
                 if (response == null) {
                     LOGGER.error("CRM API 응답이 비어있음");
                     return Collections.emptyList();
@@ -98,21 +98,21 @@ public class FetchCrmDataTasklet implements Tasklet {
     }
 
     /**
-     * 조회된 고객 정보를 migstg 테이블에 저장한다.
-     * 
-     * @param customers 고객 정보 목록
+     * 조회된 차량 정보를 migstg 테이블에 저장한다.
+     *
+     * @param vehicles 차량 정보 목록
      */
-    private void insertCustomers(List<CustomerInfo> customers) {
+    private void insertVehicles(List<VehicleInfo> vehicles) {
         String sql = "INSERT INTO migstg (customer_id, name, email, phone, reg_dttm, mod_dttm) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
-        jdbcTemplate.batchUpdate(sql, customers, customers.size(), (ps, customer) -> {
-            ps.setString(1, customer.getCustomerId());
-            ps.setString(2, customer.getName());
-            ps.setString(3, customer.getEmail());
-            ps.setString(4, customer.getPhone());
-            ps.setTimestamp(5, customer.getRegDttm() == null ? null : new Timestamp(customer.getRegDttm().getTime()));
-            ps.setTimestamp(6, customer.getModDttm() == null ? null : new Timestamp(customer.getModDttm().getTime()));
+        jdbcTemplate.batchUpdate(sql, vehicles, vehicles.size(), (ps, vehicle) -> {
+            ps.setString(1, vehicle.getCustomerId());
+            ps.setString(2, vehicle.getName());
+            ps.setString(3, vehicle.getEmail());
+            ps.setString(4, vehicle.getPhone());
+            ps.setTimestamp(5, vehicle.getRegDttm() == null ? null : new Timestamp(vehicle.getRegDttm().getTime()));
+            ps.setTimestamp(6, vehicle.getModDttm() == null ? null : new Timestamp(vehicle.getModDttm().getTime()));
         });
     }
 

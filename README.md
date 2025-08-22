@@ -67,7 +67,7 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 다음은 관련된 주요 파일들입니다.
 
 - 잡 설정:
-  - `src/main/resources/egovframework/batch/job/erp/restToStgJob.xml`: ERP REST API에서 데이터를 조회하여 STG에 적재하는 Job 설정 파일
+  - `src/main/resources/egovframework/batch/job/erp/erpRestToStgJob.xml`: ERP REST API에서 데이터를 조회하여 STG에 적재하는 Job 설정 파일
   - `src/main/resources/egovframework/batch/job/erp/stgToLocalJob.xml`: STG에 적재된 ERP 데이터를 로컬 DB로 이관하는 Job 설정 파일
 - 매퍼 파일:
   - `src/main/resources/egovframework/batch/mapper/erp/erp_rest_to_stg.xml`: ERP REST 데이터→STG 적재를 위한 SQL 매퍼

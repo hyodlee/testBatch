@@ -10,6 +10,10 @@ mvn -Pprod package    # 운영 환경 빌드
 
 각 프로필은 해당 환경의 `globals-<프로필>.properties` 파일을 사용하여 `globals.properties`를 생성합니다.
 
+## STG 환경용 DDL 스크립트
+
+migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.sql`을 실행해 테이블 구조를 생성합니다. STG 연결 정보는 각 환경별 `globals.properties` 파일의 `Globals.Stg.*` 항목을 참고하세요.
+
 배치 잡 실행 시 `sourceSystem` 파라미터를 생략하면 `LND` 프리픽스로 ESNTL_ID가 생성됩니다.
 
 ## Spring Batch 처리 방식: Chunk와 Tasklet

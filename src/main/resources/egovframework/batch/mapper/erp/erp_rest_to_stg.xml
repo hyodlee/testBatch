@@ -11,9 +11,9 @@
     <!-- REST 데이터 적재 -->
     <insert id="insertVehicleStg" parameterType="egovframework.bat.erp.domain.VehicleInfo">
         INSERT INTO MIGSTG.ERP_VEHICLE
-            (VEHICLE_ID, MODEL, MANUFACTURER, COLOR, REG_DTTM, MOD_DTTM)
+            (VEHICLE_ID, MODEL, MANUFACTURER, PRICE, REG_DTTM, MOD_DTTM)
         VALUES
-            (#{vehicleId}, #{model}, #{manufacturer}, #{color}, #{regDttm}, #{modDttm})
+            (#{vehicleId}, #{model}, #{manufacturer}, #{price}, #{regDttm}, #{modDttm})
     </insert>
 
 </mapper>

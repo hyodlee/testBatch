@@ -1,10 +1,12 @@
-# Overwrite the bins created from the Spring Framework 5.* - When you try to register bins with the same name - BeanDefinitionOverrideException occurs, setting that eliminates this.
 spring:
+  profiles:
+    active: local
   main:
+    # Spring Framework 5.*에서 같은 이름의 빈을 등록할 때 발생하는 BeanDefinitionOverrideException 방지
     allow-bean-definition-overriding: true
   output:
     ansi:
-      enabled: never   # ANSI 색상 끄기, Eclipse > Preferences > Run/Debug > Console > ANSI Support 에서 Enable ANSI support 체크박스 끄기
+      enabled: never   # ANSI 색상 끄기, Eclipse 콘솔의 ANSI Support 체크박스 끄기
 
 logging:
   # 기존 로그 레벨 설정을 주석 처리하여 log4j2 설정만 사용하도록 함

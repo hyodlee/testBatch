@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class MultiDataSourceConfig {
 
-    // Stg MySQL (Primary)
+    // 스테이징 MySQL (Primary)
     @Primary
     @Bean(name = "migstgDataSource")
     @ConfigurationProperties("spring.datasource.migstg_mysql")
@@ -27,7 +27,7 @@ public class MultiDataSourceConfig {
         return new JdbcTemplate(ds);
     }
 
-    // 로컬 개발용 MySQL
+    // 운영용 MySQL
     @Bean(name = "egovlocalDataSource")
     @ConfigurationProperties("spring.datasource.egovlocal_mysql")
     public DataSource egovlocalDataSource() {

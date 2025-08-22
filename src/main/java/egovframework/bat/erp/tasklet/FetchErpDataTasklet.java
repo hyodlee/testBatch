@@ -98,12 +98,12 @@ public class FetchErpDataTasklet implements Tasklet {
     }
 
     /**
-     * 조회된 차량 정보를 migstg 테이블에 저장한다.
+     * 조회된 차량 정보를 migstg.erp_vehicle 테이블에 저장한다.
      *
      * @param vehicles 차량 정보 목록
      */
     private void insertVehicles(List<VehicleInfo> vehicles) {
-        String sql = "INSERT INTO migstg (vehicle_id, model, manufacturer, price, reg_dttm, mod_dttm) "
+        String sql = "INSERT INTO migstg.erp_vehicle (VEHICLE_ID, MODEL, MANUFACTURER, PRICE, REG_DTTM, MOD_DTTM) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
         jdbcTemplate.batchUpdate(sql, vehicles, vehicles.size(), (ps, vehicle) -> {

@@ -1,4 +1,4 @@
-package egovframework.bat.crm.domain;
+package egovframework.bat.erp.domain;
 
 import java.util.Date;
 

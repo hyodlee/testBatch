@@ -58,9 +58,9 @@ public class EgovBootApplication implements CommandLineRunner {
         // remote1 시스템에서 STG로, 이어서 STG에서 Local로 이관하는 두 배치를 등록
         jobPaths.add("/egovframework/batch/job/insa/insaRemote1ToStgJob.xml");
         jobPaths.add("/egovframework/batch/job/insa/insaStgToLocalJob.xml");
-        // CRM 시스템의 데이터를 STG와 Local로 이관하는 두 배치를 등록
-        jobPaths.add("/egovframework/batch/job/crm/restToStgJob.xml");
-        jobPaths.add("/egovframework/batch/job/crm/stgToLocalJob.xml");
+        // ERP 시스템의 데이터를 STG와 Local로 이관하는 두 배치를 등록
+        jobPaths.add("/egovframework/batch/job/erp/restToStgJob.xml");
+        jobPaths.add("/egovframework/batch/job/erp/stgToLocalJob.xml");
 
 		/*
 		 * EgovSchedulerRunner에 contextPath, schedulerJobPath, jobPaths를 인수로 넘겨서 실행한다.

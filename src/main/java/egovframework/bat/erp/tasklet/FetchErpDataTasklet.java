@@ -1,6 +1,6 @@
-package egovframework.bat.crm.tasklet;
+package egovframework.bat.erp.tasklet;
 
-import egovframework.bat.crm.domain.VehicleInfo;
+import egovframework.bat.erp.domain.VehicleInfo;
 import egovframework.bat.notification.NotificationSender;
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -20,13 +20,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * CRM 시스템에서 차량 정보를 조회하여 STG 테이블에 적재하는 Tasklet.
+ * ERP 시스템에서 차량 정보를 조회하여 STG 테이블에 적재하는 Tasklet.
  */
 @Component
-public class FetchCrmDataTasklet implements Tasklet {
+public class FetchErpDataTasklet implements Tasklet {
 
     /** 로거 */
-    private static final Logger LOGGER = LoggerFactory.getLogger(FetchCrmDataTasklet.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(FetchErpDataTasklet.class);
 
     /** 외부 API 호출용 RestTemplate */
     private final RestTemplate restTemplate;
@@ -38,10 +38,10 @@ public class FetchCrmDataTasklet implements Tasklet {
     private final List<NotificationSender> notificationSenders;
 
     /** 차량 정보를 조회할 API URL */
-    @Value("${Globals.Crm.ApiUrl}")
+    @Value("${Globals.Erp.ApiUrl}")
     private String apiUrl;
 
-    public FetchCrmDataTasklet(RestTemplateBuilder restTemplateBuilder,
+    public FetchErpDataTasklet(RestTemplateBuilder restTemplateBuilder,
                                @Qualifier("jdbcTemplateLocal") JdbcTemplate jdbcTemplate,
                                List<NotificationSender> notificationSenders) {
         this.restTemplate = restTemplateBuilder.build();
@@ -51,7 +51,7 @@ public class FetchCrmDataTasklet implements Tasklet {
 
     @Override
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
-        LOGGER.info("CRM 차량 데이터 수집 시작");
+        LOGGER.info("ERP 차량 데이터 수집 시작");
         // 1. 외부 API 호출
         List<VehicleInfo> vehicles = fetchVehicles();
         LOGGER.info("조회된 차량 수: {}", vehicles.size());
@@ -65,12 +65,12 @@ public class FetchCrmDataTasklet implements Tasklet {
             throw e;
         }
 
-        LOGGER.info("CRM 차량 데이터 수집 완료");
+        LOGGER.info("ERP 차량 데이터 수집 완료");
         return RepeatStatus.FINISHED;
     }
 
     /**
-     * CRM API를 호출하여 차량 목록을 조회한다.
+     * ERP API를 호출하여 차량 목록을 조회한다.
      * JSON/XML 응답은 VehicleInfo 배열로 자동 매핑된다.
      *
      * @return 차량 정보 목록
@@ -79,18 +79,18 @@ public class FetchCrmDataTasklet implements Tasklet {
         int maxAttempts = 3;
         for (int attempt = 1; attempt <= maxAttempts; attempt++) {
             try {
-                LOGGER.info("CRM API 호출 시도: {} / {}", attempt, maxAttempts);
+                LOGGER.info("ERP API 호출 시도: {} / {}", attempt, maxAttempts);
                 VehicleInfo[] response = restTemplate.getForObject(apiUrl, VehicleInfo[].class);
                 if (response == null) {
-                    LOGGER.error("CRM API 응답이 비어있음");
+                    LOGGER.error("ERP API 응답이 비어있음");
                     return Collections.emptyList();
                 }
                 return Arrays.asList(response);
             } catch (Exception e) {
-                LOGGER.error("CRM API 호출 실패: 시도 {} / {}", attempt, maxAttempts, e);
+                LOGGER.error("ERP API 호출 실패: 시도 {} / {}", attempt, maxAttempts, e);
                 if (attempt == maxAttempts) {
                     saveFailedCall(e);
-                    notifyFailure("CRM API 호출 실패: " + e.getMessage());
+                    notifyFailure("ERP API 호출 실패: " + e.getMessage());
                 }
             }
         }
@@ -122,7 +122,7 @@ public class FetchCrmDataTasklet implements Tasklet {
      * @param e 발생한 예외
      */
     private void saveFailedCall(Exception e) {
-        String sql = "INSERT INTO crm_api_fail_log (api_url, error_message, reg_dttm) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO erp_api_fail_log (api_url, error_message, reg_dttm) VALUES (?, ?, ?)";
         jdbcTemplate.update(sql, apiUrl, e.getMessage(), new Timestamp(System.currentTimeMillis()));
     }
 

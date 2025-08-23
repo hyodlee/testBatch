@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class MultiDataSourceConfig {
 
-    // 스테이징 MySQL (Primary)
+    // 스테이징 MySQL (Primary) 데이타소스
     @Primary
     //@Bean(name = "migstgDataSource")
     @Bean(name = {"dataSource", "dataSource-stg"})
@@ -23,13 +23,14 @@ public class MultiDataSourceConfig {
         return DataSourceBuilder.create().build();
     }
 
+    // 스테이징 MySQL (Primary) 데이타소스를 사용하는 JdbcTemplate
     @Bean(name = "migstgJdbcTemplate")
     //JdbcTemplate migstgJdbcTemplate(@Qualifier("migstgDataSource") DataSource ds) {
     JdbcTemplate migstgJdbcTemplate(@Qualifier("dataSource-stg") DataSource ds) {
         return new JdbcTemplate(ds);
     }
 
-    // 운영용 MySQL
+    // 운영 MySQL용 데이타소스
     //@Bean(name = "egovlocalDataSource")
     @Bean(name = "dataSource-local")
     @ConfigurationProperties("spring.datasource.egovlocal-mysql")
@@ -37,14 +38,14 @@ public class MultiDataSourceConfig {
         return DataSourceBuilder.create().build();
     }
 
-    // 로컬 데이터소스를 사용하는 JdbcTemplate
+    // 운영 MySQL용 데이타소스를 사용하는 JdbcTemplate
     @Bean(name = "jdbcTemplateLocal")
     //JdbcTemplate egovlocalJdbcTemplate(@Qualifier("egovlocalDataSource") DataSource ds) {
     JdbcTemplate egovlocalJdbcTemplate(@Qualifier("dataSource-local") DataSource ds) {
         return new JdbcTemplate(ds);
     }
 
-    // Remote1 CUBRID
+    // Remote1 CUBRID 데이타소스
     //@Bean(name = "egovremote1CubridDataSource")
     @Bean(name = "dataSource-remote1")
     @ConfigurationProperties("spring.datasource.egovremote1-cubrid")
@@ -52,6 +53,7 @@ public class MultiDataSourceConfig {
         return DataSourceBuilder.create().build();
     }
 
+    // Remote1 CUBRID 데이타소스를 사용하는 JdbcTemplate
     @Bean(name = "egovremote1CubridJdbcTemplate")
     //JdbcTemplate egovremote1CubridJdbcTemplate(@Qualifier("egovremote1CubridDataSource") DataSource ds) {
     JdbcTemplate egovremote1CubridJdbcTemplate(@Qualifier("dataSource-remote1") DataSource ds) {

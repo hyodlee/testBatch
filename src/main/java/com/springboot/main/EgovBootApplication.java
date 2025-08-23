@@ -81,8 +81,7 @@ public class EgovBootApplication implements CommandLineRunner {
 		EgovSchedulerRunner egovSchedulerRunner = new EgovSchedulerRunner("/egovframework/batch/context-batch-scheduler.xml", "/egovframework/batch/context-scheduler-job.xml",
 //				jobPaths, 30000);
 				jobPaths, Long.MAX_VALUE);
-	// Boot 컨텍스트를 부모로 사용하여 dataSource 빈 재사용
-		egovSchedulerRunner.setApplicationContext(applicationContext);
+		// EgovSchedulerRunner 실행
 		egovSchedulerRunner.start();
 		
     }

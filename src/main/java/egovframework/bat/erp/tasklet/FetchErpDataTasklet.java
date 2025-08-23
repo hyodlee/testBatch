@@ -70,8 +70,9 @@ public class FetchErpDataTasklet implements Tasklet {
             LOGGER.error("DB 커넥션 획득 실패", e);
         } catch (Exception e) {
             LOGGER.error("STG 테이블 적재 실패", e);
+            // 실패 로그 저장
+            saveFailLog(e);
             notifyFailure("차량 데이터 적재 실패: " + e.getMessage());
-            throw e;
         }
 
         LOGGER.info("ERP 차량 데이터 수집 완료");
@@ -103,7 +104,8 @@ public class FetchErpDataTasklet implements Tasklet {
             } catch (Exception e) {
                 LOGGER.error("ERP API 호출 실패: 시도 {} / {}", attempt, maxAttempts, e);
                 if (attempt == maxAttempts) {
-                    saveFailedCall(e);
+                    // 실패 로그 저장
+                    saveFailLog(e);
                     notifyFailure("ERP API 호출 실패: " + e.getMessage());
                 }
             }
@@ -147,11 +149,11 @@ public class FetchErpDataTasklet implements Tasklet {
     }
 
     /**
-     * 실패한 REST 호출 정보를 저장한다.
+     * 실패 로그를 저장한다.
      *
      * @param e 발생한 예외
      */
-    private void saveFailedCall(Exception e) {
+    private void saveFailLog(Exception e) {
         String sql = "INSERT INTO migstg.erp_api_fail_log (api_url, error_message, reg_dttm) VALUES (?, ?, ?)";
         try {
             jdbcTemplate.update(sql, apiUrl, e.getMessage(), new Timestamp(System.currentTimeMillis()));

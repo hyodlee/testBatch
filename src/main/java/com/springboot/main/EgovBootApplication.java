@@ -27,8 +27,8 @@ import org.springframework.context.annotation.ComponentScan;
  *  
  *  </pre>
 */
-@SpringBootApplication // 스프링 부트 애플리케이션으로 선언
-//@ComponentScan(basePackages = {"com.springboot.main", "egovframework.bat"}) // 스캔할 패키지 지정
+@SpringBootApplication
+@ComponentScan(basePackages = {"com.springboot.main", "egovframework.bat"}) // 스캔할 패키지 지정
 public class EgovBootApplication implements CommandLineRunner {
 	
 	private static final Logger LOGGER = LoggerFactory.getLogger(EgovBootApplication.class);

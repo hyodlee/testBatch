@@ -3,6 +3,7 @@ DROP TABLE IF EXISTS comtnemplyrinfo;
 DROP TABLE IF EXISTS comtnorgnztinfo;
 DROP TABLE IF EXISTS erp_vehicle;
 DROP TABLE IF EXISTS erp_api_fail_log;
+DROP TABLE IF EXISTS erp_db_fail_log;
 
 -- 조직 테이블
 CREATE TABLE `comtnorgnztinfo` (
@@ -52,3 +53,11 @@ CREATE TABLE `erp_api_fail_log` (
   PRIMARY KEY (`FAIL_LOG_ID`),
   KEY `ERP_API_FAIL_LOG_i01` (`API_URL`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='ERP API 실패 로그';
+
+-- ERP DB 적재 실패 로그 테이블
+CREATE TABLE `erp_db_fail_log` (
+  `FAIL_LOG_ID` bigint NOT NULL AUTO_INCREMENT COMMENT '실패 로그 ID',
+  `ERROR_MESSAGE` varchar(1000) DEFAULT NULL COMMENT '오류 메시지',
+  `REG_DTTM` datetime NOT NULL COMMENT '등록일시',
+  PRIMARY KEY (`FAIL_LOG_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='ERP DB 적재 실패 로그';

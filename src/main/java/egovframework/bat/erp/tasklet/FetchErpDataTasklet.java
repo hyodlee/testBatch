@@ -70,8 +70,8 @@ public class FetchErpDataTasklet implements Tasklet {
             LOGGER.error("DB 커넥션 획득 실패", e);
         } catch (Exception e) {
             LOGGER.error("STG 테이블 적재 실패", e);
-            // 실패 로그 저장
-            saveFailLog(e);
+            // DB 적재 실패 로그 저장
+            saveDbFail(e);
             notifyFailure("차량 데이터 적재 실패: " + e.getMessage());
         }
 
@@ -145,6 +145,8 @@ public class FetchErpDataTasklet implements Tasklet {
             });
         } catch (CannotGetJdbcConnectionException e) {
             LOGGER.error("차량 정보 적재 중 커넥션 획득 실패", e);
+            // DB 적재 실패 로그 저장
+            saveDbFail(e);
         }
     }
 
@@ -159,6 +161,20 @@ public class FetchErpDataTasklet implements Tasklet {
             jdbcTemplate.update(sql, apiUrl, e.getMessage(), new Timestamp(System.currentTimeMillis()));
         } catch (CannotGetJdbcConnectionException ex) {
             LOGGER.error("REST 호출 실패 로그 저장 중 커넥션 획득 실패", ex);
+        }
+    }
+
+    /**
+     * DB 적재 실패 로그를 저장한다.
+     *
+     * @param e 발생한 예외
+     */
+    private void saveDbFail(Exception e) {
+        String sql = "INSERT INTO migstg.erp_db_fail_log (error_message, reg_dttm) VALUES (?, ?)";
+        try {
+            jdbcTemplate.update(sql, e.getMessage(), new Timestamp(System.currentTimeMillis()));
+        } catch (CannotGetJdbcConnectionException ex) {
+            LOGGER.error("DB 적재 실패 로그 저장 중 커넥션 획득 실패", ex);
         }
     }
 

@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.CannotGetJdbcConnectionException;
+import org.springframework.jdbc.BadSqlGrammarException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -161,6 +163,12 @@ public class FetchErpDataTasklet implements Tasklet {
             jdbcTemplate.update(sql, apiUrl, e.getMessage(), new Timestamp(System.currentTimeMillis()));
         } catch (CannotGetJdbcConnectionException ex) {
             LOGGER.error("REST 호출 실패 로그 저장 중 커넥션 획득 실패", ex);
+        } catch (BadSqlGrammarException ex) {
+            // 테이블 미존재 등 SQL 문법 오류가 발생해도 배치를 중단하지 않음
+            LOGGER.error("REST 호출 실패 로그 테이블 SQL 오류", ex);
+        } catch (DataAccessException ex) {
+            // 기타 데이터베이스 접근 오류 처리
+            LOGGER.error("REST 호출 실패 로그 저장 중 데이터 접근 오류", ex);
         }
     }
 
@@ -175,6 +183,12 @@ public class FetchErpDataTasklet implements Tasklet {
             jdbcTemplate.update(sql, e.getMessage(), new Timestamp(System.currentTimeMillis()));
         } catch (CannotGetJdbcConnectionException ex) {
             LOGGER.error("DB 적재 실패 로그 저장 중 커넥션 획득 실패", ex);
+        } catch (BadSqlGrammarException ex) {
+            // 테이블 미존재 등 SQL 문법 오류가 발생해도 배치를 중단하지 않음
+            LOGGER.error("DB 적재 실패 로그 테이블 SQL 오류", ex);
+        } catch (DataAccessException ex) {
+            // 기타 데이터베이스 접근 오류 처리
+            LOGGER.error("DB 적재 실패 로그 저장 중 데이터 접근 오류", ex);
         }
     }
 

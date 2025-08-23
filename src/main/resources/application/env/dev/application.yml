@@ -8,7 +8,7 @@ spring:
   profiles:
     active: dev
   datasource:
-    # 개발 서버 MySQL
+    # 운영 서버 MySQL
     egovlocal-mysql:
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://dev.mysql.example.com:3306/egovdev?useSSL=false&serverTimezone=UTC

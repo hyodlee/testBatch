@@ -6,11 +6,13 @@ import java.util.List;
 import org.egovframe.rte.bat.core.launch.support.EgovSchedulerRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 
 /**
@@ -30,8 +32,12 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.springboot.main", "egovframework.bat"}) // 스캔할 패키지 지정
 public class EgovBootApplication implements CommandLineRunner {
-	
-	private static final Logger LOGGER = LoggerFactory.getLogger(EgovBootApplication.class);
+
+        private static final Logger LOGGER = LoggerFactory.getLogger(EgovBootApplication.class);
+
+        // Boot 애플리케이션 컨텍스트를 주입받아 배치 컨텍스트의 부모로 사용
+        @Autowired
+        private ApplicationContext applicationContext;
 
 	public static void main(String[] args) {
 		//SpringApplication.run(EgovBootApplication.class, args);
@@ -75,6 +81,8 @@ public class EgovBootApplication implements CommandLineRunner {
 		EgovSchedulerRunner egovSchedulerRunner = new EgovSchedulerRunner("/egovframework/batch/context-batch-scheduler.xml", "/egovframework/batch/context-scheduler-job.xml",
 //				jobPaths, 30000);
 				jobPaths, Long.MAX_VALUE);
+	// Boot 컨텍스트를 부모로 사용하여 dataSource 빈 재사용
+		egovSchedulerRunner.setApplicationContext(applicationContext);
 		egovSchedulerRunner.start();
 		
     }

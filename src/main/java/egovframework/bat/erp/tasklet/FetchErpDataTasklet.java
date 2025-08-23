@@ -57,16 +57,22 @@ public class FetchErpDataTasklet implements Tasklet {
         List<VehicleInfo> vehicles = fetchVehicles();
         LOGGER.info("조회된 차량 수: {}", vehicles.size());
 
+        // 조회 결과가 없으면 경고 로그만 남기고 종료
+        if (vehicles.isEmpty()) {
+            LOGGER.warn("조회된 차량이 없어 작업을 종료합니다.");
+            return RepeatStatus.FINISHED;
+        }
+
         // 2. STG 테이블에 데이터 적재
-          try {
-              insertVehicles(vehicles);
-          } catch (CannotGetJdbcConnectionException e) {
-              LOGGER.error("DB 커넥션 획득 실패", e);
-          } catch (Exception e) {
-              LOGGER.error("STG 테이블 적재 실패", e);
-              notifyFailure("차량 데이터 적재 실패: " + e.getMessage());
-              throw e;
-          }
+        try {
+            insertVehicles(vehicles);
+        } catch (CannotGetJdbcConnectionException e) {
+            LOGGER.error("DB 커넥션 획득 실패", e);
+        } catch (Exception e) {
+            LOGGER.error("STG 테이블 적재 실패", e);
+            notifyFailure("차량 데이터 적재 실패: " + e.getMessage());
+            throw e;
+        }
 
         LOGGER.info("ERP 차량 데이터 수집 완료");
         return RepeatStatus.FINISHED;
@@ -111,6 +117,12 @@ public class FetchErpDataTasklet implements Tasklet {
      * @param vehicles 차량 정보 목록
      */
     private void insertVehicles(List<VehicleInfo> vehicles) {
+        // 빈 목록이면 DB 작업을 수행하지 않음
+        if (vehicles == null || vehicles.isEmpty()) {
+            LOGGER.warn("적재할 차량 정보가 없어 insertVehicles를 종료합니다.");
+            return;
+        }
+
         String sql = "INSERT INTO migstg.erp_vehicle (VEHICLE_ID, MODEL, MANUFACTURER, PRICE, REG_DTTM, MOD_DTTM) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 

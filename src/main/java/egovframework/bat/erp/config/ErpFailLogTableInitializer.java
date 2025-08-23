@@ -4,7 +4,6 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
@@ -30,6 +29,11 @@ public class ErpFailLogTableInitializer {
      */
     @PostConstruct
     public void createFailLogTables() {
+        if (jdbcTemplate == null) {
+            // DataSource가 준비되지 않은 경우에는 로그만 남기고 종료
+            LOGGER.warn("jdbcTemplate이 준비되지 않아 실패 로그 테이블을 생성하지 않습니다.");
+            return;
+        }
         try {
             // ERP API 실패 로그 테이블 생성
             jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS migstg.erp_api_fail_log (" +
@@ -46,8 +50,8 @@ public class ErpFailLogTableInitializer {
                 "ERROR_MESSAGE VARCHAR(1000)," +
                 "REG_DTTM DATETIME NOT NULL" +
                 ") ENGINE=InnoDB");
-        } catch (DataAccessException e) {
-            // 테이블 생성 중 문제가 발생해도 애플리케이션은 계속 동작하도록 처리
+        } catch (Exception e) {
+            // 예외 발생 시 로그만 남기고 메서드를 종료하여 애플리케이션에 영향을 주지 않도록 함
             LOGGER.error("실패 로그 테이블 생성 중 오류", e);
         }
     }

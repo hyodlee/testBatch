@@ -43,4 +43,4 @@ logging:
 
 erp:
   # ERP 시스템 API URL
-  api-url: http://localhost:8080/api/v1/vehicles
+  api-url: http://127.0.0.1:8080/api/v1/vehicles

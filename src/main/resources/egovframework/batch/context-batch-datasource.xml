@@ -40,13 +40,15 @@
         <property name="dataSource" ref="dataSource-local" />
     </bean>
  	-->
-
+	<!-- 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager" lazy-init="true">
         <property name="dataSource" ref="dataSource" />
     </bean>
-
+ 	-->
+ 	<!-- 
 	<bean id="lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" />
-
+ 	-->
+ 	<!-- 
 	<bean id="customEditorConfigurer" class="org.springframework.beans.factory.config.CustomEditorConfigurer">
 		<property name="customEditors">
 			<map>
@@ -54,5 +56,5 @@
 			</map>
 		</property>
 	</bean>
-
+ 	-->
 </beans>

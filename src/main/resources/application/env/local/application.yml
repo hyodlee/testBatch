@@ -19,13 +19,15 @@ spring:
     egovlocal-mysql:
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://localhost:3306/egovlocal?useSSL=false&serverTimezone=UTC
-      username: localuser
-      password: localpass
+      username: miguser
+      password: mig!1234
 
     # 원격1 CUBRID
     egovremote1-cubrid:
-      driver-class-name: cubrid.jdbc.driver.CUBRIDDriver
-      url: "jdbc:cubrid:192.168.0.10:33000:egovremote1:::"
+#      driver-class-name: cubrid.jdbc.driver.CUBRIDDriver
+#      url: "jdbc:cubrid:192.168.0.10:33000:egovremote1:::"
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/migstg?useSSL=false&serverTimezone=UTC
       username: readuser
       password: read!1234
 

@@ -6,12 +6,16 @@ import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
 import org.springframework.batch.repeat.RepeatStatus;
+import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.ParameterizedPreparedStatementSetter;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.http.HttpStatus;
 import reactor.core.publisher.Mono;
 import static org.junit.Assert.*;
+import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.*;
 
 /**
  * 원격 사이트 장애 시 빈 목록을 반환할 때 정상 종료되는지 테스트.
@@ -56,24 +60,13 @@ public class FetchErpDataTaskletTest {
                     .build()
             ));
 
-        // insert 시 예외를 발생시키고 update 호출 횟수를 기록하는 JdbcTemplate
-        class TestJdbcTemplate extends JdbcTemplate {
-            int updateCount = 0;
+        // JdbcTemplate을 Mockito로 모의하고 batchUpdate에서 DB 접근 예외 발생을 설정
+        JdbcTemplate jdbcTemplate = mock(JdbcTemplate.class);
+        when(jdbcTemplate.batchUpdate(anyString(), anyList(), anyInt(),
+                any(ParameterizedPreparedStatementSetter.class)))
+            .thenThrow(new DataAccessResourceFailureException("insert fail"));
+        when(jdbcTemplate.update(anyString(), any(), any())).thenReturn(1);
 
-            @Override
-            public <T> int[] batchUpdate(String sql, java.util.List<T> batchArgs, int batchSize,
-                                        org.springframework.jdbc.core.ParameterizedPreparedStatementSetter<T> pss) {
-                throw new RuntimeException("insert fail");
-            }
-
-            @Override
-            public int update(String sql, Object... args) {
-                updateCount++;
-                return 1;
-            }
-        }
-
-        TestJdbcTemplate jdbcTemplate = new TestJdbcTemplate();
         List<NotificationSender> senders = Collections.emptyList();
         FetchErpDataTasklet tasklet = new FetchErpDataTasklet(builder, jdbcTemplate, senders);
 
@@ -85,7 +78,8 @@ public class FetchErpDataTaskletTest {
         RepeatStatus status = tasklet.execute(null, null);
 
         assertEquals(RepeatStatus.FINISHED, status);
-        assertTrue("로그 저장이 호출되어야 합니다.", jdbcTemplate.updateCount > 0);
+        // saveDbFail 메서드 호출로 인해 erp_db_fail_log 테이블에 대한 update가 수행되었는지 검증
+        verify(jdbcTemplate, atLeastOnce()).update(contains("erp_db_fail_log"), any(), any());
     }
 }
 

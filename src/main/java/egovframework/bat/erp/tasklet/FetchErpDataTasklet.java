@@ -1,6 +1,7 @@
 package egovframework.bat.erp.tasklet;
 
 import egovframework.bat.erp.domain.VehicleInfo;
+import egovframework.bat.erp.exception.ErpApiException;
 import egovframework.bat.notification.NotificationSender;
 import java.sql.Timestamp;
 import java.util.Arrays;
@@ -20,6 +21,7 @@ import org.springframework.jdbc.BadSqlGrammarException;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 /**
  * ERP 시스템에서 차량 정보를 조회하여 STG 테이블에 적재하는 Tasklet.
@@ -103,12 +105,27 @@ public class FetchErpDataTasklet implements Tasklet {
                     return Collections.emptyList();
                 }
                 return Arrays.asList(response);
+            } catch (WebClientResponseException.NotFound e) {
+                // 404 오류는 재시도 후에도 실패하면 빈 목록 반환
+                LOGGER.error("ERP API 404 오류: {}", e.getMessage(), e);
+                if (attempt == maxAttempts) {
+                    return Collections.emptyList();
+                }
+            } catch (WebClientResponseException e) {
+                // 기타 HTTP 오류는 재시도 후 사용자 정의 예외로 변환
+                LOGGER.error("ERP API HTTP 오류: 시도 {} / {} - 상태코드 {}", attempt, maxAttempts, e.getStatusCode(), e);
+                if (attempt == maxAttempts) {
+                    saveFailLog(e);
+                    notifyFailure("ERP API HTTP 오류: " + e.getMessage());
+                    throw new ErpApiException("ERP API 호출 실패", e);
+                }
             } catch (Exception e) {
+                // 네트워크 등 일반 예외 처리
                 LOGGER.error("ERP API 호출 실패: 시도 {} / {}", attempt, maxAttempts, e);
                 if (attempt == maxAttempts) {
-                    // 실패 로그 저장
                     saveFailLog(e);
                     notifyFailure("ERP API 호출 실패: " + e.getMessage());
+                    throw new ErpApiException("ERP API 호출 중 예외 발생", e);
                 }
             }
         }

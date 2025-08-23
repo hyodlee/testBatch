@@ -29,6 +29,7 @@ public class MultiDataSourceConfig {
     @Bean(name = "migstgJdbcTemplate")
     //JdbcTemplate migstgJdbcTemplate(@Qualifier("migstgDataSource") DataSource ds) {
     JdbcTemplate migstgJdbcTemplate(@Qualifier("dataSource-stg") DataSource ds) {
+        //return new JdbcTemplate(ds);
         // LazyConnectionDataSourceProxy로 실제 커넥션 생성을 지연
         return new JdbcTemplate(new LazyConnectionDataSourceProxy(ds));
     }
@@ -46,6 +47,7 @@ public class MultiDataSourceConfig {
     @Bean(name = "jdbcTemplateLocal")
     //JdbcTemplate egovlocalJdbcTemplate(@Qualifier("egovlocalDataSource") DataSource ds) {
     JdbcTemplate egovlocalJdbcTemplate(@Qualifier("dataSource-local") DataSource ds) {
+    	//return new JdbcTemplate(ds);
         // LazyConnectionDataSourceProxy로 실제 커넥션 생성을 지연
         return new JdbcTemplate(new LazyConnectionDataSourceProxy(ds));
     }
@@ -63,6 +65,7 @@ public class MultiDataSourceConfig {
     @Bean(name = "egovremote1CubridJdbcTemplate")
     //JdbcTemplate egovremote1CubridJdbcTemplate(@Qualifier("egovremote1CubridDataSource") DataSource ds) {
     JdbcTemplate egovremote1CubridJdbcTemplate(@Qualifier("dataSource-remote1") DataSource ds) {
+    	//return new JdbcTemplate(ds);
         // LazyConnectionDataSourceProxy로 실제 커넥션 생성을 지연
         return new JdbcTemplate(new LazyConnectionDataSourceProxy(ds));
     }

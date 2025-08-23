@@ -8,6 +8,7 @@ import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import java.util.concurrent.ConcurrentHashMap;
@@ -44,6 +45,8 @@ public class EsntlIdGenerator {
         try (Connection connection = jdbcTemplate.getDataSource().getConnection()) {
             String url = connection.getMetaData().getURL();
             LOGGER.info("사용 중인 데이터소스 URL: {}", url);
+        } catch (CannotGetJdbcConnectionException e) {
+            LOGGER.error("데이터베이스 커넥션 획득 실패", e);
         } catch (SQLException e) {
             LOGGER.error("데이터소스 URL 조회 실패", e);
         }
@@ -58,10 +61,15 @@ public class EsntlIdGenerator {
     public String generate(String prefix) {
         long nextNo = prefixCounters.compute(prefix, (key, current) -> {
             if (current == null) {
-                String maxId = jdbcTemplate.queryForObject(
-                    "SELECT MAX(ESNTL_ID) FROM COMTNEMPLYRINFO WHERE ESNTL_ID LIKE ?",
-                    String.class,
-                    prefix + "%");
+                String maxId = null;
+                try {
+                    maxId = jdbcTemplate.queryForObject(
+                        "SELECT MAX(ESNTL_ID) FROM COMTNEMPLYRINFO WHERE ESNTL_ID LIKE ?",
+                        String.class,
+                        prefix + "%");
+                } catch (CannotGetJdbcConnectionException e) {
+                    LOGGER.error("ESNTL_ID 최대값 조회 실패", e);
+                }
                 long start = 0L;
                 if (maxId != null) {
                     String numberPart = maxId.substring(prefix.length());

@@ -15,6 +15,7 @@ import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -57,13 +58,15 @@ public class FetchErpDataTasklet implements Tasklet {
         LOGGER.info("조회된 차량 수: {}", vehicles.size());
 
         // 2. STG 테이블에 데이터 적재
-        try {
-            insertVehicles(vehicles);
-        } catch (Exception e) {
-            LOGGER.error("STG 테이블 적재 실패", e);
-            notifyFailure("차량 데이터 적재 실패: " + e.getMessage());
-            throw e;
-        }
+          try {
+              insertVehicles(vehicles);
+          } catch (CannotGetJdbcConnectionException e) {
+              LOGGER.error("DB 커넥션 획득 실패", e);
+          } catch (Exception e) {
+              LOGGER.error("STG 테이블 적재 실패", e);
+              notifyFailure("차량 데이터 적재 실패: " + e.getMessage());
+              throw e;
+          }
 
         LOGGER.info("ERP 차량 데이터 수집 완료");
         return RepeatStatus.FINISHED;
@@ -111,20 +114,24 @@ public class FetchErpDataTasklet implements Tasklet {
         String sql = "INSERT INTO migstg.erp_vehicle (VEHICLE_ID, MODEL, MANUFACTURER, PRICE, REG_DTTM, MOD_DTTM) "
                 + "VALUES (?, ?, ?, ?, ?, ?)";
 
-        jdbcTemplate.batchUpdate(sql, vehicles, vehicles.size(), (ps, vehicle) -> {
-            // 차량 ID
-            ps.setString(1, vehicle.getVehicleId());
-            // 모델명
-            ps.setString(2, vehicle.getModel());
-            // 제조사
-            ps.setString(3, vehicle.getManufacturer());
-            // 가격
-            ps.setBigDecimal(4, vehicle.getPrice());
-            // 등록일시
-            ps.setTimestamp(5, vehicle.getRegDttm() == null ? null : new Timestamp(vehicle.getRegDttm().getTime()));
-            // 수정일시
-            ps.setTimestamp(6, vehicle.getModDttm() == null ? null : new Timestamp(vehicle.getModDttm().getTime()));
-        });
+        try {
+            jdbcTemplate.batchUpdate(sql, vehicles, vehicles.size(), (ps, vehicle) -> {
+                // 차량 ID
+                ps.setString(1, vehicle.getVehicleId());
+                // 모델명
+                ps.setString(2, vehicle.getModel());
+                // 제조사
+                ps.setString(3, vehicle.getManufacturer());
+                // 가격
+                ps.setBigDecimal(4, vehicle.getPrice());
+                // 등록일시
+                ps.setTimestamp(5, vehicle.getRegDttm() == null ? null : new Timestamp(vehicle.getRegDttm().getTime()));
+                // 수정일시
+                ps.setTimestamp(6, vehicle.getModDttm() == null ? null : new Timestamp(vehicle.getModDttm().getTime()));
+            });
+        } catch (CannotGetJdbcConnectionException e) {
+            LOGGER.error("차량 정보 적재 중 커넥션 획득 실패", e);
+        }
     }
 
     /**
@@ -134,7 +141,11 @@ public class FetchErpDataTasklet implements Tasklet {
      */
     private void saveFailedCall(Exception e) {
         String sql = "INSERT INTO migstg.erp_api_fail_log (api_url, error_message, reg_dttm) VALUES (?, ?, ?)";
-        jdbcTemplate.update(sql, apiUrl, e.getMessage(), new Timestamp(System.currentTimeMillis()));
+        try {
+            jdbcTemplate.update(sql, apiUrl, e.getMessage(), new Timestamp(System.currentTimeMillis()));
+        } catch (CannotGetJdbcConnectionException ex) {
+            LOGGER.error("REST 호출 실패 로그 저장 중 커넥션 획득 실패", ex);
+        }
     }
 
     /**

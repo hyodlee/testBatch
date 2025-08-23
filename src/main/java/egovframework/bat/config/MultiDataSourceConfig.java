@@ -7,7 +7,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -37,7 +36,6 @@ public class MultiDataSourceConfig {
     // 운영 MySQL용 데이타소스
     //@Bean(name = "egovlocalDataSource")
     @Bean(name = "dataSource-local")
-    @Lazy // 필요한 시점까지 Bean 초기화를 지연
     @ConfigurationProperties("spring.datasource.egovlocal-mysql")
     DataSource egovlocalDataSource() {
         return DataSourceBuilder.create().build();
@@ -55,7 +53,6 @@ public class MultiDataSourceConfig {
     // Remote1 CUBRID 데이타소스
     //@Bean(name = "egovremote1CubridDataSource")
     @Bean(name = "dataSource-remote1")
-    @Lazy // 필요한 시점까지 Bean 초기화를 지연
     @ConfigurationProperties("spring.datasource.egovremote1-cubrid")
     DataSource egovremote1CubridDataSource() {
         return DataSourceBuilder.create().build();

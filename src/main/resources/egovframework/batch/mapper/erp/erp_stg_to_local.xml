@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Vehicle">
+
+    <!-- STG에서 로컬로 이관할 차량 목록 조회 -->
+    <select id="selectVehicleList" resultType="egovframework.bat.erp.domain.VehicleInfo">
+        SELECT
+            VEHICLE_ID    AS vehicleId,
+            MODEL         AS model,
+            MANUFACTURER  AS manufacturer,
+            PRICE         AS price,
+            REG_DTTM      AS regDttm,
+            MOD_DTTM      AS modDttm
+        FROM MIGSTG.ERP_VEHICLE
+    </select>
+
+    <!-- 로컬 DB에 차량 정보 적재 -->
+    <insert id="insertVehicleLocal" parameterType="egovframework.bat.erp.domain.VehicleInfo">
+        INSERT INTO ERP_VEHICLE
+            (VEHICLE_ID, MODEL, MANUFACTURER, PRICE, REG_DTTM, MOD_DTTM)
+        VALUES
+            (#{vehicleId}, #{model}, #{manufacturer}, #{price}, #{regDttm}, #{modDttm})
+        ON DUPLICATE KEY UPDATE
+            MODEL = VALUES(MODEL),
+            MANUFACTURER = VALUES(MANUFACTURER),
+            PRICE = VALUES(PRICE),
+            REG_DTTM = VALUES(REG_DTTM),
+            MOD_DTTM = VALUES(MOD_DTTM)
+    </insert>
+
+</mapper>

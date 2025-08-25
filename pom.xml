@@ -68,6 +68,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!-- 비동기 WebClient 사용 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-webflux</artifactId>
+        </dependency>
         <!-- Log4j2 사용을 위한 의존성 명시 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -111,15 +116,21 @@
 			<artifactId>spring-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.quartz-scheduler</groupId>
-			<artifactId>quartz</artifactId>
-		</dependency>
+                <dependency>
+                        <groupId>junit</groupId>
+                        <artifactId>junit</artifactId>
+                        <scope>test</scope>
+                </dependency>
+                <dependency>
+                        <groupId>org.mockito</groupId>
+                        <artifactId>mockito-core</artifactId>
+                        <version>4.11.0</version>
+                        <scope>test</scope>
+                </dependency>
+                <dependency>
+                        <groupId>org.quartz-scheduler</groupId>
+                        <artifactId>quartz</artifactId>
+                </dependency>
 		<dependency>
 			<groupId>org.antlr</groupId>
 			<artifactId>antlr</artifactId>
@@ -211,13 +222,13 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<excludes>
-					<exclude>egovframework/batch/properties/env/**</exclude>
-					<exclude>log4j2/env/**</exclude>
-				</excludes>
-				<filtering>false</filtering>
+                    <exclude>egovframework/batch/properties/env/**</exclude>	<!-- 1번(환경별 globals.properties 파일만 포함) -->
+                    <exclude>log4j2/env/**</exclude>							<!-- 2번(환경별 log4j2.xml 파일만 포함) -->
+                    <exclude>application/env/**</exclude>						<!-- 3번(환경별 application.yml 파일만 포함) -->
+	            </excludes>
+	            <filtering>false</filtering>
 			</resource>
-
-			<!-- 환경별 리소스: env/${env} 폴더의 globals.properties만 클래스패스에 포함 -->
+			<!-- 1번(환경별 globals.properties 파일만 포함) -->
             <resource>
                 <directory>src/main/resources/egovframework/batch/properties/env/${env}</directory>
                 <targetPath>egovframework/batch/properties</targetPath>
@@ -225,14 +236,23 @@
                     <include>globals.properties</include>
                 </includes>
                 <filtering>false</filtering>
-            </resource>
-            <!-- 환경별 log4j2 설정 파일 포함 -->
+            </resource>			
+            <!-- 2번(환경별 log4j2.xml 파일만 포함) -->
             <resource>
                 <directory>src/main/resources/log4j2/env/${env}</directory>
                 <targetPath>.</targetPath>
                 <includes>
                     <include>log4j2.xml</include>
                 </includes>
+            </resource>
+            <!-- 3번(환경별 application.yml 파일만 포함) -->
+            <resource>
+                <directory>src/main/resources/application/env/${env}</directory>
+                <targetPath>.</targetPath>
+                <includes>
+                    <include>application.yml</include>
+                </includes>
+                <filtering>false</filtering>
             </resource>
         </resources>
 

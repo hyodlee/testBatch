@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Vehicle">
+
+    <!-- STG 테이블 초기화 -->
+    <update id="truncateErpStg">
+        TRUNCATE TABLE MIGSTG.ERP_VEHICLE
+    </update>
+
+    <!-- REST 데이터 적재 -->
+    <insert id="insertVehicleStg" parameterType="egovframework.bat.erp.domain.VehicleInfo">
+        INSERT INTO MIGSTG.ERP_VEHICLE
+            (VEHICLE_ID, MODEL, MANUFACTURER, PRICE, REG_DTTM, MOD_DTTM)
+        VALUES
+            (#{vehicleId}, #{model}, #{manufacturer}, #{price}, #{regDttm}, #{modDttm})
+    </insert>
+
+</mapper>

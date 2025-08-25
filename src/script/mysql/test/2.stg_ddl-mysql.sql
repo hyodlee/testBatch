@@ -1,6 +1,9 @@
 -- 깨끗이 시작
 DROP TABLE IF EXISTS comtnemplyrinfo;
 DROP TABLE IF EXISTS comtnorgnztinfo;
+DROP TABLE IF EXISTS erp_vehicle;
+DROP TABLE IF EXISTS erp_api_fail_log;
+DROP TABLE IF EXISTS erp_db_fail_log;
 
 -- 조직 테이블
 CREATE TABLE `comtnorgnztinfo` (
@@ -9,7 +12,7 @@ CREATE TABLE `comtnorgnztinfo` (
   `ORGNZT_DC` varchar(100) DEFAULT NULL COMMENT '조직설명',
   PRIMARY KEY (`ORGNZT_ID`),
   UNIQUE KEY `COMTNORGNZTINFO_PK` (`ORGNZT_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='조직정보';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='조직정보';
 
 -- 직원 테이블
 CREATE TABLE `comtnemplyrinfo` (
@@ -27,4 +30,34 @@ CREATE TABLE `comtnemplyrinfo` (
   PRIMARY KEY (`EMPLYR_ID`),
   UNIQUE KEY `COMTNEMPLYRINFO_PK` (`EMPLYR_ID`),
   KEY `COMTNEMPLYRINFO_i01` (`ORGNZT_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='업무사용자정보';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='업무사용자정보';
+
+-- ERP 차량 테이블
+CREATE TABLE `erp_vehicle` (
+  `VEHICLE_ID` varchar(20) NOT NULL COMMENT '차량ID',
+  `MODEL` varchar(100) NOT NULL COMMENT '차량모델',
+  `MANUFACTURER` varchar(100) NOT NULL COMMENT '제조사',
+  `PRICE` decimal(15,2) DEFAULT NULL COMMENT '가격',
+  `REG_DTTM` datetime NOT NULL COMMENT '등록일시',
+  `MOD_DTTM` datetime DEFAULT NULL COMMENT '수정일시',
+  PRIMARY KEY (`VEHICLE_ID`),
+  UNIQUE KEY `ERP_VEHICLE_PK` (`VEHICLE_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='ERP 차량 정보';
+
+-- ERP API 실패 로그 테이블
+CREATE TABLE `erp_api_fail_log` (
+  `FAIL_LOG_ID` bigint NOT NULL AUTO_INCREMENT COMMENT '실패 로그 ID',
+  `API_URL` varchar(500) NOT NULL COMMENT 'API URL',
+  `ERROR_MESSAGE` varchar(1000) DEFAULT NULL COMMENT '오류 메시지',
+  `REG_DTTM` datetime NOT NULL COMMENT '등록일시',
+  PRIMARY KEY (`FAIL_LOG_ID`),
+  KEY `ERP_API_FAIL_LOG_i01` (`API_URL`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='ERP API 실패 로그';
+
+-- ERP DB 적재 실패 로그 테이블
+CREATE TABLE `erp_db_fail_log` (
+  `FAIL_LOG_ID` bigint NOT NULL AUTO_INCREMENT COMMENT '실패 로그 ID',
+  `ERROR_MESSAGE` varchar(1000) DEFAULT NULL COMMENT '오류 메시지',
+  `REG_DTTM` datetime NOT NULL COMMENT '등록일시',
+  PRIMARY KEY (`FAIL_LOG_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='ERP DB 적재 실패 로그';

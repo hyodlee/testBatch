@@ -8,7 +8,11 @@ mvn -Pdev package     # 개발 환경 빌드
 mvn -Pprod package    # 운영 환경 빌드
 ```
 
-각 프로필은 해당 환경의 `globals-<프로필>.properties` 파일을 사용하여 `globals.properties`를 생성합니다.
+각 프로필은 해당 환경의 `application-<프로필>.yml` 설정 파일을 사용합니다.
+
+## STG 환경용 DDL 스크립트
+
+migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.sql`을 실행해 테이블 구조를 생성합니다. STG 연결 정보는 각 환경별 `application-<프로필>.yml` 파일의 관련 항목을 참고하세요. 해당 스크립트에는 REST 호출 실패 로그 테이블(`erp_api_fail_log`)과 DB 적재 실패 로그 테이블(`erp_db_fail_log`) DDL이 포함되어 있으며, `FetchErpDataTasklet`이 DB 적재 실패 시 이 테이블에 로그를 남깁니다.
 
 배치 잡 실행 시 `sourceSystem` 파라미터를 생략하면 `LND` 프리픽스로 ESNTL_ID가 생성됩니다.
 
@@ -28,14 +32,14 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 
 `src/main/resources/egovframework/batch/job/insa` 디렉터리는 인사 관련 배치 Job 설정을 모아두는 곳입니다. 현재 포함된 Job은 다음과 같습니다.
 
-- `remote1ToStgJob`
-- `stgToLocalJob`
+- `insaRemote1ToStgJob`
+- `insaStgToLocalJob`
 
 다음은 관련된 주요 파일들입니다.
 
 - 잡 설정:
-  - `src/main/resources/egovframework/batch/job/insa/remote1ToStgJob.xml`: 원격 시스템에서 스테이징으로 데이터를 전송하는 Job 설정 파일
-  - `src/main/resources/egovframework/batch/job/insa/stgToLocalJob.xml`: 스테이징에서 로컬로 데이터를 이동하는 Job 설정 파일
+  - `src/main/resources/egovframework/batch/job/insa/insaRemote1ToStgJob.xml`: 원격 시스템에서 스테이징으로 데이터를 전송하는 Job 설정 파일
+  - `src/main/resources/egovframework/batch/job/insa/insaStgToLocalJob.xml`: 스테이징에서 로컬로 데이터를 이동하는 Job 설정 파일
 - 매퍼 파일:
   - `src/main/resources/egovframework/batch/mapper/insa/insa_remote1_to_stg.xml`: 원격→스테이징 데이터 이동을 위한 SQL 매퍼
   - `src/main/resources/egovframework/batch/mapper/insa/insa_stg_to_local.xml`: 스테이징→로컬 데이터 이동을 위한 SQL 매퍼
@@ -57,11 +61,32 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 - 공통 클래스: `src/main/java/egovframework/bat/insa/util` 아래에 작성하고 패키지 구조를 유지합니다.
 - 테스트 코드: `src/test/java/egovframework/bat/insa/domain` 및 `src/test/java/egovframework/bat/insa/util`에 동일한 패키지 구조로 작성합니다.
 
+## ERP 배치 잡 디렉터리(`erp`)
+
+`src/main/resources/egovframework/batch/job/erp` 디렉터리는 ERP 관련 배치 Job 설정을 모아두는 곳입니다. 현재 포함된 Job은 다음과 같습니다.
+
+- `erpRestToStgJob`
+- `erpStgToLocalJob`
+
+다음은 관련된 주요 파일들입니다.
+
+- 잡 설정:
+  - `src/main/resources/egovframework/batch/job/erp/erpRestToStgJob.xml`: ERP REST API에서 데이터를 조회하여 STG에 적재하는 Job 설정 파일
+  - `src/main/resources/egovframework/batch/job/erp/erpStgToLocalJob.xml`: STG에 적재된 ERP 데이터를 로컬 DB로 이관하는 Job 설정 파일
+- 매퍼 파일:
+  - `src/main/resources/egovframework/batch/mapper/erp/erp_rest_to_stg.xml`: ERP REST 데이터→STG 적재를 위한 SQL 매퍼
+  - `src/main/resources/egovframework/batch/mapper/erp/erp_stg_to_local.xml`: STG→로컬 데이터 이동을 위한 SQL 매퍼
+- 공통, 도메인 및 유틸 클래스:
+  - `src/main/java/egovframework/bat/erp/tasklet/FetchErpDataTasklet.java`: ERP 시스템에서 차량 정보를 조회하여 STG에 적재하는 Tasklet
+  - `src/main/java/egovframework/bat/erp/processor/VehicleInfoProcessor.java`: ERP 차량 정보를 처리하는 배치 프로세서
+  - `src/main/java/egovframework/bat/erp/domain/VehicleInfo.java`: ERP 차량 정보를 담는 도메인 클래스
+  - `src/main/java/egovframework/bat/erp/api/RestToStgJobController.java`: ERP REST 배치를 수동 실행하는 컨트롤러
+
 ## 예제 배치 잡 디렉터리(`example`)
 
 `src/main/resources/egovframework/batch/job/example` 디렉터리는 예제 배치 Job 설정을 모아둔 곳입니다. 예제 Job과 관련된 주요 파일은 다음과 같습니다.
 
-- `src/main/resources/egovframework/batch/job/example/mybatisToMybatisJob.xml`: MyBatis 간 데이터 이동을 정의한 배치 Job 설정 파일
+- `src/main/resources/egovframework/batch/job/example/mybatisToMybatisSampleJob.xml`: MyBatis 간 데이터 이동을 정의한 배치 Job 설정 파일(잡 ID: `mybatisToMybatisSampleJob`)
 - `src/main/resources/egovframework/batch/mapper/example/Egov_Example_SQL.xml`: 예제 배치를 위한 SQL 매퍼 파일
 - `src/main/java/egovframework/bat/example/domain/CustomerCredit.java`: 고객 신용 정보를 담는 도메인 클래스
 - `src/main/java/egovframework/bat/example/processor/CustomerCreditIncreaseProcessor.java`: 신용 증가 로직을 처리하는 배치 프로세서
@@ -69,20 +94,44 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 - `src/main/resources/egovframework/batch/context-batch-mapper.xml`: 예제 SQL 매퍼와 데이터소스가 등록된 설정 파일
 - `src/main/resources/egovframework/batch/context-scheduler-job.xml`: 예제 Job을 스케줄러에 등록하기 위한 설정 파일
 
+### 예제 배치 잡 실행 API
+
+`ExampleJobController`를 통해 MyBatis 예제 잡을 REST로 호출할 수 있습니다.
+
+- **URL**: `POST /api/batch/mybatis`
+- **파라미터**: `userId` (선택)
+- **응답**: 실행 결과 `BatchStatus`
+
+### ERP 배치 잡 실행 API
+
+`RestToStgJobController`를 통해 ERP 배치를 REST로 호출할 수 있습니다.
+
+- **URL**: `POST /api/batch/erp-rest-to-stg`
+- **파라미터**: 없음
+- **응답**: 실행 결과 `BatchStatus`
+
+### 인사 배치 잡 실행 API
+
+`insaRemote1ToStgJob`을 REST로 호출할 수 있습니다.
+
+- **URL**: `POST /api/batch/remote1-to-stg`
+- **파라미터**: `sourceSystem` (선택)
+- **응답**: 실행 결과 `BatchStatus`
+
 ## 완전 새로운 배치 작업 추가시 매뉴얼
 
-1. Job 설정 파일 작성: `src/main/resources/egovframework/batch/job/erp/NewErpJob.xml` - 새 작업의 단계와 흐름을 정의합니다.
-2. 매퍼 XML 작성: `src/main/resources/egovframework/batch/mapper/erp/erp_new_sample.xml` - 데이터 조회와 저장 SQL을 작성합니다.
-3. 도메인 클래스 생성: `src/main/java/egovframework/bat/domain/erp/NewErp.java` - 배치에서 사용할 데이터 구조를 정의합니다.
-4. 프로세서 클래스 구현: `src/main/java/egovframework/bat/domain/erp/NewErpProcessor.java` - 도메인 데이터를 가공하는 로직을 구현합니다.
-5. (선택) 테스트 코드 추가: `src/test/java/egovframework/bat/domain/erp/NewErpProcessorTest.java` - 주요 기능이 예상대로 동작하는지 검증합니다.
+1. Job 설정 파일 작성: `src/main/resources/egovframework/batch/job/crm/NewcrmJob.xml` - 새 작업의 단계와 흐름을 정의합니다.
+2. 매퍼 XML 작성: `src/main/resources/egovframework/batch/mapper/crm/crm_new_sample.xml` - 데이터 조회와 저장 SQL을 작성합니다.
+3. 도메인 클래스 생성: `src/main/java/egovframework/bat/domain/crm/Newcrm.java` - 배치에서 사용할 데이터 구조를 정의합니다.
+4. 프로세서 클래스 구현: `src/main/java/egovframework/bat/domain/crm/NewcrmProcessor.java` - 도메인 데이터를 가공하는 로직을 구현합니다.
+5. (선택) 테스트 코드 추가: `src/test/java/egovframework/bat/domain/crm/NewcrmProcessorTest.java` - 주요 기능이 예상대로 동작하는지 검증합니다.
 
 예시 파일 구조:
 
-- `src/main/resources/egovframework/batch/job/erp/NewErpJob.xml`
-- `src/main/resources/egovframework/batch/mapper/erp/erp_new_sample.xml`
-- `src/main/java/egovframework/bat/domain/erp/NewErp.java`
-- `src/main/java/egovframework/bat/domain/erp/NewErpProcessor.java`
-- `src/test/java/egovframework/bat/domain/erp/NewErpProcessorTest.java`
+- `src/main/resources/egovframework/batch/job/crm/NewcrmJob.xml`
+- `src/main/resources/egovframework/batch/mapper/crm/crm_new_sample.xml`
+- `src/main/java/egovframework/bat/domain/crm/Newcrm.java`
+- `src/main/java/egovframework/bat/domain/crm/NewcrmProcessor.java`
+- `src/test/java/egovframework/bat/domain/crm/NewcrmProcessorTest.java`
 
-ERP 배치는 자원관리 도메인에 초점을 맞추며, 주요 필드로 자원ID, 자원명, 사용량 등이 포함됩니다. 이는 사번, 조직 정보 등 인사 중심 배치와 구별되는 특징입니다.
+CRM 배치는 신규 시스템 추가시의 예시입니다

@@ -5,11 +5,9 @@
 			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
 			http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-3.0.xsd">
 
-        <import resource="classpath:/egovframework/batch/context-batch-datasource.xml" />
+		<import resource="classpath:/egovframework/batch/context-batch-datasource.xml" />
         <import resource="classpath:/egovframework/batch/context-batch-mapper.xml" />
-        <!-- 공통 설정(컴포넌트 스캔 등)을 포함하여 Bean 등록 누락 방지 -->
-        <import resource="classpath:/egovframework/batch/context-common.xml" />
-
+ 		
 	<bean id="eGovBatchRunner" class="org.egovframe.rte.bat.core.launch.support.EgovBatchRunner">
 		<constructor-arg ref="jobOperator" />
 		<constructor-arg ref="jobExplorer" />
@@ -61,9 +59,19 @@
 		p:dataSource-ref="dataSource" />
 
 	<bean id="jobRegistry" class="org.springframework.batch.core.configuration.support.MapJobRegistry" />
-
+	
+	<!--
 	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
 		<property name="dataSource" ref="dataSource" />
 	</bean>
+	-->
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <!-- LazyConnectionDataSourceProxy 사용으로 실제 커넥션을 지연 생성 -->
+        <property name="dataSource">
+	        <bean class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy">
+				<property name="targetDataSource" ref="dataSource" />
+	        </bean>
+        </property>
+    </bean>
 	
 </beans>

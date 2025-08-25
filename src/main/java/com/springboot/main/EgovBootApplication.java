@@ -33,7 +33,8 @@ import org.springframework.context.annotation.FilterType;
 
 @SpringBootApplication
 @ComponentScan(
-    basePackages = {"com.springboot.main", "egovframework.bat"}
+    basePackages = {"com.springboot.main"}
+    // 배치 관련 빈은 XML에서만 스캔되도록 설정
 //    ,
 //    excludeFilters = {
 //        @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = org.springframework.stereotype.Component.class)

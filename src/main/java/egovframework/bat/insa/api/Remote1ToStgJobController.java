@@ -8,6 +8,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +30,8 @@ public class Remote1ToStgJobController {
     // 스프링 배치 잡 실행기
     private final JobLauncher jobLauncher;
 
-    // Remote1 데이터를 중간 저장소로 옮기는 배치 잡
-    private final Job insaRemote1ToStgJob;
+    // 잡 레지스트리를 통해 배치 잡을 조회하기 위한 레지스트리
+    private final JobRegistry jobRegistry;
 
     /**
      * Remote1 데이터를 중간 저장소로 옮기는 배치 잡을 실행한다.
@@ -51,7 +52,9 @@ public class Remote1ToStgJobController {
         JobParameters jobParameters = builder.toJobParameters();
 
         try {
-            JobExecution execution = jobLauncher.run(insaRemote1ToStgJob, jobParameters);
+            // 잡 레지스트리에서 배치 잡을 조회하여 실행
+            Job job = jobRegistry.getJob("insaRemote1ToStgJob");
+            JobExecution execution = jobLauncher.run(job, jobParameters);
             return ResponseEntity.ok(execution.getStatus());
         } catch (Exception e) {
             LOGGER.error("Remote1 배치 실행 실패", e);

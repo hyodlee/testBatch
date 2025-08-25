@@ -31,7 +31,7 @@
 
     <bean id="insaRemote1ToStgJob.remote1ToStgOrgnztStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
         <!-- remote1 DB에서 조직 정보 목록을 조회 -->
-        <property name="sqlSessionFactory" ref="sqlSessionFactory-remote1" />
+        <property name="sqlSessionFactory" ref="insa-sqlSessionFactory-remote1" />
         <property name="queryId" value="Employee.selectOrgnztList" />
         <property name="pageSize" value="#{100}" />
     </bean>
@@ -44,7 +44,7 @@
 
     <bean id="insaRemote1ToStgJob.remote1ToStgStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
         <!-- remote1 DB에서 ESNTL_ID와 SOURCE_SYSTEM을 제외한 사원 정보를 조회 -->
-        <property name="sqlSessionFactory" ref="sqlSessionFactory-remote1" />
+        <property name="sqlSessionFactory" ref="insa-sqlSessionFactory-remote1" />
         <property name="queryId" value="Employee.selectEmployeeList" />
         <property name="pageSize" value="#{100}" />
     </bean>

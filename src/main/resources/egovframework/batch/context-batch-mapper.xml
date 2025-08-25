@@ -5,19 +5,7 @@
     <!-- 실행환경에서 빈이름 참조(EgovAbstractDAO) -->
     <bean id="egov.lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" lazy-init="true" />
 
-    <!-- remote1 DB용 SqlSessionFactory -->
-    <bean id="sqlSessionFactory-remote1" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource-remote1"/>
-        <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
-        <property name="mapperLocations">
-            <list>
-                <value>classpath:/egovframework/batch/mapper/example/Egov_Example_SQL.xml</value>
-                <value>classpath:/egovframework/batch/mapper/insa/insa_remote1_to_stg.xml</value>
-            </list>
-        </property>
-    </bean>
-
-    <!-- STG DB용 SqlSessionFactory (remote1->STG 이관) -->
+    <!-- STG DB용 SqlSessionFactory -->
     <bean id="sqlSessionFactory-stg" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource-stg"/>
         <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
@@ -28,27 +16,36 @@
             </list>
         </property>
     </bean>
-
-    <!-- STG DB용 SqlSessionFactory (STG->Local 이관) -->
-    <bean id="sqlSessionFactory-local" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource-stg"/>
-        <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
-        <property name="mapperLocations">
-            <list>
-                <value>classpath:/egovframework/batch/mapper/example/Egov_Example_SQL.xml</value>
-                <value>classpath:/egovframework/batch/mapper/insa/insa_stg_to_local.xml</value>
-            </list>
-        </property>
-    </bean>
-
+    
     <!-- 로컬 DB용 SqlSessionFactory -->
     <bean id="sqlSessionFactory-local" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource-local"/>
         <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">
             <list>
-                <value>classpath:/egovframework/batch/mapper/example/Egov_Example_SQL.xml</value>
                 <value>classpath:/egovframework/batch/mapper/insa/insa_stg_to_local.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- insa - remote1 DB용 SqlSessionFactory -->
+    <bean id="insa-sqlSessionFactory-remote1" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource-remote1"/>
+        <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
+        <property name="mapperLocations">
+            <list>
+                <value>classpath:/egovframework/batch/mapper/insa/insa_remote1_to_stg.xml</value>
+            </list>
+        </property>
+    </bean>
+    
+    <!-- example - remote1 DB용 SqlSessionFactory -->
+    <bean id="example-sqlSessionFactory-remote1" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource-remote1"/>
+        <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
+        <property name="mapperLocations">
+            <list>
+                <value>classpath:/egovframework/batch/mapper/example/Egov_Example_SQL.xml</value>
             </list>
         </property>
     </bean>
@@ -59,7 +56,6 @@
         <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">
             <list>
-                <value>classpath:/egovframework/batch/mapper/example/Egov_Example_SQL.xml</value>
                 <value>classpath:/egovframework/batch/mapper/erp/erp_rest_to_stg.xml</value>
             </list>
         </property>
@@ -71,7 +67,6 @@
         <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">
             <list>
-                <value>classpath:/egovframework/batch/mapper/example/Egov_Example_SQL.xml</value>
                 <value>classpath:/egovframework/batch/mapper/erp/erp_stg_to_local.xml</value>
             </list>
         </property>
@@ -83,7 +78,6 @@
         <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">
             <list>
-                <value>classpath:/egovframework/batch/mapper/example/Egov_Example_SQL.xml</value>
                 <value>classpath:/egovframework/batch/mapper/erp/erp_stg_to_local.xml</value>
             </list>
         </property>

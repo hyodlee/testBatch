@@ -11,7 +11,7 @@ import org.springframework.context.annotation.ImportResource;
 @Configuration
 @ImportResource({
     // 배치 잡 실행기 관련 기본 설정
-    "classpath:/egovframework/batch/context-batch-job-launcher.xml"
+    //"classpath:/egovframework/batch/context-batch-job-launcher.xml"
     // 개별 잡 XML은 JobRegistry를 통해 조회하므로 별도 import 불필요
 })
 public class BatchInfrastructureConfig {

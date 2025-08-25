@@ -4,6 +4,13 @@
 
         <import resource="context-batch-job-launcher.xml" />
 
+		<!-- 각 잡을 넣는다 -->
+		<import resource="classpath:/egovframework/batch/job/insa/insaRemote1ToStgJob.xml" />
+		<import resource="classpath:/egovframework/batch/job/insa/insaStgToLocalJob.xml" />
+		<import resource="job/erp/erpRestToStgJob.xml" />
+		<import resource="job/erp/erpStgToLocalJob.xml" />
+		<import resource="job/example/mybatisToMybatisSampleJob.xml" />
+        
         <!-- 각 잡에 대한 크론 트리거 정의 -->
 
         <bean id="insaRemote1ToStgCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">

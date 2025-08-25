@@ -1,7 +1,6 @@
 package egovframework.bat.erp.tasklet;
 
 import egovframework.bat.notification.NotificationSender;
-import java.lang.reflect.Field;
 import java.util.Collections;
 import java.util.List;
 import org.junit.Test;
@@ -37,12 +36,7 @@ public class FetchErpDataTaskletTest {
         };
 
         List<NotificationSender> senders = Collections.emptyList();
-        FetchErpDataTasklet tasklet = new FetchErpDataTasklet(builder, jdbcTemplate, senders);
-
-        // apiUrl 필드 설정
-        Field field = FetchErpDataTasklet.class.getDeclaredField("apiUrl");
-        field.setAccessible(true);
-        field.set(tasklet, "http://example.com");
+        FetchErpDataTasklet tasklet = new FetchErpDataTasklet(builder, jdbcTemplate, senders, "http://example.com");
 
         RepeatStatus status = tasklet.execute(null, null);
         assertEquals(RepeatStatus.FINISHED, status);
@@ -68,12 +62,7 @@ public class FetchErpDataTaskletTest {
         when(jdbcTemplate.update(anyString(), any(), any())).thenReturn(1);
 
         List<NotificationSender> senders = Collections.emptyList();
-        FetchErpDataTasklet tasklet = new FetchErpDataTasklet(builder, jdbcTemplate, senders);
-
-        // apiUrl 필드 설정
-        Field field = FetchErpDataTasklet.class.getDeclaredField("apiUrl");
-        field.setAccessible(true);
-        field.set(tasklet, "http://example.com");
+        FetchErpDataTasklet tasklet = new FetchErpDataTasklet(builder, jdbcTemplate, senders, "http://example.com");
 
         RepeatStatus status = tasklet.execute(null, null);
 

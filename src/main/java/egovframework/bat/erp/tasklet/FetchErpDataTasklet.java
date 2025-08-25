@@ -42,17 +42,26 @@ public class FetchErpDataTasklet implements Tasklet {
     private final List<NotificationSender> notificationSenders;
 
     /** 차량 정보를 조회할 API URL */
-    //@Value("${erp.api-url}")
-    @Value("${Globals.Erp.ApiUrl}")
-    private String apiUrl;
+    private final String apiUrl;
 
     public FetchErpDataTasklet(WebClient.Builder builder,
                                @Qualifier("jdbcTemplateLocal") JdbcTemplate jdbcTemplate,
-                               List<NotificationSender> notificationSenders) {
+                               List<NotificationSender> notificationSenders,
+                               @Value("${Globals.Erp.ApiUrl}") String apiUrl) {
         // WebClient 생성
         this.webClient = builder.build();
         this.jdbcTemplate = jdbcTemplate;
         this.notificationSenders = notificationSenders;
+        this.apiUrl = apiUrl;
+    }
+
+    /**
+     * 현재 설정된 API URL을 반환한다.
+     *
+     * @return API URL
+     */
+    public String getApiUrl() {
+        return apiUrl;
     }
 
     @Override

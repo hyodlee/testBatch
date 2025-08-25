@@ -18,10 +18,10 @@
             <property name="cronExpression" value="0 * * * * ?" />
         </bean>
 
-        <bean id="erpRestToStgCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-            <property name="jobDetail" ref="erpRestToStgJobDetail" />
-            <property name="cronExpression" value="0 * * * * ?" />
-        </bean>
+    <bean id="erpRestToStgCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="erpRestToStgJobDetail" />
+        <property name="cronExpression" value="0 0/5 * * * ?" />
+    </bean>
 
         <bean id="erpStgToLocalCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
             <property name="jobDetail" ref="erpStgToLocalJobDetail" />

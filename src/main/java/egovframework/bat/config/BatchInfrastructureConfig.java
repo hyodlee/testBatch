@@ -11,9 +11,8 @@ import org.springframework.context.annotation.ImportResource;
 @Configuration
 @ImportResource({
     // 배치 잡 실행기 관련 기본 설정
-    "classpath:/egovframework/batch/context-batch-job-launcher.xml",
-    // ERP REST -> STG 배치 잡 설정을 로딩하여 Job 빈을 등록
-    "classpath:/egovframework/batch/job/erp/erpRestToStgJob.xml"
+    "classpath:/egovframework/batch/context-batch-job-launcher.xml"
+    // 개별 잡 XML은 JobRegistry를 통해 조회하므로 별도 import 불필요
 })
 public class BatchInfrastructureConfig {
     // 필요 시 JobLauncher 빈을 직접 정의할 수 있다.

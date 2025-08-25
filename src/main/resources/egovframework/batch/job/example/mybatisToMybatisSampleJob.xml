@@ -27,8 +27,8 @@
     </bean>
 
     <bean id="mybatisToIbatisJob.mybatisToIbatisStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
-        <!-- 로컬 DB 적재를 위해 local SqlSessionFactory 사용 -->
-        <property name="sqlSessionFactory" ref="sqlSessionFactory-local" />
+        <!-- 스테이지 DB 적재를 위해 SqlSessionFactory 사용 -->
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-stg" />
         <property name="statementId" value="Customer.updateCredit" />
     </bean>
 

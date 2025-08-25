@@ -38,7 +38,7 @@
 
     <bean id="insaRemote1ToStgJob.remote1ToStgOrgnztStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
         <!-- STG DB에 조직 정보 적재 -->
-        <property name="sqlSessionFactory" ref="sqlSessionFactory-remote1-to-stg" />
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-stg" />
         <property name="statementId" value="Employee.insertOrganization" />
     </bean>
 
@@ -51,13 +51,13 @@
 
     <bean id="insaRemote1ToStgJob.remote1ToStgStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
         <!-- STG DB 적재를 위해 stg SqlSessionFactory 사용 -->
-        <property name="sqlSessionFactory" ref="sqlSessionFactory-remote1-to-stg" />
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-stg" />
         <property name="statementId" value="Employee.insertEmployeeLegacy" />
     </bean>
     
     <!-- STG 테이블을 비우는 Tasklet -->
     <bean id="truncateStgTablesTasklet" class="egovframework.bat.insa.tasklet.TruncateStgTablesTasklet">
-        <property name="sqlSessionFactory" ref="sqlSessionFactory-remote1-to-stg" />
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-stg" />
     </bean>
 
 </beans>

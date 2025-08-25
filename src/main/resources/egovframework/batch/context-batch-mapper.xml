@@ -18,7 +18,7 @@
     </bean>
 
     <!-- STG DB용 SqlSessionFactory (remote1->STG 이관) -->
-    <bean id="sqlSessionFactory-remote1-to-stg" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <bean id="sqlSessionFactory-stg" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource-stg"/>
         <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">
@@ -30,7 +30,7 @@
     </bean>
 
     <!-- STG DB용 SqlSessionFactory (STG->Local 이관) -->
-    <bean id="sqlSessionFactory-stg-local" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <bean id="sqlSessionFactory-local" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource-stg"/>
         <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">

@@ -12,6 +12,7 @@
         <property name="mapperLocations">
             <list>
                 <value>classpath:/egovframework/batch/mapper/insa/insa_stg_to_local.xml</value>
+                <value>classpath:/egovframework/batch/mapper/erp/erp_stg_to_local.xml</value>
             </list>
         </property>
     </bean>
@@ -22,7 +23,9 @@
         <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">
             <list>
-                <value>classpath:/egovframework/batch/mapper/insa/insa_remote1_to_stg.xml</value>
+                <value>classpath:/egovframework/batch/mapper/insa/insa_remote1_to_stg.xml</value>                
+                <value>classpath:/egovframework/batch/mapper/erp/erp_stg_to_local.xml</value>
+                <value>classpath:/egovframework/batch/mapper/erp/erp_rest_to_stg.xml</value>
                 <value>classpath:/egovframework/batch/mapper/example/Egov_Example_SQL.xml</value>
             </list>
         </property>
@@ -62,38 +65,5 @@
         </property>
     </bean>    
  	-->
-
-    <!-- ERP REST->STG 적재용 SqlSessionFactory -->
-    <bean id="sqlSessionFactory-erp-to-stg" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource-stg"/>
-        <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
-        <property name="mapperLocations">
-            <list>
-                <value>classpath:/egovframework/batch/mapper/erp/erp_rest_to_stg.xml</value>
-            </list>
-        </property>
-    </bean>
-
-    <!-- ERP STG 조회용 SqlSessionFactory -->
-    <bean id="sqlSessionFactory-erp-stg-local" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource-stg"/>
-        <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
-        <property name="mapperLocations">
-            <list>
-                <value>classpath:/egovframework/batch/mapper/erp/erp_stg_to_local.xml</value>
-            </list>
-        </property>
-    </bean>
-
-    <!-- ERP 로컬 적재용 SqlSessionFactory -->
-    <bean id="sqlSessionFactory-erp-local" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource-local"/>
-        <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
-        <property name="mapperLocations">
-            <list>
-                <value>classpath:/egovframework/batch/mapper/erp/erp_stg_to_local.xml</value>
-            </list>
-        </property>
-    </bean>
 
 </beans>

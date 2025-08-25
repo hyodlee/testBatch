@@ -222,12 +222,13 @@
 			<resource>
 				<directory>src/main/resources</directory>
 				<excludes>
-                    <exclude>log4j2/env/**</exclude>
-                    <exclude>application/env/**</exclude>
+                    <exclude>egovframework/batch/properties/env/**</exclude>	<!-- 1번(환경별 globals.properties 파일만 포함) -->
+                    <exclude>log4j2/env/**</exclude>							<!-- 2번(환경별 log4j2.xml 파일만 포함) -->
+                    <exclude>application/env/**</exclude>						<!-- 3번(환경별 application.yml 파일만 포함) -->
 	            </excludes>
 	            <filtering>false</filtering>
 			</resource>
-			<!-- 환경별 리소스: env/${env} 폴더의 globals.properties만 클래스패스에 포함 -->
+			<!-- 1번(환경별 globals.properties 파일만 포함) -->
             <resource>
                 <directory>src/main/resources/egovframework/batch/properties/env/${env}</directory>
                 <targetPath>egovframework/batch/properties</targetPath>
@@ -236,7 +237,7 @@
                 </includes>
                 <filtering>false</filtering>
             </resource>			
-            <!-- 환경별 log4j2 설정 파일 포함 -->
+            <!-- 2번(환경별 log4j2.xml 파일만 포함) -->
             <resource>
                 <directory>src/main/resources/log4j2/env/${env}</directory>
                 <targetPath>.</targetPath>
@@ -244,7 +245,7 @@
                     <include>log4j2.xml</include>
                 </includes>
             </resource>
-            <!-- 환경별 application.yml 복사 -->
+            <!-- 3번(환경별 application.yml 파일만 포함) -->
             <resource>
                 <directory>src/main/resources/application/env/${env}</directory>
                 <targetPath>.</targetPath>

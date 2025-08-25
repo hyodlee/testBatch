@@ -44,13 +44,13 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
   - `src/main/resources/egovframework/batch/mapper/insa/insa_remote1_to_stg.xml`: 원격→스테이징 데이터 이동을 위한 SQL 매퍼
   - `src/main/resources/egovframework/batch/mapper/insa/insa_stg_to_local.xml`: 스테이징→로컬 데이터 이동을 위한 SQL 매퍼
 - 공통, 도메인 및 유틸 클래스:
-  - `src/main/java/egovframework/bat/insa/util/SourceSystemPrefix.java`: 시스템 구분을 위한 접두어 상수 정의 클래스
+  - `src/main/java/egovframework/bat/insa/common/SourceSystemPrefix.java`: 시스템 구분을 위한 접두어 상수 정의 클래스
   - `src/main/java/egovframework/bat/insa/processor/EmployeeInfoProcessor.java`: 직원 정보를 처리하는 배치 프로세서
-  - `src/main/java/egovframework/bat/insa/util/EsntlIdGenerator.java`: ESNTL_ID를 생성하는 유틸리티 클래스
+  - `src/main/java/egovframework/bat/insa/common/EsntlIdGenerator.java`: ESNTL_ID를 생성하는 유틸리티 클래스
   - `src/main/java/egovframework/bat/insa/domain/EmployeeInfo.java`: 직원 정보를 담는 도메인 클래스
   - `src/main/java/egovframework/bat/insa/domain/Orgnztinfo.java`: 조직 정보를 표현하는 도메인 클래스
 - 테스트 코드:
-  - `src/test/java/egovframework/bat/insa/util/EsntlIdGeneratorTest.java`: ESNTL_ID 생성 로직을 검증하는 테스트
+  - `src/test/java/egovframework/bat/insa/common/EsntlIdGeneratorTest.java`: ESNTL_ID 생성 로직을 검증하는 테스트
 
 ### 인사 배치 Job 추가시 확인 사항
 
@@ -58,8 +58,8 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 
 - 설정 파일: `src/main/resources/egovframework/batch/job/insa`에 `<Source>To<Target>Job.xml` 형태로 저장합니다. 파일명은 lowerCamelCase를 사용하며 반드시 `Job.xml`으로 끝납니다.
 - 관련 도메인 클래스: `src/main/java/egovframework/bat/insa/domain` 아래에 작성하고 패키지 구조를 유지합니다.
-- 공통 클래스: `src/main/java/egovframework/bat/insa/util` 아래에 작성하고 패키지 구조를 유지합니다.
-- 테스트 코드: `src/test/java/egovframework/bat/insa/domain` 및 `src/test/java/egovframework/bat/insa/util`에 동일한 패키지 구조로 작성합니다.
+- 공통 클래스: `src/main/java/egovframework/bat/insa/common` 아래에 작성하고 패키지 구조를 유지합니다.
+- 테스트 코드: `src/test/java/egovframework/bat/insa/domain` 및 `src/test/java/egovframework/bat/insa/common`에 동일한 패키지 구조로 작성합니다.
 
 ## ERP 배치 잡 디렉터리(`erp`)
 

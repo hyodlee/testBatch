@@ -33,8 +33,7 @@ import org.springframework.context.annotation.ImportResource;
 
 @SpringBootApplication
 @ImportResource({
-    "classpath:/egovframework/batch/context-batch-scheduler.xml",
-    "classpath:/egovframework/batch/context-scheduler-job.xml"
+    "classpath:/egovframework/batch/context-batch-scheduler.xml"
 })
 @ComponentScan(basePackages = {"com.springboot.main", "egovframework.bat"})
 public class EgovBootApplication implements CommandLineRunner {

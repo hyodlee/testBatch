@@ -33,10 +33,11 @@ import org.springframework.context.annotation.FilterType;
 
 @SpringBootApplication
 @ComponentScan(
-    basePackages = {"com.springboot.main", "egovframework.bat"},
-    excludeFilters = {
-        @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = org.springframework.stereotype.Component.class)
-    }
+    basePackages = {"com.springboot.main", "egovframework.bat"}
+//    ,
+//    excludeFilters = {
+//        @ComponentScan.Filter(type = FilterType.ANNOTATION, classes = org.springframework.stereotype.Component.class)
+//    }
 )
 public class EgovBootApplication implements CommandLineRunner {
 

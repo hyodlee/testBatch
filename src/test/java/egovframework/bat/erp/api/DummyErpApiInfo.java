@@ -11,12 +11,4 @@ public final class DummyErpApiInfo {
     public static final String DUMMY_ENDPOINT =
         "https://dummy-erp.example.com/api/v1/vehicles";
 
-    /** 더미 응답 JSON (테스트용) */
-    public static final String DUMMY_RESPONSE = "{\\n"
-        + "  \\\"vehicleId\\\": \\\"DUMMY-VEHICLE-0001\\\",\\n"
-        + "  \\\"model\\\": \\\"테스트 더미 차량\\\",\\n"
-        + "  \\\"manufacturer\\\": \\\"더미 제조사\\\",\\n"
-        + "  \\\"price\\\": 1000000,\\n"
-        + "  \\\"created_at\\\": \\\"2024-05-10T09:00:00Z\\\"\\n"
-        + "}";
 }

@@ -30,7 +30,7 @@ import org.springframework.context.annotation.ComponentScan;
  *  </pre>
 */
 @SpringBootApplication
-@ComponentScan(basePackages = {"com.springboot.main", "egovframework.bat"}) // 스캔할 패키지 지정
+@ComponentScan(basePackages = {"com.springboot.main", "egovframework"}) // 스캔할 패키지 지정
 public class EgovBootApplication implements CommandLineRunner {
 
         private static final Logger LOGGER = LoggerFactory.getLogger(EgovBootApplication.class);

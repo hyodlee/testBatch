@@ -13,7 +13,7 @@
         </select>
 
         <!-- STG DB에서 로컬 DB로 이관할 사원 목록 조회 (ESNTL_ID는 로컬 적재 시 생성) -->
-        <select id="selectEmployeeListLocal" resultType="egovframework.bat.insa.domain.EmployeeInfo">
+        <select id="selectEmployeeList" resultType="egovframework.bat.insa.domain.EmployeeInfo">
                 SELECT
                          EMPLYR_ID,
                          ORGNZT_ID,

@@ -53,7 +53,7 @@
     <bean id="insaStgToLocalJob.stgToLocalStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
         <!-- 스테이징 DB에서 사원 정보를 조회 (ESNTL_ID는 로컬 적재 시 생성) -->
         <property name="sqlSessionFactory" ref="sqlSessionFactory-stg" />
-        <property name="queryId" value="insaStgToLoc.selectEmployeeListLocal" />
+        <property name="queryId" value="insaStgToLoc.selectEmployeeList" />
         <property name="pageSize" value="#{100}" />
     </bean>
 

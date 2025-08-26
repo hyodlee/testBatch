@@ -36,7 +36,7 @@
        </insert>
 
        <!-- remote1 -> STG 이관 시 사용 (ESNTL_ID 제외, STG 대상 테이블이 사전 TRUNCATE되므로 중복 갱신 없음) -->
-       <insert id="insertEmployeeLegacy" parameterType="egovframework.bat.insa.domain.EmployeeInfo">
+       <insert id="insertEmployee" parameterType="egovframework.bat.insa.domain.EmployeeInfo">
                INSERT INTO MIGSTG.COMTNEMPLYRINFO
                        (EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)
                VALUES

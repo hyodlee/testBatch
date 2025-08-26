@@ -60,7 +60,7 @@
     <bean id="insaRemote1ToStgJob.remote1ToStgStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
         <!-- STG DB 적재를 위해 stg SqlSessionFactory 사용 -->
         <property name="sqlSessionFactory" ref="sqlSessionFactory-stg" />
-        <property name="statementId" value="insaRemToStg.insertEmployeeLegacy" />
+        <property name="statementId" value="insaRemToStg.insertEmployee" />
     </bean>
     
     <!-- STG 테이블을 비우는 Tasklet -->

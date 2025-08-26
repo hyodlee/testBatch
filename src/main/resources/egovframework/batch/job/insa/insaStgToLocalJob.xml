@@ -29,10 +29,6 @@
                     <listener ref="stepCountLogger" />
                 </listeners>
             </step>
-        <!-- <step id="stgEmplyrCountStep" parent="eGovTaskletStep" next="stgToLocalStep">
-            완료된 후에도 재실행할 수 있도록 allow-start-if-complete을 true로 설정
-            <tasklet ref="stgEmplyrCountTasklet" allow-start-if-complete="true" />
-        </step> -->
     </job>
 
     <bean id="insaStgToLocalJob.stgToLocalOrgnztStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
@@ -65,11 +61,6 @@
     <bean id="insaStgToLocalJob.stgToLocalStep.itemProcessor"
           class="egovframework.bat.insa.processor.EmployeeInfoProcessor"
           scope="step" />
-
-    <!-- COMTNEMPLYRINFO 건수를 출력하는 Tasklet -->
-    <bean id="stgEmplyrCountTasklet" class="egovframework.bat.insa.tasklet.StgEmplyrCountTasklet">
-        <property name="sqlSessionFactory" ref="sqlSessionFactory-stg" />
-    </bean>
 
 </beans>
 

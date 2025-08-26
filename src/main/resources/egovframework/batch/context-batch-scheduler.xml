@@ -61,12 +61,6 @@
         </bean>
 
         <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
-            <!-- 트리거가 없는 작업을 등록하기 위한 jobDetails 설정 -->
-            <property name="jobDetails">
-                <list>
-                    <ref bean="insaStgToLocalJobDetail" />
-                </list>
-            </property>
             <property name="triggers">
                 <list>
                     <ref bean="insaRemote1ToStgCronTrigger" />
@@ -74,6 +68,12 @@
                     <ref bean="erpStgToLocalCronTrigger" />
                 </list>
             </property>
+            <!-- 트리거가 없는 작업을 등록하기 위한 jobDetails 설정 -->
+            <property name="jobDetails">
+                <list>
+                    <ref bean="insaStgToLocalJobDetail" />
+                </list>
+            </property>            
             <property name="globalJobListeners">
                 <list>
                     <ref bean="jobChainingJobListener" />

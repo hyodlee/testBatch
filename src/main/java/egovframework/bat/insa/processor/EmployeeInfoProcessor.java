@@ -1,5 +1,7 @@
 package egovframework.bat.insa.processor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,6 +19,9 @@ import lombok.RequiredArgsConstructor;
 @StepScope
 @RequiredArgsConstructor
 public class EmployeeInfoProcessor implements ItemProcessor<EmployeeInfo, EmployeeInfo> {
+
+    /** 로깅을 위한 로거 */
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmployeeInfoProcessor.class);
 
     /** ESNTL_ID 생성기 */
     private final EsntlIdGenerator esntlIdGenerator;
@@ -38,6 +43,8 @@ public class EmployeeInfoProcessor implements ItemProcessor<EmployeeInfo, Employ
         }
         // 프리픽스로 ESNTL_ID 생성
         item.setEsntlId(esntlIdGenerator.generate(prefix));
+        // 디버그 로그: 원천 시스템과 프리픽스, 생성된 ID를 출력
+        LOGGER.debug("sourceSystem={}, prefix={}, generatedId={}", sourceSystem, prefix, item.getEsntlId());
 
         return item;
     }

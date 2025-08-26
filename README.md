@@ -16,6 +16,9 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
 
 배치 잡 실행 시 `sourceSystem` 파라미터를 생략하면 `LND` 프리픽스로 ESNTL_ID가 생성됩니다.
 
+잡을 반복 실행해야 할 경우 `RunIdIncrementer`를 사용해 실행할 때마다 Run ID를 증가시킬 수 있습니다.
+또는 실행 명령에 임의의 `JobParameters`를 추가해도 동일한 효과를 얻을 수 있습니다.
+
 ## Spring Batch 처리 방식: Chunk와 Tasklet
 
 Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.

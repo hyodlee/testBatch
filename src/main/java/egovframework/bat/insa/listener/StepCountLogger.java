@@ -23,7 +23,8 @@ public class StepCountLogger implements StepExecutionListener {
     @Override
     public ExitStatus afterStep(StepExecution stepExecution) {
         // 스텝 처리 건수를 디버그 로그로 출력
-        LOGGER.debug("readCount={}, writeCount={}, skipCount={}",
+        //LOGGER.debug("StepCountLogger.afterStep(): readCount={}, writeCount={}, skipCount={}",
+    	LOGGER.info("StepCountLogger.afterStep(): readCount={}, writeCount={}, skipCount={}",
                 stepExecution.getReadCount(),
                 stepExecution.getWriteCount(),
                 stepExecution.getSkipCount());

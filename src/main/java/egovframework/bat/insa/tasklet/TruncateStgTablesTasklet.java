@@ -27,9 +27,9 @@ public class TruncateStgTablesTasklet implements Tasklet {
     public RepeatStatus execute(StepContribution contribution, ChunkContext chunkContext) throws Exception {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             // 조직 테이블 비우기
-            session.update("Employee.truncateOrgnztInfo");
+            session.update("insaStgToLoc.truncateOrgnztInfo");
             // 사원 테이블 비우기
-            session.update("Employee.truncateEmplyrInfo");
+            session.update("insaStgToLoc.truncateEmplyrInfo");
             session.commit();
         }
         return RepeatStatus.FINISHED;

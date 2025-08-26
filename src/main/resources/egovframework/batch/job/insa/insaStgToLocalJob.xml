@@ -38,27 +38,27 @@
     <bean id="insaStgToLocalJob.stgToLocalOrgnztStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
         <!-- 스테이징 DB에서 조직 정보 목록을 조회 -->
         <property name="sqlSessionFactory" ref="sqlSessionFactory-stg" />
-        <property name="queryId" value="Employee.selectOrgnztList" />
+        <property name="queryId" value="insaStgToLoc.selectOrgnztList" />
         <property name="pageSize" value="#{100}" />
     </bean>
 
     <bean id="insaStgToLocalJob.stgToLocalOrgnztStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
         <!-- 로컬 DB에 조직 정보 적재 -->
         <property name="sqlSessionFactory" ref="sqlSessionFactory-local" />
-        <property name="statementId" value="Employee.insertOrganization" />
+        <property name="statementId" value="insaStgToLoc.insertOrganization" />
     </bean>
 
     <bean id="insaStgToLocalJob.stgToLocalStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
         <!-- 스테이징 DB에서 사원 정보를 조회 (ESNTL_ID는 로컬 적재 시 생성) -->
         <property name="sqlSessionFactory" ref="sqlSessionFactory-stg" />
-        <property name="queryId" value="Employee.selectEmployeeListLocal" />
+        <property name="queryId" value="insaStgToLoc.selectEmployeeListLocal" />
         <property name="pageSize" value="#{100}" />
     </bean>
 
     <bean id="insaStgToLocalJob.stgToLocalStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
         <!-- STG -> Local 이관 단계에서는 ESNTL_ID를 포함한 insertEmployee 사용 -->
         <property name="sqlSessionFactory" ref="sqlSessionFactory-local" />
-        <property name="statementId" value="Employee.insertEmployee" />
+        <property name="statementId" value="insaStgToLoc.insertEmployee" />
     </bean>
 
     <!-- jobParameters를 사용하기 위해 스텝 스코프로 지정 -->

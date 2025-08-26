@@ -2,12 +2,12 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
+		<!-- Job-launcher -->
         <import resource="context-batch-job-launcher.xml" />
         <!-- JobDetail 정의를 포함하는 설정 -->
         <import resource="context-scheduler-job.xml" />
         
         <!-- 각 잡에 대한 크론 트리거 정의 -->
-
         <bean id="insaRemote1ToStgCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
             <property name="jobDetail" ref="insaRemote1ToStgJobDetail" />
             <property name="cronExpression" value="0 * * * * ?" />
@@ -55,6 +55,7 @@
             </property>
         </bean>
 
+		<!-- 트리거들을 실행가능상태로 한다 -->
         <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
             <property name="triggers">
                 <list>
@@ -67,6 +68,7 @@
             <property name="jobDetails">
                 <list>
                     <ref bean="insaStgToLocalJobDetail" />
+                    <ref bean="erpStgToLocalJobDetail" />
                 </list>
             </property>            
             <property name="globalJobListeners">

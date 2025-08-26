@@ -44,6 +44,8 @@
                 <entry key="jobName" value="insaStgToLocalJob" />
                 <entry key="jobLocator" value-ref="jobRegistry" />
                 <entry key="jobLauncher" value-ref="jobLauncher" />
+                <!-- 잡에서 사용할 원천 시스템 값 -->
+                <entry key="sourceSystem" value="remote1" />
             </map>
         </property>
     </bean>

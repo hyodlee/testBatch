@@ -144,3 +144,16 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 - `src/test/java/egovframework/bat/domain/crm/NewcrmProcessorTest.java`
 
 CRM 배치는 신규 시스템 추가시의 예시입니다
+
+## 스프링 배치 순차 실행 요약
+
+1. 스프링 배치는 Job → Step 구조를 기반으로 한다.
+2. 하나의 Job 안에서 Step들을 순서대로 정의해 실행할 수 있다.
+3. Step1 완료 후 Step2, Step2 완료 후 Step3처럼 순차 실행이 가능하다.
+4. 여러 Job을 만들어 Job 간에도 순차 실행을 구성할 수 있다.
+5. JobLauncher나 JobStep을 사용하면 다른 Job을 Step처럼 호출할 수 있다.
+6. Step의 성공/실패 결과에 따라 다음 Step을 분기 처리할 수 있다.
+7. XML 설정과 Java Config 방식 모두 지원한다.
+8. 조건부 로직으로 유연한 배치 흐름 제어가 가능하다.
+9. 기본 기능만으로도 단순한 순차 실행부터 복잡한 플로우 구성까지 가능하다.
+10. 재사용성과 확장성이 높아 대규모 배치 처리에 적합하다.

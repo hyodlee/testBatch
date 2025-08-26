@@ -1,5 +1,6 @@
 package egovframework.bat.insa.processor;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -38,7 +39,7 @@ public class EmployeeInfoProcessor implements ItemProcessor<EmployeeInfo, Employ
         // 원천 시스템에 해당하는 프리픽스를 조회
         String prefix = SourceSystemPrefix.getPrefix(sourceSystem);
         // 프리픽스가 비어있으면 기본값 LND 사용
-        if (prefix.isEmpty()) {
+        if (StringUtils.isEmpty(prefix)) {
             prefix = "LND";
         }
         // 프리픽스로 ESNTL_ID 생성

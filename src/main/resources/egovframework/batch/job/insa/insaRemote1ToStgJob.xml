@@ -38,14 +38,14 @@
     </job>
 
     <bean id="insaRemote1ToStgJob.remote1ToStgOrgnztStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
-        <!-- remote1 DB에서 조직 정보 목록을 조회 -->
+        <!-- remote1 DB에서 조직 정보를 조회 -->
         <property name="sqlSessionFactory" ref="insa-sqlSessionFactory-remote1" />
         <property name="queryId" value="insaRemToStg.selectOrgnztList" />
         <property name="pageSize" value="#{100}" />
     </bean>
 
     <bean id="insaRemote1ToStgJob.remote1ToStgOrgnztStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
-        <!-- STG DB에 조직 정보 적재 -->
+        <!-- STG DB에 조직 정보를 적재 -->
         <property name="sqlSessionFactory" ref="sqlSessionFactory-stg" />
         <property name="statementId" value="insaRemToStg.insertOrganization" />
     </bean>

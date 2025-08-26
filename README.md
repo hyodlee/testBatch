@@ -16,6 +16,16 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
 
 배치 잡 실행 시 `sourceSystem` 파라미터를 생략하면 `LND` 프리픽스로 ESNTL_ID가 생성됩니다.
 
+## 배치 메타데이터 정리 스크립트
+
+배치 실패로 메타데이터가 남아 있는 경우 `src/main/resources/script/cleanup-batch-meta.sql` 스크립트를 실행해 `stgEmplyrCountStep` 관련 `BATCH_STEP_EXECUTION` 및 `BATCH_JOB_EXECUTION` 레코드를 정리할 수 있습니다.
+
+> ⚠️ 운영 데이터베이스에서 실행하기 전에 반드시 전체 백업을 완료하세요.
+
+1. DB 백업을 수행합니다.
+2. 오류가 발생한 배치가 더 이상 실행 중이 아닌지 확인합니다.
+3. SQL 클라이언트에서 `cleanup-batch-meta.sql`을 실행합니다.
+
 ## Spring Batch 처리 방식: Chunk와 Tasklet
 
 Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.

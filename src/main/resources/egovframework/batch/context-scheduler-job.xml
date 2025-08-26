@@ -68,6 +68,7 @@
     <bean id="erpStgToLocalJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="egovframework.bat.scheduler.EgovQuartzJobLauncher" />
         <property name="group" value="quartz-batch" />
+        <property name="durability" value="true" />
         <property name="jobDataAsMap">
             <map>
                 <!-- STG에 있는 ERP 고객 정보를 로컬 DB로 이관하는 잡 -->

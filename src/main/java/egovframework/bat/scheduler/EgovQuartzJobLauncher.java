@@ -80,7 +80,8 @@ public class EgovQuartzJobLauncher extends QuartzJobBean {
 	protected void executeInternal(JobExecutionContext context) {
 		Long timestamp = null;
 		Map<String, Object> jobDataMap = context.getMergedJobDataMap();
-		LOGGER.debug("JobDataMap: {}", jobDataMap); // JobDataMap 디버그 로그
+		//LOGGER.debug("JobDataMap: {}", jobDataMap); // JobDataMap 디버그 로그
+		LOGGER.info("JobDataMap: {}", jobDataMap); // JobDataMap 디버그 로그
 		String jobName = (String) jobDataMap.get(JOB_NAME);
 
 		/*
@@ -127,7 +128,8 @@ public class EgovQuartzJobLauncher extends QuartzJobBean {
 			} else if (value instanceof Date) {
 				builder.addDate(key, (Date) value);
 			} else {
-				LOGGER.debug("JobDataMap contains values which are not job parameters (ignoring).");
+				//LOGGER.debug("JobDataMap contains values which are not job parameters (ignoring).");
+				LOGGER.info("JobDataMap contains values which are not job parameters (ignoring).");
 			}
 		}
 		return builder.toJobParameters();

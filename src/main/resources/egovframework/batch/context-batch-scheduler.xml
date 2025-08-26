@@ -13,11 +13,6 @@
             <property name="cronExpression" value="0 * * * * ?" />
         </bean>
 
-        <bean id="insaStgToLocalCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-            <property name="jobDetail" ref="insaStgToLocalJobDetail" />
-            <property name="cronExpression" value="0 * * * * ?" />
-        </bean>
-
     <bean id="erpRestToStgCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="erpRestToStgJobDetail" />
         <property name="cronExpression" value="0 0/5 * * * ?" />
@@ -28,7 +23,7 @@
             <property name="cronExpression" value="0 * * * * ?" />
         </bean>
 
-        <!-- JobChainingJobListener를 이용하여 순차 실행 설정 -->
+        <!-- JobChainingJobListener를 이용하여 순차 실행 설정 (insaStgToLocalJobDetail은 트리거 없이 insaRemote1ToStgJobDetail 후에 실행됨) -->
         <bean id="jobChainingJobListener" class="org.quartz.listeners.JobChainingJobListener">
             <constructor-arg value="jobChainingListener" />
         </bean>
@@ -69,7 +64,6 @@
             <property name="triggers">
                 <list>
                     <ref bean="insaRemote1ToStgCronTrigger" />
-                    <ref bean="insaStgToLocalCronTrigger" />
                     <ref bean="erpRestToStgCronTrigger" />
                     <ref bean="erpStgToLocalCronTrigger" />
                 </list>

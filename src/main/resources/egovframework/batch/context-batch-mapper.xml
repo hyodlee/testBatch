@@ -24,6 +24,7 @@
         <property name="mapperLocations">
             <list>
                 <value>classpath:/egovframework/batch/mapper/insa/insa_remote1_to_stg.xml</value>                
+                <value>classpath:/egovframework/batch/mapper/insa/insa_stg_to_local.xml</value>
                 <value>classpath:/egovframework/batch/mapper/erp/erp_stg_to_local.xml</value>
                 <value>classpath:/egovframework/batch/mapper/erp/erp_rest_to_stg.xml</value>
                 <value>classpath:/egovframework/batch/mapper/example/Egov_Example_SQL.xml</value>

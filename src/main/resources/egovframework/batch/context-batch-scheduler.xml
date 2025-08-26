@@ -61,7 +61,6 @@
                 <list>
                     <ref bean="insaRemote1ToStgCronTrigger" />
                     <ref bean="erpRestToStgCronTrigger" />
-                    <ref bean="erpStgToLocalCronTrigger" />
                 </list>
             </property>
             <!-- 트리거가 없는 작업을 등록하기 위한 jobDetails 설정 -->

@@ -97,7 +97,8 @@ public class EgovQuartzJobLauncher extends QuartzJobBean {
 		LOGGER.warn("Quartz trigger firing with Spring Batch jobName={}", jobName);
 
 	JobParameters jobParameters = getJobParametersFromJobMap(jobDataMap);
-	LOGGER.debug("JobParameters: {}", jobParameters); // JobParameters 디버그 로그
+	//LOGGER.debug("JobParameters: {}", jobParameters); // JobParameters 디버그 로그
+	LOGGER.info("JobParameters: {}", jobParameters); // JobParameters 디버그 로그
 	try {
             LOGGER.info("{} 작업 시작", jobName); // 작업 시작 로그
             JobExecution jobExecution = jobLauncher.run(jobLocator.getJob(jobName), jobParameters);

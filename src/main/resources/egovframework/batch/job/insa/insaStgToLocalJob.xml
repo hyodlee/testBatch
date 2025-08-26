@@ -20,7 +20,8 @@
         </listeners>
     </step>
     <step id="stgEmplyrCountStep" parent="eGovTaskletStep" next="stgToLocalStep">
-        <tasklet ref="stgEmplyrCountTasklet" />
+        <!-- 완료된 후에도 재실행할 수 있도록 allow-start-if-complete을 true로 설정 -->
+        <tasklet ref="stgEmplyrCountTasklet" allow-start-if-complete="true" />
     </step>
     <step id="stgToLocalStep" parent="eGovBaseStep">
         <tasklet>

@@ -19,6 +19,10 @@
                        writer="insaRemote1ToStgJob.remote1ToStgOrgnztStep.mybatisItemWriter"
                        commit-interval="500" />
             </tasklet>
+            <!-- step 실행 통계 로깅을 위한 리스너 등록 -->
+            <listeners>
+                <listener ref="stepCountLogger"/>
+            </listeners>
         </step>
         <step id="remote1ToStgStep" parent="eGovBaseStep">
             <tasklet>

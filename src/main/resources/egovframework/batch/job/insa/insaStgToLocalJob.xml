@@ -8,27 +8,28 @@
 
     <!-- commit-interval 값은 일반적으로 500~1000으로 설정함 -->
     <job id="insaStgToLocalJob" parent="eGovBaseJob" incrementer="runIdIncrementer" xmlns="http://www.springframework.org/schema/batch">
-            <step id="insaStgToLocalEmployeeStep" parent="eGovBaseStep" next="insaStgToLocalOrgnztStep">
-                <tasklet>
-<!--                            processor="insaStgToLocalJob.insaStgToLocalEmployeeStep.itemProcessor" -->
-                    <chunk reader="insaStgToLocalJob.insaStgToLocalEmployeeStep.mybatisItemReader"
-                           writer="insaStgToLocalJob.insaStgToLocalEmployeeStep.mybatisItemWriter"
-                           commit-interval="500" />
-                </tasklet>
-                <listeners>
-                    <listener ref="stepCountLogger" />
-                </listeners>
-            </step>    
-            <step id="insaStgToLocalOrgnztStep" parent="eGovBaseStep">
-                <tasklet>
-                    <chunk reader="insaStgToLocalJob.insaStgToLocalOrgnztStep.mybatisItemReader"
-                           writer="insaStgToLocalJob.insaStgToLocalOrgnztStep.mybatisItemWriter"
-                           commit-interval="500" />
-                </tasklet>
-                <listeners>
-                    <listener ref="stepCountLogger" />
-                </listeners>
-            </step>
+        <!-- 조직 정보를 먼저 복사한 후 사원 정보를 복사 -->    
+        <step id="insaStgToLocalOrgnztStep" parent="eGovBaseStep" next="insaStgToLocalEmployeeStep">
+            <tasklet>
+                <chunk reader="insaStgToLocalJob.insaStgToLocalOrgnztStep.mybatisItemReader"
+                       writer="insaStgToLocalJob.insaStgToLocalOrgnztStep.mybatisItemWriter"
+                       commit-interval="500" />
+            </tasklet>
+            <listeners>
+                <listener ref="stepCountLogger" />
+            </listeners>
+        </step>    
+        <step id="insaStgToLocalEmployeeStep" parent="eGovBaseStep">
+            <tasklet>
+                <chunk reader="insaStgToLocalJob.insaStgToLocalEmployeeStep.mybatisItemReader"
+                       processor="insaStgToLocalJob.insaStgToLocalEmployeeStep.itemProcessor"
+                       writer="insaStgToLocalJob.insaStgToLocalEmployeeStep.mybatisItemWriter"
+                       commit-interval="500" />
+            </tasklet>
+            <listeners>
+                <listener ref="stepCountLogger" />
+            </listeners>
+        </step>    
         <!-- <step id="stgEmplyrCountStep" parent="eGovTaskletStep" next="insaStgToLocalEmployeeStep">
             완료된 후에도 재실행할 수 있도록 allow-start-if-complete을 true로 설정
             <tasklet ref="stgEmplyrCountTasklet" allow-start-if-complete="true" />

@@ -16,6 +16,9 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
 
 배치 잡 실행 시 `sourceSystem` 파라미터를 생략하면 `LND` 프리픽스로 ESNTL_ID가 생성됩니다.
 
+잡을 반복 실행해야 할 경우 `RunIdIncrementer`를 사용해 실행할 때마다 Run ID를 증가시킬 수 있습니다.
+또는 실행 명령에 임의의 `JobParameters`를 추가해도 동일한 효과를 얻을 수 있습니다.
+
 ## 배치 메타데이터 정리 스크립트
 
 배치 실패로 메타데이터가 남아 있는 경우 `src/main/resources/script/cleanup-batch-meta.sql` 스크립트를 실행해 `stgEmplyrCountStep` 관련 `BATCH_STEP_EXECUTION` 및 `BATCH_JOB_EXECUTION` 레코드를 정리할 수 있습니다.

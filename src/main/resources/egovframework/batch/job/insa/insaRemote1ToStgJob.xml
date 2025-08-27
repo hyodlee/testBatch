@@ -19,6 +19,10 @@
                        writer="insaRemote1ToStgJob.remote1ToStgOrgnztStep.mybatisItemWriter"
                        commit-interval="500" />
             </tasklet>
+            <!-- step 실행 통계 로깅을 위한 리스너 등록 -->
+            <listeners>
+                <listener ref="stepCountLogger"/>
+            </listeners>
         </step>
         <step id="remote1ToStgStep" parent="eGovBaseStep">
             <tasklet>
@@ -26,33 +30,37 @@
                        writer="insaRemote1ToStgJob.remote1ToStgStep.mybatisItemWriter"
                        commit-interval="500" />
             </tasklet>
+            <!-- step 실행 통계 로깅을 위한 리스너 등록 -->
+            <listeners>
+                <listener ref="stepCountLogger"/>
+            </listeners>
         </step>
     </job>
 
     <bean id="insaRemote1ToStgJob.remote1ToStgOrgnztStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
-        <!-- remote1 DB에서 조직 정보 목록을 조회 -->
+        <!-- remote1 DB에서 조직 정보를 조회 -->
         <property name="sqlSessionFactory" ref="insa-sqlSessionFactory-remote1" />
-        <property name="queryId" value="Employee.selectOrgnztList" />
+        <property name="queryId" value="insaRemToStg.selectOrgnztList" />
         <property name="pageSize" value="#{100}" />
     </bean>
 
     <bean id="insaRemote1ToStgJob.remote1ToStgOrgnztStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
-        <!-- STG DB에 조직 정보 적재 -->
+        <!-- STG DB에 조직 정보를 적재 -->
         <property name="sqlSessionFactory" ref="sqlSessionFactory-stg" />
-        <property name="statementId" value="Employee.insertOrganization" />
+        <property name="statementId" value="insaRemToStg.insertOrganization" />
     </bean>
 
     <bean id="insaRemote1ToStgJob.remote1ToStgStep.mybatisItemReader" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader" scope="step">
         <!-- remote1 DB에서 ESNTL_ID와 SOURCE_SYSTEM을 제외한 사원 정보를 조회 -->
         <property name="sqlSessionFactory" ref="insa-sqlSessionFactory-remote1" />
-        <property name="queryId" value="Employee.selectEmployeeList" />
+        <property name="queryId" value="insaRemToStg.selectEmployeeList" />
         <property name="pageSize" value="#{100}" />
     </bean>
 
     <bean id="insaRemote1ToStgJob.remote1ToStgStep.mybatisItemWriter" class="org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter">
         <!-- STG DB 적재를 위해 stg SqlSessionFactory 사용 -->
         <property name="sqlSessionFactory" ref="sqlSessionFactory-stg" />
-        <property name="statementId" value="Employee.insertEmployeeLegacy" />
+        <property name="statementId" value="insaRemToStg.insertEmployee" />
     </bean>
     
     <!-- STG 테이블을 비우는 Tasklet -->

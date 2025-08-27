@@ -53,7 +53,7 @@ public class EgovQuartzJobLauncher extends QuartzJobBean {
 	 */
 	static final String JOB_NAME = "jobName";
 
-        private static final Logger LOGGER = LoggerFactory.getLogger(EgovQuartzJobLauncher.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(EgovQuartzJobLauncher.class);
 
 	private JobLocator jobLocator;
 
@@ -80,27 +80,32 @@ public class EgovQuartzJobLauncher extends QuartzJobBean {
 	protected void executeInternal(JobExecutionContext context) {
 		Long timestamp = null;
 		Map<String, Object> jobDataMap = context.getMergedJobDataMap();
+		//LOGGER.debug("JobDataMap: {}", jobDataMap); // JobDataMap 디버그 로그
+		LOGGER.info("JobDataMap: {}", jobDataMap); // JobDataMap 디버그 로그
 		String jobName = (String) jobDataMap.get(JOB_NAME);
 
 		/*
 		 * 주기적으로 실행가능하도록 하기 위해, JobParamter의 timestamp 값을 갱신한다.
 		 */
 		if (jobDataMap.containsKey("timestamp")) {
-			jobDataMap.remove("timestamp");
+                        jobDataMap.remove("timestamp");
 		}
 		timestamp = new Date().getTime();
 		jobDataMap.put("timestamp", timestamp);
+		LOGGER.debug("timestamp: {}", timestamp); // timestamp 디버그 로그
 
 		LOGGER.warn("Quartz trigger firing with Spring Batch jobName={}", jobName);
 
-        JobParameters jobParameters = getJobParametersFromJobMap(jobDataMap);
-        try {
+	JobParameters jobParameters = getJobParametersFromJobMap(jobDataMap);
+	//LOGGER.debug("JobParameters: {}", jobParameters); // JobParameters 디버그 로그
+	LOGGER.info("EgovQuartzJobLauncher.executeInternal(): JobParameters: {}", jobParameters); // JobParameters 디버그 로그
+	try {
             LOGGER.info("{} 작업 시작", jobName); // 작업 시작 로그
             JobExecution jobExecution = jobLauncher.run(jobLocator.getJob(jobName), jobParameters);
             LOGGER.info("{} 작업 종료, 상태: {}", jobName, jobExecution.getStatus()); // 작업 종료 로그
-        } catch (JobExecutionException e) {
+	} catch (JobExecutionException e) {
             LOGGER.error("Could not execute job.", e);
-        }
+	}
     }
 
 	/*
@@ -124,7 +129,8 @@ public class EgovQuartzJobLauncher extends QuartzJobBean {
 			} else if (value instanceof Date) {
 				builder.addDate(key, (Date) value);
 			} else {
-				LOGGER.debug("JobDataMap contains values which are not job parameters (ignoring).");
+				//LOGGER.debug("JobDataMap contains values which are not job parameters (ignoring).");
+				LOGGER.info("JobDataMap contains values which are not job parameters (ignoring).");
 			}
 		}
 		return builder.toJobParameters();

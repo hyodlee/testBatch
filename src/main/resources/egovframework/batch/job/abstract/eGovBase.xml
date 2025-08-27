@@ -4,7 +4,11 @@
 		http://www.springframework.org/schema/batch D:\DEV\xsd\spring-batch-3.0.xsd">
 		<!-- http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-3.0.xsd"> -->	
 		
-	<job id="eGovBaseJob" abstract="true" job-repository="jobRepository" restartable="true" xmlns="http://www.springframework.org/schema/batch"/>
+        <job id="eGovBaseJob" abstract="true" job-repository="jobRepository" restartable="true" xmlns="http://www.springframework.org/schema/batch"/>
+
+        <!-- Job 실행 시마다 Run ID를 증가시키는 Incrementer -->
+        <bean id="runIdIncrementer"
+              class="org.springframework.batch.core.launch.support.RunIdIncrementer"/>
 
         <!-- chunk 기반 공통 스텝 -->
         <step id="eGovBaseStep" abstract="true"  xmlns="http://www.springframework.org/schema/batch">

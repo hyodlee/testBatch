@@ -28,6 +28,7 @@ CREATE TABLE `comtnemplyrinfo` (
   `MOD_DTTM` datetime DEFAULT NULL COMMENT '수정일자',
   PRIMARY KEY (`ESNTL_ID`),
   UNIQUE KEY `COMTNEMPLYRINFO_PK` (`ESNTL_ID`),
+  UNIQUE KEY `uq_hr_emp_prefix_employ` ((left(`ESNTL_ID`,3)),`EMPLYR_ID`),
   KEY `COMTNEMPLYRINFO_i01` (`ORGNZT_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='업무사용자정보';
 

@@ -38,12 +38,16 @@
     <bean id="insaStgToLocalJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="egovframework.bat.scheduler.EgovQuartzJobLauncher" />
         <property name="group" value="quartz-batch" />
+        <!-- 트리거 없이 등록되는 잡을 지속적으로 유지 -->
+        <property name="durability" value="true" />
         <property name="jobDataAsMap">
             <map>
                 <!-- 스테이징 DB 데이터를 로컬로 적재하기 위한 작업 이름 설정 (가이드) -->
                 <entry key="jobName" value="insaStgToLocalJob" />
                 <entry key="jobLocator" value-ref="jobRegistry" />
                 <entry key="jobLauncher" value-ref="jobLauncher" />
+                <!-- 잡에서 사용할 원천 시스템 값 -->
+                <entry key="sourceSystem" value="remote1" />
             </map>
         </property>
     </bean>
@@ -64,6 +68,7 @@
     <bean id="erpStgToLocalJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="egovframework.bat.scheduler.EgovQuartzJobLauncher" />
         <property name="group" value="quartz-batch" />
+        <property name="durability" value="true" />
         <property name="jobDataAsMap">
             <map>
                 <!-- STG에 있는 ERP 고객 정보를 로컬 DB로 이관하는 잡 -->

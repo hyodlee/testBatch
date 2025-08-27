@@ -42,17 +42,26 @@ public class FetchErpDataTasklet implements Tasklet {
     private final List<NotificationSender> notificationSenders;
 
     /** 차량 정보를 조회할 API URL */
-    //@Value("${erp.api-url}")
-    @Value("${Globals.Erp.ApiUrl}")
-    private String apiUrl;
+    private final String apiUrl;
 
     public FetchErpDataTasklet(WebClient.Builder builder,
                                @Qualifier("jdbcTemplateLocal") JdbcTemplate jdbcTemplate,
-                               List<NotificationSender> notificationSenders) {
+                               List<NotificationSender> notificationSenders,
+                               @Value("${Globals.Erp.ApiUrl}") String apiUrl) {
         // WebClient 생성
         this.webClient = builder.build();
         this.jdbcTemplate = jdbcTemplate;
         this.notificationSenders = notificationSenders;
+        this.apiUrl = apiUrl;
+    }
+
+    /**
+     * 현재 설정된 API URL을 반환한다.
+     *
+     * @return API URL
+     */
+    public String getApiUrl() {
+        return apiUrl;
     }
 
     @Override
@@ -171,23 +180,53 @@ public class FetchErpDataTasklet implements Tasklet {
     }
 
     /**
-     * 실패 로그를 저장한다.
+     * 공통 로그 저장 메서드.
+     *
+     * @param table  저장할 테이블명
+     * @param apiUrl API URL (필요 없으면 null)
+     * @param e      발생한 예외
+     */
+    private void saveLog(String table, String apiUrl, Exception e) {
+        String sql;
+        Object[] params;
+        if (apiUrl != null) {
+            sql = "INSERT INTO " + table + " (api_url, error_message, reg_dttm) VALUES (?, ?, ?)";
+            params = new Object[] {apiUrl, e.getMessage(), new Timestamp(System.currentTimeMillis())};
+        } else {
+            sql = "INSERT INTO " + table + " (error_message, reg_dttm) VALUES (?, ?)";
+            params = new Object[] {e.getMessage(), new Timestamp(System.currentTimeMillis())};
+        }
+
+        try {
+            jdbcTemplate.update(sql, params);
+        } catch (CannotGetJdbcConnectionException ex) {
+            LOGGER.error("{} 로그 저장 중 커넥션 획득 실패", table, ex);
+        } catch (BadSqlGrammarException ex) {
+            // 테이블 미존재 등 SQL 문법 오류가 발생해도 배치를 중단하지 않음
+            LOGGER.error("{} 로그 테이블 SQL 오류", table, ex);
+        } catch (DataAccessException ex) {
+            // 기타 데이터베이스 접근 오류 처리
+            LOGGER.error("{} 로그 저장 중 데이터 접근 오류", table, ex);
+        }
+    }
+
+    /**
+     * 공통 로그 저장 메서드(API URL 없이).
+     *
+     * @param table 저장할 테이블명
+     * @param e     발생한 예외
+     */
+    private void saveLog(String table, Exception e) {
+        saveLog(table, null, e);
+    }
+
+    /**
+     * API 실패 로그를 저장한다.
      *
      * @param e 발생한 예외
      */
     private void saveFailLog(Exception e) {
-        String sql = "INSERT INTO migstg.erp_api_fail_log (api_url, error_message, reg_dttm) VALUES (?, ?, ?)";
-        try {
-            jdbcTemplate.update(sql, apiUrl, e.getMessage(), new Timestamp(System.currentTimeMillis()));
-        } catch (CannotGetJdbcConnectionException ex) {
-            LOGGER.error("REST 호출 실패 로그 저장 중 커넥션 획득 실패", ex);
-        } catch (BadSqlGrammarException ex) {
-            // 테이블 미존재 등 SQL 문법 오류가 발생해도 배치를 중단하지 않음
-            LOGGER.error("REST 호출 실패 로그 테이블 SQL 오류", ex);
-        } catch (DataAccessException ex) {
-            // 기타 데이터베이스 접근 오류 처리
-            LOGGER.error("REST 호출 실패 로그 저장 중 데이터 접근 오류", ex);
-        }
+        saveLog("migstg.erp_api_fail_log", apiUrl, e);
     }
 
     /**
@@ -196,18 +235,7 @@ public class FetchErpDataTasklet implements Tasklet {
      * @param e 발생한 예외
      */
     private void saveDbFail(Exception e) {
-        String sql = "INSERT INTO migstg.erp_db_fail_log (error_message, reg_dttm) VALUES (?, ?)";
-        try {
-            jdbcTemplate.update(sql, e.getMessage(), new Timestamp(System.currentTimeMillis()));
-        } catch (CannotGetJdbcConnectionException ex) {
-            LOGGER.error("DB 적재 실패 로그 저장 중 커넥션 획득 실패", ex);
-        } catch (BadSqlGrammarException ex) {
-            // 테이블 미존재 등 SQL 문법 오류가 발생해도 배치를 중단하지 않음
-            LOGGER.error("DB 적재 실패 로그 테이블 SQL 오류", ex);
-        } catch (DataAccessException ex) {
-            // 기타 데이터베이스 접근 오류 처리
-            LOGGER.error("DB 적재 실패 로그 저장 중 데이터 접근 오류", ex);
-        }
+        saveLog("migstg.erp_db_fail_log", e);
     }
 
     /**

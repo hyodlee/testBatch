@@ -16,6 +16,15 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
 
 배치 잡 실행 시 `sourceSystem` 파라미터를 생략하면 `LND` 프리픽스로 ESNTL_ID가 생성됩니다.
 
+잡을 반복 실행해야 할 경우 `RunIdIncrementer`를 사용해 실행할 때마다 Run ID를 증가시킬 수 있습니다.
+또는 실행 명령에 임의의 `JobParameters`를 추가해도 동일한 효과를 얻을 수 있습니다.
+
+## 배치 메타데이터 정리
+
+배치 실패로 메타데이터가 남아 있는 경우에는 스텝별로 전용 정리 스크립트를 작성해 실행하세요.
+
+> ⚠️ 운영 데이터베이스에서 실행하기 전에 반드시 전체 백업을 완료하세요.
+
 ## Spring Batch 처리 방식: Chunk와 Tasklet
 
 Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
@@ -44,13 +53,13 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
   - `src/main/resources/egovframework/batch/mapper/insa/insa_remote1_to_stg.xml`: 원격→스테이징 데이터 이동을 위한 SQL 매퍼
   - `src/main/resources/egovframework/batch/mapper/insa/insa_stg_to_local.xml`: 스테이징→로컬 데이터 이동을 위한 SQL 매퍼
 - 공통, 도메인 및 유틸 클래스:
-  - `src/main/java/egovframework/bat/insa/util/SourceSystemPrefix.java`: 시스템 구분을 위한 접두어 상수 정의 클래스
+  - `src/main/java/egovframework/bat/insa/common/SourceSystemPrefix.java`: 시스템 구분을 위한 접두어 상수 정의 클래스
   - `src/main/java/egovframework/bat/insa/processor/EmployeeInfoProcessor.java`: 직원 정보를 처리하는 배치 프로세서
-  - `src/main/java/egovframework/bat/insa/util/EsntlIdGenerator.java`: ESNTL_ID를 생성하는 유틸리티 클래스
+  - `src/main/java/egovframework/bat/insa/common/EsntlIdGenerator.java`: ESNTL_ID를 생성하는 유틸리티 클래스
   - `src/main/java/egovframework/bat/insa/domain/EmployeeInfo.java`: 직원 정보를 담는 도메인 클래스
   - `src/main/java/egovframework/bat/insa/domain/Orgnztinfo.java`: 조직 정보를 표현하는 도메인 클래스
 - 테스트 코드:
-  - `src/test/java/egovframework/bat/insa/util/EsntlIdGeneratorTest.java`: ESNTL_ID 생성 로직을 검증하는 테스트
+  - `src/test/java/egovframework/bat/insa/common/EsntlIdGeneratorTest.java`: ESNTL_ID 생성 로직을 검증하는 테스트
 
 ### 인사 배치 Job 추가시 확인 사항
 
@@ -58,8 +67,8 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 
 - 설정 파일: `src/main/resources/egovframework/batch/job/insa`에 `<Source>To<Target>Job.xml` 형태로 저장합니다. 파일명은 lowerCamelCase를 사용하며 반드시 `Job.xml`으로 끝납니다.
 - 관련 도메인 클래스: `src/main/java/egovframework/bat/insa/domain` 아래에 작성하고 패키지 구조를 유지합니다.
-- 공통 클래스: `src/main/java/egovframework/bat/insa/util` 아래에 작성하고 패키지 구조를 유지합니다.
-- 테스트 코드: `src/test/java/egovframework/bat/insa/domain` 및 `src/test/java/egovframework/bat/insa/util`에 동일한 패키지 구조로 작성합니다.
+- 공통 클래스: `src/main/java/egovframework/bat/insa/common` 아래에 작성하고 패키지 구조를 유지합니다.
+- 테스트 코드: `src/test/java/egovframework/bat/insa/domain` 및 `src/test/java/egovframework/bat/insa/common`에 동일한 패키지 구조로 작성합니다.
 
 ## ERP 배치 잡 디렉터리(`erp`)
 
@@ -135,3 +144,18 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 - `src/test/java/egovframework/bat/domain/crm/NewcrmProcessorTest.java`
 
 CRM 배치는 신규 시스템 추가시의 예시입니다
+
+## 스프링 배치 순차 실행 요약
+
+1. 스프링 배치는 Job → Step 구조를 기반으로 한다.
+2. 하나의 Job 안에서 Step들을 순서대로 정의해 실행할 수 있다.
+3. Step1 완료 후 Step2, Step2 완료 후 Step3처럼 순차 실행이 가능하다.
+4. 여러 Job을 만들어 Job 간에도 순차 실행을 구성할 수 있다.
+5. JobLauncher나 JobStep을 사용하면 다른 Job을 Step처럼 호출할 수 있다.
+6. Step의 성공/실패 결과에 따라 다음 Step을 분기 처리할 수 있다.
+7. XML 설정과 Java Config 방식 모두 지원한다.
+8. 조건부 로직으로 유연한 배치 흐름 제어가 가능하다.
+9. 기본 기능만으로도 단순한 순차 실행부터 복잡한 플로우 구성까지 가능하다.
+10. 재사용성과 확장성이 높아 대규모 배치 처리에 적합하다.
+
+※ ID이름이 중복되지 않게 신경쓸것. (예로 step태그의 ID가 다른 업무와 같게 구성할경우, 에러가 발생하지 않는데, 그 작업이 실행되지 않는 현상을 경험할 수 있음) 

@@ -1,0 +1,4 @@
+spring:
+  config:
+    # application/env 경로의 설정 파일을 추가로 읽도록 설정
+    additional-location: classpath:/application/env/

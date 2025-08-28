@@ -12,6 +12,10 @@
                        writer="erpStgToLocalJob.erpStgToLocalVehicleStep.mybatisItemWriter"
                        commit-interval="500" />
             </tasklet>
+            <!-- 스텝 처리 건수 로깅 -->
+            <listeners>
+                <listener ref="stepCountLogger"/>
+            </listeners>            
         </step>
     </job>
 

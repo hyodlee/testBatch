@@ -1,23 +1,24 @@
 package egovframework.bat.erp.tasklet;
 
-import egovframework.bat.notification.NotificationSender;
 import java.util.Collections;
 import java.util.List;
-import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
-import org.springframework.core.io.ClassPathResource;
+import java.util.Properties;
+
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.reactive.function.client.ClientResponse;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.http.HttpStatus;
-import org.junit.runner.RunWith;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.web.reactive.function.client.ClientResponse;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import egovframework.bat.notification.NotificationSender;
 import reactor.core.publisher.Mono;
 
 /**
@@ -34,10 +35,14 @@ public class FetchErpDataTaskletPropertyInjectionTest {
         // application.yml을 로딩하여 프로퍼티를 주입
         @Bean
         public static PropertySourcesPlaceholderConfigurer properties() {
-            YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
-            yaml.setResources(new ClassPathResource("application/env/local/application.yml"));
+            //YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
+            //yaml.setResources(new ClassPathResource("application.yml"));
+            //PropertySourcesPlaceholderConfigurer config = new PropertySourcesPlaceholderConfigurer();
+            //config.setProperties(yaml.getObject());
+            Properties props = new Properties();
+            props.setProperty("Globals.Erp.ApiUrl", "http://127.0.0.1:8080/api/v1/vehicles");
             PropertySourcesPlaceholderConfigurer config = new PropertySourcesPlaceholderConfigurer();
-            config.setProperties(yaml.getObject());
+            config.setProperties(props);
             return config;
         }
 

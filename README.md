@@ -40,6 +40,7 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
 - context-scheduler-job.xml: 각 배치 잡 XML을 import하고 Quartz `JobDetail`을 정의하며, 상위에서 제공하는 `jobLauncher`와 `jobRegistry`를 참조한다.
 - context-batch-scheduler.xml: 앞선 두 설정을 import하여 크론 트리거와 `SchedulerFactoryBean`을 설정하고 잡 실행 순서를 제어한다.
 - 각_업무_job.xml: 각 업무별 배치 Job을 정의하는 XML로서 Step 구성, Reader/Processor/Writer 설정, Job ID 등을 포함한다. 
+                 Tasklet을 정의하고 실제 Step에서 호출하는 곳
                  context-scheduler-job.xml에서 import되어 스케줄러가 실행할 Job을 결정한다. (경로: `src/main/resources/egovframework/batch/job/`)
 
 상위→하위 참조 구조:

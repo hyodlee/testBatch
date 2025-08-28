@@ -31,7 +31,7 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
       → context-batch-job-launcher.xml 
       → context-scheduler-job.xml 
       → context-batch-scheduler.xml
-      → 각_업무_job xml
+      → 각_업무_job.xml
 
 - context-batch-datasource.xml: 공통 데이터소스와 트랜잭션 매니저 등을 정의한다.
 - context-batch-job-launcher.xml: 데이터소스 설정을 import하여 `JobLauncher`, `JobRepository` 등을 구성한다.
@@ -39,11 +39,13 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
 - context-batch-scheduler.xml: 앞선 두 설정을 import하여 크론 트리거와 `SchedulerFactoryBean`을 설정하고 잡 실행 순서를 제어한다.
 - 각_업무_job.xml: 각 업무별 배치 Job을 정의하는 XML로서 Step 구성, Reader/Processor/Writer 설정, Job ID 등을 포함한다. 
                  context-scheduler-job.xml에서 import되어 스케줄러가 실행할 Job을 결정한다. (경로: `src/main/resources/egovframework/batch/job/`)
+
 상위→하위 참조 구조:
- 		context-batch-scheduler.xml 
- 	  → context-scheduler-job.xml
- 	  → context-batch-job-launcher.xml 
- 	  → context-batch-datasource.xml
+        context-batch-scheduler.xml
+          → context-scheduler-job.xml
+              → 각_업무_job.xml
+                  → context-batch-job-launcher.xml
+                      → context-batch-datasource.xml
 
 ## Spring Batch 처리 방식: Chunk와 Tasklet
 

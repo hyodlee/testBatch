@@ -3,8 +3,6 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
         http://www.springframework.org/schema/batch D:\\DEV\\xsd\\spring-batch-3.0.xsd">
 
-    <import resource="../abstract/eGovBase.xml" />
-
     <!-- STG에 적재된 ERP 차량 정보를 로컬 DB로 이관하는 잡 -->
     <job id="erpStgToLocalJob" parent="eGovBaseJob" xmlns="http://www.springframework.org/schema/batch">
         <step id="erpStgToLocalVehicleStep" parent="eGovBaseStep">
@@ -14,6 +12,10 @@
                        writer="erpStgToLocalJob.erpStgToLocalVehicleStep.mybatisItemWriter"
                        commit-interval="500" />
             </tasklet>
+            <!-- 스텝 처리 건수 로깅 -->
+            <listeners>
+                <listener ref="stepCountLogger"/>
+            </listeners>            
         </step>
     </job>
 

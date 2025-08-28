@@ -25,6 +25,34 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
 
 > ⚠️ 운영 데이터베이스에서 실행하기 전에 반드시 전체 백업을 완료하세요.
 
+## 배치 컨텍스트 파일 관계
+작성 순서: 
+		context-batch-datasource.xml 
+	  → context-batch-mapper.xml
+      → context-batch-job-launcher.xml 
+      → context-scheduler-job.xml 
+      → context-batch-scheduler.xml
+      → 각_업무_job.xml
+
+- context-batch-datasource.xml: 공통 데이터소스와 트랜잭션 매니저 등을 정의한다.
+- context-batch-mapper.xml: MyBatis SqlSessionFactory와 매퍼 위치를 정의한다.
+- context-batch-job-launcher.xml: 데이터소스 설정을 import하여 `JobLauncher`, `JobRepository` 등을 구성한다.
+- context-scheduler-job.xml: 각 배치 잡 XML을 import하고 Quartz `JobDetail`을 정의하며, 상위에서 제공하는 `jobLauncher`와 `jobRegistry`를 참조한다.
+- context-batch-scheduler.xml: 앞선 두 설정을 import하여 크론 트리거와 `SchedulerFactoryBean`을 설정하고 잡 실행 순서를 제어한다.
+- 각_업무_job.xml: 각 업무별 배치 Job을 정의하는 XML로서 Step 구성, Reader/Processor/Writer 설정, Job ID 등을 포함한다. 
+                 Tasklet을 정의하고 실제 Step에서 호출하는 곳 
+                 <step> 요소 안에 <chunk>가 정의되어 있으면 Chunk 기반 Step이며, <tasklet>이 정의되어 있으면 Tasklet 기반 Step입니다.
+                 context-scheduler-job.xml에서 import되어 스케줄러가 실행할 Job을 결정한다. (경로: `src/main/resources/egovframework/batch/job/`)
+
+상위→하위 참조 구조:
+        context-batch-scheduler.xml
+          → context-scheduler-job.xml (각_업무_job.xml파일들을 import한다)
+              → 각_업무_job.xml
+                  → context-batch-job-launcher.xml
+                      → context-batch-datasource.xml
+                      → context-batch-mapper.xml
+                      
+
 ## Spring Batch 처리 방식: Chunk와 Tasklet
 
 Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
@@ -36,6 +64,47 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 - **Tasklet 기반 처리**
   - 단일 Tasklet을 실행하는 간단한 Step 구조로, 반복이 필요 없는 작업에 적합합니다.
   - 파일 이동, 디렉터리 정리 등 단순 작업을 구현할 때 사용합니다.
+
+### StepCountLogger 활용
+
+`StepCountLogger`는 스텝 종료 후 읽기·쓰기·스킵 건수를 로그로 남기는 `StepExecutionListener`입니다. \
+클래스 경로: `src/main/java/egovframework/bat/insa/listener/StepCountLogger.java`
+
+#### Chunk 기반 스텝에서의 사용
+
+Chunk 스텝에서는 `StepCountLogger`를 리스너로 등록하기만 하면 자동으로 처리 건수가 기록됩니다.
+
+```java
+@Bean
+public Step sampleStep(StepBuilderFactory stepBuilderFactory,
+                       StepCountLogger stepCountLogger) {
+    return stepBuilderFactory.get("sampleStep")
+            .<Input, Output>chunk(100)
+            .reader(reader())              // 아이템 읽기
+            .processor(processor())        // 아이템 가공
+            .writer(writer())              // 아이템 쓰기
+            .listener(stepCountLogger)     // StepExecutionListener 등록
+            .build();
+}
+```
+
+#### Tasklet 기반 스텝에서의 사용
+
+Tasklet 스텝은 `StepContribution`의 카운트를 자동 증가시키지 않으므로,
+처리 건수를 수동으로 갱신해야 `StepCountLogger`가 정확한 값을 출력합니다.
+
+```java
+public class SampleTasklet implements Tasklet {
+    @Override
+    public RepeatStatus execute(StepContribution contribution,
+                                ChunkContext chunkContext) {
+        contribution.incrementReadCount();      // 읽은 건수 +1
+        // 비즈니스 로직 수행
+        contribution.incrementWriteCount(1);    // 쓴 건수 +1
+        return RepeatStatus.FINISHED;
+    }
+}
+```
 
 ## 인사 배치 잡 디렉터리(`insa`)
 

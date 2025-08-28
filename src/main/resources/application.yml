@@ -1,4 +1,7 @@
 spring:
+  main:
+    # 동일한 빈 정의가 있을 경우 덮어쓰기를 허용
+    allow-bean-definition-overriding: true
   config:
     # application/env 경로의 설정 파일을 추가로 읽도록 설정
     additional-location: classpath:/application/env/

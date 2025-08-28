@@ -80,12 +80,13 @@
 
 	<bean id="lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" />
 
-	<bean id="customEditorConfigurer" class="org.springframework.beans.factory.config.CustomEditorConfigurer">
-		<property name="customEditors">
-			<map>
-				<entry key="int[]" value="org.springframework.batch.support.IntArrayPropertyEditor" />
-			</map>
-		</property>
-	</bean>
+        <bean id="customEditorConfigurer" class="org.springframework.beans.factory.config.CustomEditorConfigurer">
+                <property name="customEditors">
+                        <!-- 키와 값이 Class 타입으로 변환되도록 명시 -->
+                        <map key-type="java.lang.Class" value-type="java.lang.Class">
+                                <entry key="int[]" value="org.springframework.batch.support.IntArrayPropertyEditor" />
+                        </map>
+                </property>
+        </bean>
 
 </beans>

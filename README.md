@@ -59,6 +59,47 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
   - 단일 Tasklet을 실행하는 간단한 Step 구조로, 반복이 필요 없는 작업에 적합합니다.
   - 파일 이동, 디렉터리 정리 등 단순 작업을 구현할 때 사용합니다.
 
+### StepCountLogger 활용
+
+`StepCountLogger`는 스텝 종료 후 읽기·쓰기·스킵 건수를 로그로 남기는 `StepExecutionListener`입니다. \
+클래스 경로: `src/main/java/egovframework/bat/insa/listener/StepCountLogger.java`
+
+#### Chunk 기반 스텝에서의 사용
+
+Chunk 스텝에서는 `StepCountLogger`를 리스너로 등록하기만 하면 자동으로 처리 건수가 기록됩니다.
+
+```java
+@Bean
+public Step sampleStep(StepBuilderFactory stepBuilderFactory,
+                       StepCountLogger stepCountLogger) {
+    return stepBuilderFactory.get("sampleStep")
+            .<Input, Output>chunk(100)
+            .reader(reader())              // 아이템 읽기
+            .processor(processor())        // 아이템 가공
+            .writer(writer())              // 아이템 쓰기
+            .listener(stepCountLogger)     // StepExecutionListener 등록
+            .build();
+}
+```
+
+#### Tasklet 기반 스텝에서의 사용
+
+Tasklet 스텝은 `StepContribution`의 카운트를 자동 증가시키지 않으므로,
+처리 건수를 수동으로 갱신해야 `StepCountLogger`가 정확한 값을 출력합니다.
+
+```java
+public class SampleTasklet implements Tasklet {
+    @Override
+    public RepeatStatus execute(StepContribution contribution,
+                                ChunkContext chunkContext) {
+        contribution.incrementReadCount();      // 읽은 건수 +1
+        // 비즈니스 로직 수행
+        contribution.incrementWriteCount(1);    // 쓴 건수 +1
+        return RepeatStatus.FINISHED;
+    }
+}
+```
+
 ## 인사 배치 잡 디렉터리(`insa`)
 
 `src/main/resources/egovframework/batch/job/insa` 디렉터리는 인사 관련 배치 Job 설정을 모아두는 곳입니다. 현재 포함된 Job은 다음과 같습니다.

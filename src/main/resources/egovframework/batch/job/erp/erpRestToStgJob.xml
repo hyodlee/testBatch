@@ -8,9 +8,17 @@
         <!-- STG 테이블을 먼저 초기화 -->
         <step id="truncateErpVehicleStep" parent="eGovTaskletStep" next="fetchErpDataStep">
             <tasklet ref="truncateErpVehicleTasklet" />
+            <!-- 스텝 처리 건수 로깅 -->
+            <listeners>
+                <listener ref="stepCountLogger"/>
+            </listeners>
         </step>
         <step id="fetchErpDataStep" parent="eGovTaskletStep">
             <tasklet ref="fetchErpDataTasklet" />
+            <!-- 스텝 처리 건수 로깅 -->
+            <listeners>
+                <listener ref="stepCountLogger"/>
+            </listeners>
         </step>
     </job>
 

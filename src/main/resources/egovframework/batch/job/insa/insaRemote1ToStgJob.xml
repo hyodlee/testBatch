@@ -4,8 +4,6 @@
         http://www.springframework.org/schema/batch D:\DEV\xsd\spring-batch-3.0.xsd">
         <!-- http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-3.0.xsd"> -->
 
-    <import resource="../abstract/eGovBase.xml" />
-
     <!-- commit-interval 값은 일반적으로 500~1000으로 설정함 -->
     <job id="insaRemote1ToStgJob" parent="eGovBaseJob" xmlns="http://www.springframework.org/schema/batch">
         <!-- STG 테이블 초기화 후 조직 정보, 사원 정보 순으로 이관 -->

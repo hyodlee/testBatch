@@ -4,8 +4,6 @@
         http://www.springframework.org/schema/batch D:\DEV\xsd\spring-batch-3.0.xsd">
         <!-- http://www.springframework.org/schema/batch http://www.springframework.org/schema/batch/spring-batch-3.0.xsd -->
 
-    <import resource="../abstract/eGovBase.xml" />
-
     <!-- commit-interval 값은 일반적으로 500~1000으로 설정함 -->
     <job id="insaStgToLocalJob" parent="eGovBaseJob" incrementer="runIdIncrementer" xmlns="http://www.springframework.org/schema/batch">
         <!-- 조직 정보를 먼저 복사한 후 사원 정보를 복사 -->    

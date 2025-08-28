@@ -3,8 +3,6 @@
     xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
         http://www.springframework.org/schema/batch D:\\DEV\\xsd\\spring-batch-3.0.xsd">
 
-    <import resource="../abstract/eGovBase.xml" />
-
     <!-- ERP REST API에서 데이터를 조회하여 STG 테이블에 적재하는 잡 -->
     <job id="erpRestToStgJob" parent="eGovBaseJob" xmlns="http://www.springframework.org/schema/batch">
         <step id="fetchErpDataStep" parent="eGovTaskletStep">

@@ -80,14 +80,4 @@
 
 	<bean id="lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" />
 
-    <bean id="customEditorConfigurer" class="org.springframework.beans.factory.config.CustomEditorConfigurer">
-        <property name="customEditors">
-            <!-- SpEL을 사용하여 문자열 변환 없이 클래스 지정 -->
-            <map>
-                <entry key="#{T(int[])}"
-                       value="#{T(org.springframework.batch.support.IntArrayPropertyEditor)}"/>
-            </map>
-        </property>
-    </bean>
-
 </beans>

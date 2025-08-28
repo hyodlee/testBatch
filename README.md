@@ -44,7 +44,7 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
 
 상위→하위 참조 구조:
         context-batch-scheduler.xml
-          → context-scheduler-job.xml
+          → context-scheduler-job.xml (각_업무_job.xml파일들을 import한다)
               → 각_업무_job.xml
                   → context-batch-job-launcher.xml
                       → context-batch-datasource.xml

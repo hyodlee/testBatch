@@ -5,9 +5,18 @@
 
     <!-- ERP REST API에서 데이터를 조회하여 STG 테이블에 적재하는 잡 -->
     <job id="erpRestToStgJob" parent="eGovBaseJob" xmlns="http://www.springframework.org/schema/batch">
+        <!-- STG 테이블을 먼저 초기화 -->
+        <step id="truncateErpVehicleStep" parent="eGovTaskletStep" next="fetchErpDataStep">
+            <tasklet ref="truncateErpVehicleTasklet" />
+        </step>
         <step id="fetchErpDataStep" parent="eGovTaskletStep">
             <tasklet ref="fetchErpDataTasklet" />
         </step>
     </job>
+
+    <!-- STG 차량 테이블 초기화용 Tasklet 빈 정의 -->
+    <bean id="truncateErpVehicleTasklet" class="egovframework.bat.erp.tasklet.TruncateErpVehicleTasklet">
+        <property name="sqlSessionFactory" ref="sqlSessionFactory-stg" />
+    </bean>
 
 </beans>

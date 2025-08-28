@@ -48,7 +48,7 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
               → 각_업무_job.xml
                   → context-batch-job-launcher.xml
                       → context-batch-datasource.xml
-                          → context-batch-mapper.xml
+                      → context-batch-mapper.xml
                       
 
 ## Spring Batch 처리 방식: Chunk와 Tasklet

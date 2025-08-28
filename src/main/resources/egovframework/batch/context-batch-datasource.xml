@@ -11,13 +11,9 @@
     <bean id="yamlProperties" class="org.springframework.beans.factory.config.YamlPropertiesFactoryBean">
         <property name="resources" value="classpath:application.yml" />
     </bean>
-   	<bean id="egov.propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
-        <property name="locations">
-            <list>
-                <value>classpath:/egovframework/batch/properties/globals.properties</value>
-            </list>
-        </property>
-    </bean>
+    <context:property-placeholder
+            location="classpath:/egovframework/batch/properties/globals.properties"
+            properties-ref="yamlProperties"/>
 
  	
 	<!-- 운영 MySQL용 데이타소스 -->

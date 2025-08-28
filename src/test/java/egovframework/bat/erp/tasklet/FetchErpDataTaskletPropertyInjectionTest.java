@@ -3,7 +3,8 @@ package egovframework.bat.erp.tasklet;
 import egovframework.bat.notification.NotificationSender;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
+import org.springframework.beans.factory.config.YamlPropertiesFactoryBean;
+import org.springframework.core.io.ClassPathResource;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +21,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import reactor.core.publisher.Mono;
 
 /**
- * Globals.Erp.ApiUrl 프로퍼티가 주입되는지 검증하는 테스트.
+ * erp.api-url 프로퍼티가 주입되는지 검증하는 테스트.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = FetchErpDataTaskletPropertyInjectionTest.TestConfig.class)
@@ -30,13 +31,13 @@ public class FetchErpDataTaskletPropertyInjectionTest {
     @ComponentScan(basePackageClasses = FetchErpDataTasklet.class)
     static class TestConfig {
 
-        // 테스트용 프로퍼티 설정
+        // application.yml을 로딩하여 프로퍼티를 주입
         @Bean
         public static PropertySourcesPlaceholderConfigurer properties() {
-            Properties props = new Properties();
-            props.setProperty("Globals.Erp.ApiUrl", "http://127.0.0.1:8080/api/v1/vehicles");
+            YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
+            yaml.setResources(new ClassPathResource("application/env/local/application.yml"));
             PropertySourcesPlaceholderConfigurer config = new PropertySourcesPlaceholderConfigurer();
-            config.setProperties(props);
+            config.setProperties(yaml.getObject());
             return config;
         }
 

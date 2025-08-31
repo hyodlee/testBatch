@@ -17,7 +17,7 @@ import org.springframework.jdbc.support.lob.DefaultLobHandler;
 import org.springframework.jdbc.support.lob.LobHandler;
 import org.springframework.transaction.PlatformTransactionManager;
 
-//@Configuration
+@Configuration
 public class BatchInfraConfig {
 
 	@Lazy

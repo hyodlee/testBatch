@@ -28,27 +28,24 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
 ## 배치 컨텍스트 파일 관계
 **작성 순서**
   - context-batch-mapper.xml
-  - → context-batch-job-launcher.xml
-  - → context-scheduler-job.xml
-  - → context-batch-scheduler.xml
+  - → BatchJobLauncherConfig.java
+  - → BatchSchedulerConfig.java
   - → 각_업무_job.xml
 
 
   - MultiDataSourceConfig.java / BatchInfraConfig.java: 공통 데이터소스와 트랜잭션 매니저 등을 정의한다.
   - context-batch-mapper.xml: MyBatis SqlSessionFactory와 매퍼 위치를 정의한다.
-  - context-batch-job-launcher.xml: MyBatis 설정을 import하여 `JobLauncher`, `JobRepository` 등을 구성한다.
-  - context-scheduler-job.xml: 각 배치 잡 XML을 import하고 Quartz `JobDetail`을 정의하며, 상위에서 제공하는 `jobLauncher`와 `jobRegistry`를 참조한다.
-  - context-batch-scheduler.xml: 앞선 설정을 import하여 크론 트리거와 `SchedulerFactoryBean`을 설정하고 잡 실행 순서를 제어한다.
-  - 각_업무_job.xml: 각 업무별 배치 Job을 정의하는 XML로서 Step 구성, Reader/Processor/Writer 설정, Job ID 등을 포함한다.  
+  - BatchJobLauncherConfig.java: MyBatis 설정을 import하여 `JobLauncher`, `JobRepository` 등을 구성한다.
+  - BatchSchedulerConfig.java: Quartz `JobDetail`, 크론 트리거, `SchedulerFactoryBean` 및 잡 체이닝을 자바 설정으로 정의한다.
+  - 각_업무_job.xml: 각 업무별 배치 Job을 정의하는 XML로서 Step 구성, Reader/Processor/Writer 설정, Job ID 등을 포함한다.
                    Tasklet을 정의하고 실제 Step에서 호출하는 곳 
-                   `<step>` 요소 안에 `<chunk>`가 정의되어 있으면 Chunk 기반 Step이며, `<tasklet>`이 정의되어 있으면 Tasklet 기반 Step입니다.  
-                   context-scheduler-job.xml에서 import되어 스케줄러가 실행할 Job을 결정한다. (경로: `src/main/resources/egovframework/batch/job/`)
+                    `<step>` 요소 안에 `<chunk>`가 정의되어 있으면 Chunk 기반 Step이며, `<tasklet>`이 정의되어 있으면 Tasklet 기반 Step입니다.
+                    BatchSchedulerConfig.java에서 참조되어 스케줄러가 실행할 Job을 결정한다. (경로: `src/main/resources/egovframework/batch/job/`)
 
 **상위→하위 참조 구조**
-  - context-batch-scheduler.xml
-  - → context-scheduler-job.xml (각_업무_job.xml파일들을 import한다)
+  - BatchSchedulerConfig.java
   - → 각_업무_job.xml
-  - → context-batch-job-launcher.xml
+  - → BatchJobLauncherConfig.java
   - → context-batch-mapper.xml
                       
 

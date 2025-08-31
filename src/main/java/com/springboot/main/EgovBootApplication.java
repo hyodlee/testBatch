@@ -14,7 +14,6 @@ import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ImportResource;
 
 /**
  * @author 배치실행개발팀
@@ -32,9 +31,6 @@ import org.springframework.context.annotation.ImportResource;
 */
 
 @SpringBootApplication
-@ImportResource({
-    "classpath:/egovframework/batch/context-batch-scheduler.xml"
-})
 @ComponentScan(basePackages = {"com.springboot.main", "egovframework.bat"})
 public class EgovBootApplication implements CommandLineRunner {
 

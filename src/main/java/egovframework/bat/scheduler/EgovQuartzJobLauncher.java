@@ -30,6 +30,9 @@ import org.springframework.batch.core.configuration.JobLocator;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
+import egovframework.bat.management.JobProgressService;
+import egovframework.bat.service.JobLockService;
+
 /**
  * Quartz 스케줄러에서 Spring Batch Job을 실행하는 클래스입니다.
  *
@@ -55,9 +58,15 @@ public class EgovQuartzJobLauncher extends QuartzJobBean {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(EgovQuartzJobLauncher.class);
 
-	private JobLocator jobLocator;
+        private JobLocator jobLocator;
 
-	private JobLauncher jobLauncher;
+        private JobLauncher jobLauncher;
+
+        /** 중복 실행을 방지하기 위한 락 서비스 */
+        private JobLockService jobLockService;
+
+        /** 진행 상황 전송을 위한 서비스 */
+        private JobProgressService jobProgressService;
 
 	/**
 	 * Public setter for the {@link JobLocator}.
@@ -71,9 +80,25 @@ public class EgovQuartzJobLauncher extends QuartzJobBean {
 	 * Public setter for the {@link JobLauncher}.
 	 * @param jobLauncher the {@link JobLauncher} to set
 	 */
-	public void setJobLauncher(JobLauncher jobLauncher) {
-		this.jobLauncher = jobLauncher;
-	}
+        public void setJobLauncher(JobLauncher jobLauncher) {
+                this.jobLauncher = jobLauncher;
+        }
+
+        /**
+         * {@link JobLockService} 주입.
+         * @param jobLockService 락 서비스
+         */
+        public void setJobLockService(JobLockService jobLockService) {
+                this.jobLockService = jobLockService;
+        }
+
+        /**
+         * {@link JobProgressService} 주입.
+         * @param jobProgressService 진행 상황 서비스
+         */
+        public void setJobProgressService(JobProgressService jobProgressService) {
+                this.jobProgressService = jobProgressService;
+        }
 
 	@Override
 	@SuppressWarnings("unchecked")
@@ -94,18 +119,27 @@ public class EgovQuartzJobLauncher extends QuartzJobBean {
 		jobDataMap.put("timestamp", timestamp);
 		LOGGER.debug("timestamp: {}", timestamp); // timestamp 디버그 로그
 
-		LOGGER.warn("Quartz trigger firing with Spring Batch jobName={}", jobName);
+                LOGGER.warn("Quartz trigger firing with Spring Batch jobName={}", jobName);
 
-	JobParameters jobParameters = getJobParametersFromJobMap(jobDataMap);
-	//LOGGER.debug("JobParameters: {}", jobParameters); // JobParameters 디버그 로그
-	LOGGER.info("EgovQuartzJobLauncher.executeInternal(): JobParameters: {}", jobParameters); // JobParameters 디버그 로그
-	try {
+        if (!jobLockService.tryLock(jobName)) {
+            LOGGER.warn("{} 작업이 이미 실행 중이므로 스케줄러 실행을 건너뜀", jobName);
+            return;
+        }
+
+        JobParameters jobParameters = getJobParametersFromJobMap(jobDataMap);
+        LOGGER.info("EgovQuartzJobLauncher.executeInternal(): JobParameters: {}", jobParameters); // JobParameters 디버그 로그
+        jobProgressService.send(jobName, "STARTED");
+        try {
             LOGGER.info("{} 작업 시작", jobName); // 작업 시작 로그
             JobExecution jobExecution = jobLauncher.run(jobLocator.getJob(jobName), jobParameters);
             LOGGER.info("{} 작업 종료, 상태: {}", jobName, jobExecution.getStatus()); // 작업 종료 로그
-	} catch (JobExecutionException e) {
+            jobProgressService.send(jobName, jobExecution.getStatus().toString());
+        } catch (JobExecutionException e) {
             LOGGER.error("Could not execute job.", e);
-	}
+            jobProgressService.send(jobName, "FAILED");
+        } finally {
+            jobLockService.unlock(jobName);
+        }
     }
 
 	/*

@@ -57,5 +57,15 @@ document.addEventListener('DOMContentLoaded', () => {
         renderPagination(pagination, executions.length, page, size, p => { page = p; render(); });
     }
 
+    // SSE 구독: 해당 잡의 상태가 변경되면 목록을 갱신
+    const eventSource = new EventSource('/api/batch/progress');
+    eventSource.onmessage = e => {
+        const data = JSON.parse(e.data);
+        if (data.jobName === jobName) {
+            load();
+        }
+    };
+    window.addEventListener('beforeunload', () => eventSource.close());
+
     load();
 });

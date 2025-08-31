@@ -47,7 +47,11 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
   - → 각_업무_job.xml
   - → BatchJobLauncherConfig.java
   - → context-batch-mapper.xml
-                      
+
+## 기타 공통 설정
+WebClient처럼 이미 자바 설정으로 작성된 클래스(`WebClientConfig`)는 좋은 예시입니다.
+반복적으로 사용하는 공통 빈(예: 로깅, 글로벌 메시지)은 별도의 `@Configuration` 클래스에 배치하여 응집력을 높입니다.
+예를 들어, `NotificationConfig`는 이메일 및 SMS 알림 전송기를 빈으로 등록합니다.
 
 ## Spring Batch 처리 방식: Chunk와 Tasklet
 

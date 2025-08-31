@@ -2,12 +2,10 @@ package egovframework.bat.notification;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Service;
 
 /**
  * 메일 알림 전송 컴포넌트.
  */
-@Service
 public class EmailNotificationSender implements NotificationSender {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailNotificationSender.class);

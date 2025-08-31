@@ -80,12 +80,4 @@
 
 	<bean id="lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" />
 
-	<bean id="customEditorConfigurer" class="org.springframework.beans.factory.config.CustomEditorConfigurer">
-		<property name="customEditors">
-			<map>
-				<entry key="int[]" value="org.springframework.batch.support.IntArrayPropertyEditor" />
-			</map>
-		</property>
-	</bean>
-
 </beans>

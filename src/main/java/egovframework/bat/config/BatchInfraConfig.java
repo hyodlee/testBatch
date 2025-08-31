@@ -31,12 +31,4 @@ public class BatchInfraConfig {
         return new DefaultLobHandler();
     }
 
-    @Bean
-    static CustomEditorConfigurer customEditorConfigurer() {
-        CustomEditorConfigurer c = new CustomEditorConfigurer();
-        Map<Class<?>, Class<? extends PropertyEditor>> editors = new HashMap<>();
-        editors.put(int[].class, IntArrayPropertyEditor.class);
-        c.setCustomEditors(editors);
-        return c;
-    }
 }

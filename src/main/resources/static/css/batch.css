@@ -1,0 +1,17 @@
+/* 테이블 공통 스타일 */
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+}
+
+/* 상태별 색상 */
+.status-completed { color: green; }
+.status-failed { color: red; }
+.status-started { color: blue; }
+.status-stopped { color: gray; }

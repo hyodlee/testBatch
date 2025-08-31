@@ -17,11 +17,13 @@
 			<map>
 				<!-- DB에서 DB로 데이터 이동 샘플 작업 이름 설정 (샘플) -->
                 <entry key="jobName" value="mybatisToMybatisSampleJob" />
-				<entry key="jobLocator" value-ref="jobRegistry" />
-				<entry key="jobLauncher" value-ref="jobLauncher" />
-			</map>
-		</property>
-	</bean>
+                                <entry key="jobLocator" value-ref="jobRegistry" />
+                                <entry key="jobLauncher" value-ref="jobLauncher" />
+                                <entry key="jobLockService" value-ref="jobLockService" />
+                                <entry key="jobProgressService" value-ref="jobProgressService" />
+                        </map>
+                </property>
+        </bean>
 	
     <bean id="insaRemote1ToStgJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
         <property name="jobClass" value="egovframework.bat.scheduler.EgovQuartzJobLauncher" />
@@ -32,6 +34,8 @@
                 <entry key="jobName" value="insaRemote1ToStgJob" />
                 <entry key="jobLocator" value-ref="jobRegistry" />
                 <entry key="jobLauncher" value-ref="jobLauncher" />
+                <entry key="jobLockService" value-ref="jobLockService" />
+                <entry key="jobProgressService" value-ref="jobProgressService" />
             </map>
         </property>
     </bean>
@@ -49,6 +53,8 @@
                 <entry key="jobLauncher" value-ref="jobLauncher" />
                 <!-- 잡에서 사용할 원천 시스템 값 -->
                 <entry key="sourceSystem" value="remote1" />
+                <entry key="jobLockService" value-ref="jobLockService" />
+                <entry key="jobProgressService" value-ref="jobProgressService" />
             </map>
         </property>
     </bean>
@@ -62,6 +68,8 @@
                 <entry key="jobName" value="erpRestToStgJob" />
                 <entry key="jobLocator" value-ref="jobRegistry" />
                 <entry key="jobLauncher" value-ref="jobLauncher" />
+                <entry key="jobLockService" value-ref="jobLockService" />
+                <entry key="jobProgressService" value-ref="jobProgressService" />
             </map>
         </property>
     </bean>
@@ -76,6 +84,8 @@
                 <entry key="jobName" value="erpStgToLocalJob" />
                 <entry key="jobLocator" value-ref="jobRegistry" />
                 <entry key="jobLauncher" value-ref="jobLauncher" />
+                <entry key="jobLockService" value-ref="jobLockService" />
+                <entry key="jobProgressService" value-ref="jobProgressService" />
             </map>
         </property>
     </bean>

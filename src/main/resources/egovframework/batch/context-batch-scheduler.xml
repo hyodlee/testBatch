@@ -7,16 +7,18 @@
         <!-- JobDetail 정의를 포함하는 설정 -->
         <import resource="context-scheduler-job.xml" />
         
-        <!-- 각 잡에 대한 크론 트리거 정의 -->
+        <!-- 각 잡에 대한 크론 트리거 정의는 자바 설정에서 동적으로 등록됨 -->
+        <!--
         <bean id="insaRemote1ToStgCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
             <property name="jobDetail" ref="insaRemote1ToStgJobDetail" />
             <property name="cronExpression" value="0 * * * * ?" />
         </bean>
 
-	    <bean id="erpRestToStgCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
-	        <property name="jobDetail" ref="erpRestToStgJobDetail" />
-	        <property name="cronExpression" value="0 0/5 * * * ?" />
-	    </bean>
+        <bean id="erpRestToStgCronTrigger" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+            <property name="jobDetail" ref="erpRestToStgJobDetail" />
+            <property name="cronExpression" value="0 0/5 * * * ?" />
+        </bean>
+        -->
 
         <!-- JobChainingJobListener를 이용하여 순차 실행 설정 (insaStgToLocalJobDetail은 트리거 없이 insaRemote1ToStgJobDetail 후에 실행됨) -->
         <bean id="jobChainingJobListener" class="org.quartz.listeners.JobChainingJobListener">
@@ -55,7 +57,8 @@
             </property>
         </bean>
 
-		<!-- 트리거들을 실행가능상태로 한다 -->
+        <!-- SchedulerFactoryBean 설정은 SchedulerConfig 클래스에서 처리 -->
+        <!--
         <bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
             <property name="triggers">
                 <list>
@@ -63,18 +66,18 @@
                     <ref bean="erpRestToStgCronTrigger" />
                 </list>
             </property>
-            <!-- 트리거가 없는 작업을 등록하기 위한 jobDetails 설정 -->
             <property name="jobDetails">
                 <list>
                     <ref bean="insaStgToLocalJobDetail" />
                     <ref bean="erpStgToLocalJobDetail" />
                 </list>
-            </property>            
+            </property>
             <property name="globalJobListeners">
                 <list>
                     <ref bean="jobChainingJobListener" />
                 </list>
             </property>
         </bean>
+        -->
 
 </beans>

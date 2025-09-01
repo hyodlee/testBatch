@@ -72,10 +72,11 @@ public class MybatisToMybatisJobConfig {
             ItemProcessor<CustomerCredit, CustomerCredit> itemProcessor,
             ItemWriter<CustomerCredit> mybatisItemWriter) {
         return new StepBuilder("mybatisToMybatisStep").repository(jobRepository)
-                .<CustomerCredit, CustomerCredit>chunk(500, transactionManager)
+                .<CustomerCredit, CustomerCredit>chunk(500)
                 .reader(mybatisItemReader)
                 .processor(itemProcessor)
                 .writer(mybatisItemWriter)
+                .transactionManager(transactionManager) // 트랜잭션 매니저 설정
                 .build();
     }
 

@@ -108,16 +108,16 @@ public class SampleTasklet implements Tasklet {
 
 ## 인사 배치 잡 디렉터리(`insa`)
 
-`src/main/resources/egovframework/batch/job/insa` 디렉터리는 인사 관련 배치 Job 설정을 모아두는 곳입니다. 현재 포함된 Job은 다음과 같습니다.
+`src/main/java/egovframework/bat/insa/config` 디렉터리는 인사 관련 배치 Job 설정 클래스를 모아두는 곳입니다. 현재 포함된 Job은 다음과 같습니다.
 
 - `insaRemote1ToStgJob`
 - `insaStgToLocalJob`
 
 다음은 관련된 주요 파일들입니다.
 
-- 잡 설정:
-  - `src/main/resources/egovframework/batch/job/insa/insaRemote1ToStgJob.xml`: 원격 시스템에서 스테이징으로 데이터를 전송하는 Job 설정 파일
-  - `src/main/resources/egovframework/batch/job/insa/insaStgToLocalJob.xml`: 스테이징에서 로컬로 데이터를 이동하는 Job 설정 파일
+- 잡 설정 클래스:
+  - `src/main/java/egovframework/bat/insa/config/InsaRemote1ToStgJobConfig.java`: 원격 시스템에서 스테이징으로 데이터를 전송하는 Job 설정 클래스
+  - `src/main/java/egovframework/bat/insa/config/InsaStgToLocalJobConfig.java`: 스테이징에서 로컬로 데이터를 이동하는 Job 설정 클래스
 - 매퍼 파일:
   - `src/main/resources/egovframework/batch/mapper/insa/insa_remote1_to_stg.xml`: 원격→스테이징 데이터 이동을 위한 SQL 매퍼
   - `src/main/resources/egovframework/batch/mapper/insa/insa_stg_to_local.xml`: 스테이징→로컬 데이터 이동을 위한 SQL 매퍼
@@ -134,7 +134,7 @@ public class SampleTasklet implements Tasklet {
 
 새로운 인사 배치 Job을 추가할 때는 다음 규칙을 지킵니다.
 
-- 설정 파일: `src/main/resources/egovframework/batch/job/insa`에 `<Source>To<Target>Job.xml` 형태로 저장합니다. 파일명은 lowerCamelCase를 사용하며 반드시 `Job.xml`으로 끝납니다.
+- 설정 클래스: `src/main/java/egovframework/bat/insa/config`에 `<Source>To<Target>JobConfig.java` 형태로 작성합니다. 클래스명은 UpperCamelCase를 사용하며 반드시 `JobConfig`로 끝납니다.
 - 관련 도메인 클래스: `src/main/java/egovframework/bat/insa/domain` 아래에 작성하고 패키지 구조를 유지합니다.
 - 공통 클래스: `src/main/java/egovframework/bat/insa/common` 아래에 작성하고 패키지 구조를 유지합니다.
 - 테스트 코드: `src/test/java/egovframework/bat/insa/domain` 및 `src/test/java/egovframework/bat/insa/common`에 동일한 패키지 구조로 작성합니다.

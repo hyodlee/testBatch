@@ -31,19 +31,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const statusTd = document.createElement('td');
             statusTd.textContent = '조회중';
-            // 실행 이력 조회 후 상태 표시
+            tr.appendChild(statusTd);
+
+            // 최근 실행의 시작/종료 시간 셀 추가
+            const startTd = document.createElement('td');
+            startTd.textContent = '조회중';
+            startTd.classList.add('time-column');
+            tr.appendChild(startTd);
+
+            const endTd = document.createElement('td');
+            endTd.textContent = '조회중';
+            endTd.classList.add('time-column');
+            tr.appendChild(endTd);
+
+            // 실행 이력 조회 후 상태와 시간 표시
             fetch(`/api/batch/management/jobs/${jobName}/executions`)
                 .then(res => res.json())
                 .then(exec => {
                     if (exec.length > 0) {
+                        const latest = exec[0];
                         statusTd.textContent = '';
-                        statusTd.appendChild(renderStatus(exec[0].status));
+                        statusTd.appendChild(renderStatus(latest.status));
+                        startTd.textContent = latest.startTime ? new Date(latest.startTime).toLocaleString() : '-';
+                        endTd.textContent = latest.endTime ? new Date(latest.endTime).toLocaleString() : '-';
                     } else {
                         statusTd.textContent = '-';
+                        startTd.textContent = '-';
+                        endTd.textContent = '-';
                     }
                 })
-                .catch(() => statusTd.textContent = '-');
-            tr.appendChild(statusTd);
+                .catch(() => {
+                    statusTd.textContent = '-';
+                    startTd.textContent = '-';
+                    endTd.textContent = '-';
+                });
 
             const actionTd = document.createElement('td');
             const detailBtn = document.createElement('a');

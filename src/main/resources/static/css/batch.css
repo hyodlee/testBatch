@@ -15,3 +15,8 @@ th, td {
 .status-failed { color: red; }
 .status-started { color: blue; }
 .status-stopped { color: gray; }
+
+/* 시간 열 폭 조정 */
+th.time-column, td.time-column {
+    width: 20%;
+}

@@ -37,7 +37,8 @@ import org.mybatis.spring.annotation.MapperScan;
     "classpath:/egovframework/batch/context-batch-scheduler.xml"
 })
 @ComponentScan(basePackages = {"com.springboot.main", "egovframework.bat"})
-@MapperScan("egovframework.bat.service")
+// BatchManagementMapper가 STG 데이터소스를 사용하도록 SqlSessionFactory 지정
+@MapperScan(basePackages = "egovframework.bat.service", sqlSessionFactoryRef = "sqlSessionFactory-stg")
 public class EgovBootApplication implements CommandLineRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EgovBootApplication.class);

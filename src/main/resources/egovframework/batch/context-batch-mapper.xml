@@ -13,7 +13,6 @@
             <list>
                 <value>classpath:/egovframework/batch/mapper/insa/insa_stg_to_local.xml</value>
                 <value>classpath:/egovframework/batch/mapper/erp/erp_stg_to_local.xml</value>
-                <value>classpath:/egovframework/batch/mapper/batch/BatchManagementMapper.xml</value>
             </list>
         </property>
     </bean>

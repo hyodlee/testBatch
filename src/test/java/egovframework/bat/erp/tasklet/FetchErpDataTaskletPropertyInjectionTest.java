@@ -32,15 +32,12 @@ public class FetchErpDataTaskletPropertyInjectionTest {
     @ComponentScan(basePackageClasses = FetchErpDataTasklet.class)
     static class TestConfig {
 
-        // application.yml을 로딩하여 프로퍼티를 주입
+        // erp.api-url 프로퍼티를 직접 주입
         @Bean
         public static PropertySourcesPlaceholderConfigurer properties() {
-            //YamlPropertiesFactoryBean yaml = new YamlPropertiesFactoryBean();
-            //yaml.setResources(new ClassPathResource("application.yml"));
-            //PropertySourcesPlaceholderConfigurer config = new PropertySourcesPlaceholderConfigurer();
-            //config.setProperties(yaml.getObject());
             Properties props = new Properties();
-            props.setProperty("Globals.Erp.ApiUrl", "http://127.0.0.1:8080/api/v1/vehicles");
+            // 테스트에서 사용할 ERP API URL 설정
+            props.setProperty("erp.api-url", "http://127.0.0.1:8080/api/v1/vehicles");
             PropertySourcesPlaceholderConfigurer config = new PropertySourcesPlaceholderConfigurer();
             config.setProperties(props);
             return config;
@@ -55,7 +52,8 @@ public class FetchErpDataTaskletPropertyInjectionTest {
                     .build()));
         }
 
-        @Bean(name = "jdbcTemplateLocal")
+        // Tasklet이 기대하는 이름과 동일하게 빈을 등록
+        @Bean(name = "migstgJdbcTemplate")
         public JdbcTemplate jdbcTemplate() {
             return new JdbcTemplate();
         }

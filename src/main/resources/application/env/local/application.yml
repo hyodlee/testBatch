@@ -22,11 +22,11 @@ spring:
       username: miguser
       password: mig!1234
 
-    # 원격1 CUBRID
-    egovremote1-cubrid:
-      driver-class-name: cubrid.jdbc.driver.CUBRIDDriver   # CUBRID JDBC 드라이버
-      url: "jdbc:cubrid:192.168.0.10:33000:egovremote1:::" # 원격1 DB 접속 URL
-      username: readuser                                  # 읽기 전용 계정
+    # 원격1 MySQL
+    egovremote1-mysql:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/egovremote1
+      username: readuser
       password: read!1234
 
 logging:

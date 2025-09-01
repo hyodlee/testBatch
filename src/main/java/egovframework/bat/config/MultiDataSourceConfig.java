@@ -53,7 +53,7 @@ public class MultiDataSourceConfig {
     // Remote1 CUBRID 데이타소스
     //@Bean(name = "egovremote1CubridDataSource")
     @Bean(name = "dataSource-remote1")
-    @ConfigurationProperties("spring.datasource.egovremote1-cubrid")
+    @ConfigurationProperties("spring.datasource.egovremote1-mysql")
     DataSource egovremote1CubridDataSource() {
         return DataSourceBuilder.create().build();
     }

@@ -23,7 +23,7 @@ spring:
       password: prodpass
 
     # 원격1 CUBRID
-    egovremote1-cubrid:
+    egovremote1-mysql:
       driver-class-name: cubrid.jdbc.driver.CUBRIDDriver
       url: "jdbc:cubrid:192.168.20.20:33000:egovremote1_prod:::"
       username: readuser

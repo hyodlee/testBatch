@@ -30,21 +30,19 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
   - context-batch-mapper.xml
   - → BatchJobLauncherConfig.java
   - → BatchSchedulerConfig.java
-  - → 각_업무_job.xml
+  - → 각 JobConfig.java
 
 
   - MultiDataSourceConfig.java / BatchInfraConfig.java: 공통 데이터소스와 트랜잭션 매니저 등을 정의한다.
   - context-batch-mapper.xml: MyBatis SqlSessionFactory와 매퍼 위치를 정의한다.
   - BatchJobLauncherConfig.java: MyBatis 설정을 import하여 `JobLauncher`, `JobRepository` 등을 구성한다.
   - BatchSchedulerConfig.java: Quartz `JobDetail`, 크론 트리거, `SchedulerFactoryBean` 및 잡 체이닝을 자바 설정으로 정의한다.
-  - 각_업무_job.xml: 각 업무별 배치 Job을 정의하는 XML로서 Step 구성, Reader/Processor/Writer 설정, Job ID 등을 포함한다.
-                   Tasklet을 정의하고 실제 Step에서 호출하는 곳 
-                    `<step>` 요소 안에 `<chunk>`가 정의되어 있으면 Chunk 기반 Step이며, `<tasklet>`이 정의되어 있으면 Tasklet 기반 Step입니다.
-                    BatchSchedulerConfig.java에서 참조되어 스케줄러가 실행할 Job을 결정한다. (경로: `src/main/resources/egovframework/batch/job/`)
+  - 각 JobConfig.java: 각 업무의 배치 Job과 Step을 자바 설정으로 정의한다. `<step>` 안에 `<chunk>`를 사용하면 청크 기반 Step, `<tasklet>`을 사용하면 Tasklet 기반 Step이 된다.
+                    BatchSchedulerConfig.java에서 참조되어 스케줄러가 실행할 Job을 결정한다.
 
 **상위→하위 참조 구조**
   - BatchSchedulerConfig.java
-  - → 각_업무_job.xml
+  - → 각 JobConfig.java
   - → BatchJobLauncherConfig.java
   - → context-batch-mapper.xml
 
@@ -139,9 +137,9 @@ public class SampleTasklet implements Tasklet {
 - 공통 클래스: `src/main/java/egovframework/bat/insa/common` 아래에 작성하고 패키지 구조를 유지합니다.
 - 테스트 코드: `src/test/java/egovframework/bat/insa/domain` 및 `src/test/java/egovframework/bat/insa/common`에 동일한 패키지 구조로 작성합니다.
 
-## ERP 배치 잡 디렉터리(`erp`)
+## ERP 배치 Job 구성(`erp`)
 
-`src/main/resources/egovframework/batch/job/erp` 디렉터리는 ERP 관련 배치 Job 설정을 모아두는 곳입니다. 현재 포함된 Job은 다음과 같습니다.
+`src/main/java/egovframework/bat/erp/config` 디렉터리는 ERP 관련 배치 Job 설정 클래스를 모아둔 곳입니다. 현재 포함된 Job은 다음과 같습니다.
 
 - `erpRestToStgJob`
 - `erpStgToLocalJob`
@@ -160,17 +158,16 @@ public class SampleTasklet implements Tasklet {
   - `src/main/java/egovframework/bat/erp/domain/VehicleInfo.java`: ERP 차량 정보를 담는 도메인 클래스
   - `src/main/java/egovframework/bat/erp/api/RestToStgJobController.java`: ERP REST 배치를 수동 실행하는 컨트롤러
 
-## 예제 배치 잡 디렉터리(`example`)
+## 예제 배치 Job 구성(`example`)
 
-`src/main/resources/egovframework/batch/job/example` 디렉터리는 예제 배치 Job 설정을 모아둔 곳입니다. 예제 Job과 관련된 주요 파일은 다음과 같습니다.
+`src/main/java/egovframework/bat/example/config` 디렉터리는 예제 배치 Job 설정 클래스를 모아둔 곳입니다. 예제 Job과 관련된 주요 파일은 다음과 같습니다.
 
-- `src/main/resources/egovframework/batch/job/example/mybatisToMybatisSampleJob.xml`: MyBatis 간 데이터 이동을 정의한 배치 Job 설정 파일(잡 ID: `mybatisToMybatisSampleJob`)
+- `src/main/java/egovframework/bat/example/config/MybatisToMybatisJobConfig.java`: MyBatis 간 데이터 이동을 정의한 배치 Job 설정 클래스(잡 ID: `mybatisToMybatisSampleJob`)
 - `src/main/resources/egovframework/batch/mapper/example/Egov_Example_SQL.xml`: 예제 배치를 위한 SQL 매퍼 파일
 - `src/main/java/egovframework/bat/example/domain/CustomerCredit.java`: 고객 신용 정보를 담는 도메인 클래스
 - `src/main/java/egovframework/bat/example/processor/CustomerCreditIncreaseProcessor.java`: 신용 증가 로직을 처리하는 배치 프로세서
 - `src/main/java/egovframework/bat/scheduler/EgovQuartzJobLauncher.java`: Quartz 스케줄러에서 배치 Job을 실행하는 클래스
 - `src/main/resources/egovframework/batch/context-batch-mapper.xml`: 예제 SQL 매퍼와 데이터소스가 등록된 설정 파일
-- `src/main/resources/egovframework/batch/context-scheduler-job.xml`: 예제 Job을 스케줄러에 등록하기 위한 설정 파일
 
 ### 예제 배치 잡 실행 API
 
@@ -198,19 +195,19 @@ public class SampleTasklet implements Tasklet {
 
 ## 완전 새로운 배치 작업 추가시 매뉴얼
 
-1. Job 설정 파일 작성: `src/main/resources/egovframework/batch/job/crm/NewcrmJob.xml` - 새 작업의 단계와 흐름을 정의합니다.
+1. Job 설정 클래스 작성: `src/main/java/egovframework/bat/crm/config/NewcrmJobConfig.java` - 새 작업의 단계와 흐름을 정의합니다.
 2. 매퍼 XML 작성: `src/main/resources/egovframework/batch/mapper/crm/crm_new_sample.xml` - 데이터 조회와 저장 SQL을 작성합니다.
-3. 도메인 클래스 생성: `src/main/java/egovframework/bat/domain/crm/Newcrm.java` - 배치에서 사용할 데이터 구조를 정의합니다.
-4. 프로세서 클래스 구현: `src/main/java/egovframework/bat/domain/crm/NewcrmProcessor.java` - 도메인 데이터를 가공하는 로직을 구현합니다.
-5. (선택) 테스트 코드 추가: `src/test/java/egovframework/bat/domain/crm/NewcrmProcessorTest.java` - 주요 기능이 예상대로 동작하는지 검증합니다.
+3. 도메인 클래스 생성: `src/main/java/egovframework/bat/crm/domain/Newcrm.java` - 배치에서 사용할 데이터 구조를 정의합니다.
+4. 프로세서 클래스 구현: `src/main/java/egovframework/bat/crm/processor/NewcrmProcessor.java` - 도메인 데이터를 가공하는 로직을 구현합니다.
+5. (선택) 테스트 코드 추가: `src/test/java/egovframework/bat/crm/processor/NewcrmProcessorTest.java` - 주요 기능이 예상대로 동작하는지 검증합니다.
 
 예시 파일 구조:
 
-- `src/main/resources/egovframework/batch/job/crm/NewcrmJob.xml`
+- `src/main/java/egovframework/bat/crm/config/NewcrmJobConfig.java`
 - `src/main/resources/egovframework/batch/mapper/crm/crm_new_sample.xml`
-- `src/main/java/egovframework/bat/domain/crm/Newcrm.java`
-- `src/main/java/egovframework/bat/domain/crm/NewcrmProcessor.java`
-- `src/test/java/egovframework/bat/domain/crm/NewcrmProcessorTest.java`
+- `src/main/java/egovframework/bat/crm/domain/Newcrm.java`
+- `src/main/java/egovframework/bat/crm/processor/NewcrmProcessor.java`
+- `src/test/java/egovframework/bat/crm/processor/NewcrmProcessorTest.java`
 
 CRM 배치는 신규 시스템 추가시의 예시입니다
 
@@ -222,7 +219,7 @@ CRM 배치는 신규 시스템 추가시의 예시입니다
 4. 여러 Job을 만들어 Job 간에도 순차 실행을 구성할 수 있다.
 5. JobLauncher나 JobStep을 사용하면 다른 Job을 Step처럼 호출할 수 있다.
 6. Step의 성공/실패 결과에 따라 다음 Step을 분기 처리할 수 있다.
-7. XML 설정과 Java Config 방식 모두 지원한다.
+7. XML 설정과 Java Config 방식을 모두 지원하나, 본 프로젝트는 Java Config 방식을 사용한다.
 8. 조건부 로직으로 유연한 배치 흐름 제어가 가능하다.
 9. 기본 기능만으로도 단순한 순차 실행부터 복잡한 플로우 구성까지 가능하다.
 10. 재사용성과 확장성이 높아 대규모 배치 처리에 적합하다.

@@ -20,10 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 배치 잡과 실행 정보를 조회/관리하기 위한 REST 컨트롤러.
  */
-@RestController
+@RestController("batchApiController")
 @RequestMapping("/api/batch")
 @RequiredArgsConstructor
-public class BatchManagementController {
+public class BatchApiController {
 
     /** 배치 관리 서비스 */
     private final BatchManagementService batchManagementService;

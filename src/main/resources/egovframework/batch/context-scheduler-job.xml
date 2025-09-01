@@ -7,6 +7,7 @@
     <import resource="classpath:/egovframework/batch/job/insa/insaStgToLocalJob.xml" />
     <import resource="classpath:/egovframework/batch/job/erp/erpRestToStgJob.xml" />
     <import resource="classpath:/egovframework/batch/job/erp/erpStgToLocalJob.xml" />
+    <import resource="classpath:/egovframework/batch/job/erp/erpStgToRestJob.xml" />
     <import resource="classpath:/egovframework/batch/job/example/mybatisToMybatisSampleJob.xml" />
 
 
@@ -74,6 +75,19 @@
             <map>
                 <!-- STG에 있는 ERP 고객 정보를 로컬 DB로 이관하는 잡 -->
                 <entry key="jobName" value="erpStgToLocalJob" />
+                <entry key="jobLocator" value-ref="jobRegistry" />
+                <entry key="jobLauncher" value-ref="jobLauncher" />
+            </map>
+        </property>
+    </bean>
+
+    <bean id="erpStgToRestJobDetail" class="org.springframework.scheduling.quartz.JobDetailFactoryBean">
+        <property name="jobClass" value="egovframework.bat.scheduler.EgovQuartzJobLauncher" />
+        <property name="group" value="quartz-batch" />
+        <property name="jobDataAsMap">
+            <map>
+                <!-- STG 데이터를 외부 ERP로 전송하는 잡 -->
+                <entry key="jobName" value="erpStgToRestJob" />
                 <entry key="jobLocator" value-ref="jobRegistry" />
                 <entry key="jobLauncher" value-ref="jobLauncher" />
             </map>

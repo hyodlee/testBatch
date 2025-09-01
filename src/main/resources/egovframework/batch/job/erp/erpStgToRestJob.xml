@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+        http://www.springframework.org/schema/batch D:\\DEV\\xsd\\spring-batch-3.0.xsd">
+
+    <!-- STG에 있는 ERP 데이터를 외부 REST API로 전송하는 잡 -->
+    <job id="erpStgToRestJob" parent="eGovBaseJob" xmlns="http://www.springframework.org/schema/batch">
+        <step id="sendErpDataStep" parent="eGovTaskletStep">
+            <tasklet ref="sendErpDataTasklet" />
+        </step>
+    </job>
+
+</beans>

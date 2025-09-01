@@ -142,24 +142,28 @@ public class SampleTasklet implements Tasklet {
 
 ## ERP 배치 잡 디렉터리(`erp`)
 
-`src/main/resources/egovframework/batch/job/erp` 디렉터리는 ERP 관련 배치 Job 설정을 모아두는 곳입니다. 현재 포함된 Job은 다음과 같습니다.
+`src/main/resources/egovframework/batch/job/erp` 디렉터리는 ERP 관련 배치 Job 설정을 모아두는 곳입니다. ERP 배치는 외부 시스템에서 우리쪽으로 데이터를 수집하는 흐름과, 우리 시스템의 데이터를 외부로 전송하는 흐름 두 가지를 모두 지원합니다. 현재 포함된 Job은 다음과 같습니다.
 
-- `erpRestToStgJob`
-- `erpStgToLocalJob`
+- `erpRestToStgJob` : 외부 ERP \u2192 STG (데이터 수집)
+- `erpStgToRestJob` : STG \u2192 외부 ERP (데이터 전송)
+- `erpStgToLocalJob` : STG \u2192 로컬 DB
 
 다음은 관련된 주요 파일들입니다.
 
 - 잡 설정:
   - `src/main/resources/egovframework/batch/job/erp/erpRestToStgJob.xml`: ERP REST API에서 데이터를 조회하여 STG에 적재하는 Job 설정 파일
+  - `src/main/resources/egovframework/batch/job/erp/erpStgToRestJob.xml`: STG 데이터를 외부 ERP REST API로 전송하는 Job 설정 파일
   - `src/main/resources/egovframework/batch/job/erp/erpStgToLocalJob.xml`: STG에 적재된 ERP 데이터를 로컬 DB로 이관하는 Job 설정 파일
 - 매퍼 파일:
   - `src/main/resources/egovframework/batch/mapper/erp/erp_rest_to_stg.xml`: ERP REST 데이터→STG 적재를 위한 SQL 매퍼
   - `src/main/resources/egovframework/batch/mapper/erp/erp_stg_to_local.xml`: STG→로컬 데이터 이동을 위한 SQL 매퍼
 - 공통, 도메인 및 유틸 클래스:
   - `src/main/java/egovframework/bat/erp/tasklet/FetchErpDataTasklet.java`: ERP 시스템에서 차량 정보를 조회하여 STG에 적재하는 Tasklet
+  - `src/main/java/egovframework/bat/erp/tasklet/SendErpDataTasklet.java`: STG 데이터를 외부 ERP로 전송하는 Tasklet
   - `src/main/java/egovframework/bat/erp/processor/VehicleInfoProcessor.java`: ERP 차량 정보를 처리하는 배치 프로세서
   - `src/main/java/egovframework/bat/erp/domain/VehicleInfo.java`: ERP 차량 정보를 담는 도메인 클래스
-  - `src/main/java/egovframework/bat/erp/api/RestToStgJobController.java`: ERP REST 배치를 수동 실행하는 컨트롤러
+  - `src/main/java/egovframework/bat/erp/api/RestToStgJobController.java`: 외부 ERP에서 STG로 적재하는 배치를 수동 실행하는 컨트롤러
+  - `src/main/java/egovframework/bat/erp/api/StgToRestJobController.java`: STG 데이터를 외부 ERP로 전송하는 배치를 수동 실행하는 컨트롤러
 
 ## 예제 배치 잡 디렉터리(`example`)
 
@@ -183,9 +187,15 @@ public class SampleTasklet implements Tasklet {
 
 ### ERP 배치 잡 실행 API
 
-`RestToStgJobController`를 통해 ERP 배치를 REST로 호출할 수 있습니다.
+`RestToStgJobController`를 통해 외부 ERP \u2192 STG 배치를 REST로 호출할 수 있습니다.
 
 - **URL**: `POST /api/batch/erp-rest-to-stg`
+- **파라미터**: 없음
+- **응답**: 실행 결과 `BatchStatus`
+
+`StgToRestJobController`를 통해 STG \u2192 외부 ERP 배치를 REST로 호출할 수 있습니다.
+
+- **URL**: `POST /api/batch/erp-stg-to-rest`
 - **파라미터**: 없음
 - **응답**: 실행 결과 `BatchStatus`
 

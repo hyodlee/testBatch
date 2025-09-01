@@ -27,7 +27,7 @@ spring:
 #      driver-class-name: cubrid.jdbc.driver.CUBRIDDriver
 #      url: "jdbc:cubrid:192.168.0.10:33000:egovremote1:::"
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/migstg?useSSL=false&serverTimezone=UTC
+      url: jdbc:mysql://localhost:3306/egovremote1?useSSL=false&serverTimezone=UTC
       username: readuser
       password: read!1234
 

@@ -48,7 +48,6 @@ public class FetchErpDataTasklet implements Tasklet {
                                @Qualifier("migstgJdbcTemplate") JdbcTemplate jdbcTemplate,
                                List<NotificationSender> notificationSenders,
                                @Value("${erp.api-url}") String apiUrl) {
-                               //@Value("${Globals.Erp.ApiUrl}") String apiUrl) {
         // WebClient 생성
         this.webClient = builder.build();
         this.jdbcTemplate = jdbcTemplate;

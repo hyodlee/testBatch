@@ -1,6 +1,7 @@
 package egovframework.bat.service;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -11,6 +12,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import egovframework.bat.service.dto.JobExecutionDto;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.launch.JobOperator;
 
@@ -45,12 +47,18 @@ public class BatchManagementServiceTest {
 
     @Test
     public void getJobExecutionsReturnsMapperResult() {
-        List<JobExecution> executions = Arrays.asList(new JobExecution(1L), new JobExecution(2L));
-        when(batchManagementMapper.selectJobExecutions("job")).thenReturn(executions);
+        JobExecutionDto dto = new JobExecutionDto();
+        dto.setId(1L);
+        dto.setStatus("COMPLETED");
+        when(batchManagementMapper.selectJobExecutions("job")).thenReturn(Arrays.asList(dto));
 
         List<JobExecution> result = batchManagementService.getJobExecutions("job");
 
-        assertEquals(executions, result);
+        assertEquals(1, result.size());
+        JobExecution execution = result.get(0);
+        assertNotNull(execution);
+        assertEquals(Long.valueOf(1L), execution.getId());
+        assertEquals("COMPLETED", execution.getStatus().toString());
     }
 
     @Test

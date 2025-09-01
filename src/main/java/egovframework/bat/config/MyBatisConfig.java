@@ -2,6 +2,8 @@ package egovframework.bat.config;
 
 import javax.sql.DataSource;
 
+import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.util.Arrays;
 
 import org.mybatis.spring.SqlSessionFactoryBean;
@@ -37,7 +39,14 @@ public class MyBatisConfig {
         // 매퍼 XML 경로 지정 (config 디렉터리를 제외하기 위해 필터링)
         PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         Resource[] mapperLocations = Arrays.stream(resolver.getResources("classpath:/egovframework/batch/mapper/*/*.xml"))
-            .filter(resource -> !resource.getURL().getPath().contains("/config/"))
+            // 리소스 경로 확인 중 발생한 IOException을 UncheckedIOException으로 래핑
+            .filter(resource -> {
+                try {
+                    return !resource.getURL().getPath().contains("/config/");
+                } catch (IOException e) {
+                    throw new UncheckedIOException("리소스 경로 확인 실패", e);
+                }
+            })
             .toArray(Resource[]::new);
         factoryBean.setMapperLocations(mapperLocations);
         return factoryBean;

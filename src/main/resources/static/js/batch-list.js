@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const actionTd = document.createElement('td');
             const detailBtn = document.createElement('a');
             detailBtn.textContent = '상세';
-            detailBtn.href = `detail.html?jobName=${encodeURIComponent(jobName)}`;
+            detailBtn.href = `/batch/detail?jobName=${encodeURIComponent(jobName)}`;
             actionTd.appendChild(detailBtn);
             tr.appendChild(actionTd);
             tableBody.appendChild(tr);

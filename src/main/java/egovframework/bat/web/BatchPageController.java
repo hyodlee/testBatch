@@ -13,4 +13,10 @@ public class BatchPageController {
     public String list() {
         return "batch/list";
     }
+
+    // `/batch/detail` 요청 시 templates/batch/detail.html 렌더링
+    @GetMapping("/detail")
+    public String detail() {
+        return "batch/detail";
+    }
 }

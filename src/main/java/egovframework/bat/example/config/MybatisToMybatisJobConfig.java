@@ -71,7 +71,7 @@ public class MybatisToMybatisJobConfig {
             ItemReader<CustomerCredit> mybatisItemReader,
             ItemProcessor<CustomerCredit, CustomerCredit> itemProcessor,
             ItemWriter<CustomerCredit> mybatisItemWriter) {
-        return new StepBuilder("mybatisToMybatisStep", jobRepository)
+        return new StepBuilder("mybatisToMybatisStep").repository(jobRepository)
                 .<CustomerCredit, CustomerCredit>chunk(500, transactionManager)
                 .reader(mybatisItemReader)
                 .processor(itemProcessor)
@@ -84,7 +84,7 @@ public class MybatisToMybatisJobConfig {
      */
     @Bean
     public Job mybatisToMybatisSampleJob(JobRepository jobRepository, Step mybatisToMybatisStep) {
-        return new JobBuilder("mybatisToMybatisSampleJob", jobRepository)
+        return new JobBuilder("mybatisToMybatisSampleJob").repository(jobRepository)
                 .start(mybatisToMybatisStep)
                 .build();
     }

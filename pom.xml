@@ -74,6 +74,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
+        <!-- Thymeleaf 템플릿 엔진 추가 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
         <!-- Log4j2 사용을 위한 의존성 명시 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

@@ -115,6 +115,12 @@
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
         </dependency>
+        <!-- JPA 엔티티를 사용하기 위한 의존성 추가 -->
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>
+            <version>2.2</version>
+        </dependency>
         <!-- For Testing -->
         <dependency>
             <groupId>org.springframework</groupId>

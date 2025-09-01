@@ -32,6 +32,8 @@ spring:
       password: read!1234
 
 logging:
+  level:
+    org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: trace # 요청 매핑 로그 상세 출력
   # 기존 로그 레벨 설정을 주석 처리하여 log4j2 설정만 사용하도록 함
   # level:
   #   '[org.egovframe]': DEBUG

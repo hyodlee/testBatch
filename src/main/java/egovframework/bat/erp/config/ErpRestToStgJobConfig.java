@@ -41,7 +41,8 @@ public class ErpRestToStgJobConfig {
             PlatformTransactionManager transactionManager,
             TruncateErpVehicleTasklet truncateErpVehicleTasklet) {
         return new StepBuilder("truncateErpVehicleStep").repository(jobRepository)
-                .tasklet(truncateErpVehicleTasklet, transactionManager)
+                .tasklet(truncateErpVehicleTasklet)
+                .transactionManager(transactionManager)
                 .build();
     }
 
@@ -53,7 +54,8 @@ public class ErpRestToStgJobConfig {
             PlatformTransactionManager transactionManager,
             FetchErpDataTasklet fetchErpDataTasklet) {
         return new StepBuilder("fetchErpDataStep").repository(jobRepository)
-                .tasklet(fetchErpDataTasklet, transactionManager)
+                .tasklet(fetchErpDataTasklet)
+                .transactionManager(transactionManager)
                 .build();
     }
 

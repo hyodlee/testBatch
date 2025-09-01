@@ -2,12 +2,15 @@ package egovframework.bat.config;
 
 import javax.sql.DataSource;
 
+import java.util.Arrays;
+
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 
 /**
@@ -31,10 +34,12 @@ public class MyBatisConfig {
         factoryBean.setDataSource(dataSource);
         // MyBatis 설정 파일 위치 지정
         factoryBean.setConfigLocation(new ClassPathResource("egovframework/batch/mapper/config/mapper-config.xml"));
-        // 매퍼 XML 경로 지정 (config 디렉터리 제외)
-        factoryBean.setMapperLocations(
-            new PathMatchingResourcePatternResolver()
-                .getResources("classpath:/egovframework/batch/mapper/*/*.xml"));
+        // 매퍼 XML 경로 지정 (config 디렉터리를 제외하기 위해 필터링)
+        PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
+        Resource[] mapperLocations = Arrays.stream(resolver.getResources("classpath:/egovframework/batch/mapper/*/*.xml"))
+            .filter(resource -> !resource.getURL().getPath().contains("/config/"))
+            .toArray(Resource[]::new);
+        factoryBean.setMapperLocations(mapperLocations);
         return factoryBean;
     }
 }

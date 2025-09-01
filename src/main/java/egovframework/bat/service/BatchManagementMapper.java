@@ -2,12 +2,14 @@ package egovframework.bat.service;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Mapper;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.stereotype.Repository;
 
 /**
  * 배치 메타데이터 조회를 위한 매퍼 인터페이스.
  */
+@Mapper
 @Repository
 public interface BatchManagementMapper {
 

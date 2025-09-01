@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.ImportResource;
+import org.mybatis.spring.annotation.MapperScan;
 
 /**
  * @author 배치실행개발팀
@@ -36,6 +37,7 @@ import org.springframework.context.annotation.ImportResource;
     "classpath:/egovframework/batch/context-batch-scheduler.xml"
 })
 @ComponentScan(basePackages = {"com.springboot.main", "egovframework.bat"})
+@MapperScan("egovframework.bat.service")
 public class EgovBootApplication implements CommandLineRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EgovBootApplication.class);

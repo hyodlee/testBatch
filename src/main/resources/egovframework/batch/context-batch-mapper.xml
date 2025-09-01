@@ -13,7 +13,6 @@
             <list>
                 <value>classpath:/egovframework/batch/mapper/insa/insa_stg_to_local.xml</value>
                 <value>classpath:/egovframework/batch/mapper/erp/erp_stg_to_local.xml</value>
-                <value>classpath:/egovframework/batch/mapper/bat/BatchManagementMapper.xml</value>
                 <value>classpath:/egovframework/batch/mapper/batch/BatchManagementMapper.xml</value>
             </list>
         </property>
@@ -30,7 +29,6 @@
                 <value>classpath:/egovframework/batch/mapper/erp/erp_stg_to_local.xml</value>
                 <value>classpath:/egovframework/batch/mapper/erp/erp_rest_to_stg.xml</value>
                 <value>classpath:/egovframework/batch/mapper/example/Egov_Example_SQL.xml</value>
-                <value>classpath:/egovframework/batch/mapper/bat/BatchManagementMapper.xml</value>
                 <value>classpath:/egovframework/batch/mapper/batch/BatchManagementMapper.xml</value>
             </list>
         </property>

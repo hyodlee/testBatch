@@ -3,7 +3,7 @@ package egovframework.bat.service;
 import java.util.List;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.batch.core.JobExecution;
+import egovframework.bat.service.dto.JobExecutionDto;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -26,7 +26,7 @@ public interface BatchManagementMapper {
      * @param jobName 잡 이름
      * @return 실행 이력 목록
      */
-    List<JobExecution> selectJobExecutions(String jobName);
+    List<JobExecutionDto> selectJobExecutions(String jobName);
 
     /**
      * 특정 잡 실행의 에러 로그를 조회한다.

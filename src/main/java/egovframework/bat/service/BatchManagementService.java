@@ -3,6 +3,12 @@ package egovframework.bat.service;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
+import egovframework.bat.service.dto.JobExecutionDto;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.stream.Collectors;
+import org.springframework.batch.core.BatchStatus;
+import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.stereotype.Service;
@@ -36,7 +42,35 @@ public class BatchManagementService {
      * @return 실행 이력 목록
      */
     public List<JobExecution> getJobExecutions(String jobName) {
-        return batchManagementMapper.selectJobExecutions(jobName);
+        List<JobExecutionDto> dtos = batchManagementMapper.selectJobExecutions(jobName);
+        return dtos.stream().map(this::toJobExecution).collect(Collectors.toList());
+    }
+
+    /**
+     * JobExecutionDto를 JobExecution으로 변환한다.
+     *
+     * @param dto 변환할 DTO
+     * @return 변환된 JobExecution
+     */
+    private JobExecution toJobExecution(JobExecutionDto dto) {
+        JobExecution jobExecution = new JobExecution(dto.getId());
+        if (dto.getStartTime() != null) {
+            jobExecution.setStartTime(Date.from(dto.getStartTime().atZone(ZoneId.systemDefault()).toInstant()));
+        }
+        if (dto.getEndTime() != null) {
+            jobExecution.setEndTime(Date.from(dto.getEndTime().atZone(ZoneId.systemDefault()).toInstant()));
+        }
+        if (dto.getStatus() != null) {
+            jobExecution.setStatus(BatchStatus.valueOf(dto.getStatus()));
+        }
+        jobExecution.setExitStatus(new ExitStatus(dto.getExitCode(), dto.getExitDescription()));
+        if (dto.getCreateTime() != null) {
+            jobExecution.setCreateTime(Date.from(dto.getCreateTime().atZone(ZoneId.systemDefault()).toInstant()));
+        }
+        if (dto.getLastUpdated() != null) {
+            jobExecution.setLastUpdated(Date.from(dto.getLastUpdated().atZone(ZoneId.systemDefault()).toInstant()));
+        }
+        return jobExecution;
     }
 
     /**

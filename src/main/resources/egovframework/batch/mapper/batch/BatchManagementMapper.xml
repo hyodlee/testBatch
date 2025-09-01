@@ -12,13 +12,13 @@
     </select>
 
     <!-- 특정 잡의 실행 이력 조회 -->
-    <resultMap id="jobExecutionMap" type="org.springframework.batch.core.JobExecution">
+    <resultMap id="jobExecutionMap" type="egovframework.bat.service.dto.JobExecutionDto">
         <id property="id" column="JOB_EXECUTION_ID"/>
         <result property="startTime" column="START_TIME"/>
         <result property="endTime" column="END_TIME"/>
         <result property="status" column="STATUS"/>
-        <result property="exitStatus.exitCode" column="EXIT_CODE"/>
-        <result property="exitStatus.exitDescription" column="EXIT_MESSAGE"/>
+        <result property="exitCode" column="EXIT_CODE"/>
+        <result property="exitDescription" column="EXIT_MESSAGE"/>
         <result property="createTime" column="CREATE_TIME"/>
         <result property="lastUpdated" column="LAST_UPDATED"/>
     </resultMap>

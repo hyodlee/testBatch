@@ -22,6 +22,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 /**
  * ERP 시스템에서 차량 정보를 조회하여 STG 테이블에 적재하는 Tasklet.
@@ -41,18 +43,23 @@ public class FetchErpDataTasklet implements Tasklet {
     /** 장애 알림 전송기 목록 */
     private final List<NotificationSender> notificationSenders;
 
+    /** JSON 처리를 위한 ObjectMapper */
+    private final ObjectMapper objectMapper;
+
     /** 차량 정보를 조회할 API URL */
     private final String apiUrl;
 
     public FetchErpDataTasklet(WebClient.Builder builder,
                                @Qualifier("jdbcTemplateLocal") JdbcTemplate jdbcTemplate,
                                List<NotificationSender> notificationSenders,
+                               ObjectMapper objectMapper,
                                @Value("${erp.api-url}") String apiUrl) {
                                //@Value("${Globals.Erp.ApiUrl}") String apiUrl) {
         // WebClient 생성
         this.webClient = builder.build();
         this.jdbcTemplate = jdbcTemplate;
         this.notificationSenders = notificationSenders;
+        this.objectMapper = objectMapper;
         this.apiUrl = apiUrl;
     }
 
@@ -96,7 +103,7 @@ public class FetchErpDataTasklet implements Tasklet {
 
     /**
      * ERP API를 호출하여 차량 목록을 조회한다.
-     * JSON/XML 응답은 VehicleInfo 배열로 자동 매핑된다.
+     * JSON 응답을 수신 후 Jackson으로 VehicleInfo 배열로 변환한다.
      *
      * @return 차량 정보 목록
      */
@@ -105,16 +112,17 @@ public class FetchErpDataTasklet implements Tasklet {
         for (int attempt = 1; attempt <= maxAttempts; attempt++) {
             try {
                 LOGGER.info("ERP API 호출 시도: {} / {}", attempt, maxAttempts);
-                // WebClient를 사용하여 ERP API 호출
-                VehicleInfo[] response = webClient.get()
+                // WebClient를 사용하여 ERP API 호출 후 JSON 수신
+                String json = webClient.get()
                         .uri(apiUrl)
                         .retrieve()
-                        .bodyToMono(VehicleInfo[].class)
+                        .bodyToMono(String.class)
                         .block(); // 배치 특성상 동기 처리
-                if (response == null) {
+                if (json == null || json.isEmpty()) {
                     LOGGER.error("ERP API 응답이 비어있음");
                     return Collections.emptyList();
                 }
+                VehicleInfo[] response = objectMapper.readValue(json, VehicleInfo[].class);
                 return Arrays.asList(response);
             } catch (WebClientResponseException.NotFound e) {
                 // 404 오류는 재시도 후에도 실패하면 빈 목록 반환
@@ -129,6 +137,14 @@ public class FetchErpDataTasklet implements Tasklet {
                     saveFailLog(e);
                     notifyFailure("ERP API HTTP 오류: " + e.getMessage());
                     throw new ErpApiException("ERP API 호출 실패", e);
+                }
+            } catch (JsonProcessingException e) {
+                // JSON 파싱 오류 처리
+                LOGGER.error("ERP API 응답 파싱 실패: 시도 {} / {}", attempt, maxAttempts, e);
+                if (attempt == maxAttempts) {
+                    saveFailLog(e);
+                    notifyFailure("ERP API 응답 파싱 실패: " + e.getMessage());
+                    throw new ErpApiException("ERP API 응답 파싱 실패", e);
                 }
             } catch (Exception e) {
                 // 네트워크 등 일반 예외 처리

@@ -22,16 +22,16 @@ spring:
       username: miguser
       password: mig!1234
 
-    # 원격1 CUBRID
-    egovremote1-cubrid:
-#      driver-class-name: cubrid.jdbc.driver.CUBRIDDriver
-#      url: "jdbc:cubrid:192.168.0.10:33000:egovremote1:::"
+    # 원격1 MySQL
+    egovremote1-mysql:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/migstg?useSSL=false&serverTimezone=UTC
+      url: jdbc:mysql://localhost:3306/egovremote1
       username: readuser
       password: read!1234
 
 logging:
+  level:
+    org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: trace # 요청 매핑 로그 상세 출력
   # 기존 로그 레벨 설정을 주석 처리하여 log4j2 설정만 사용하도록 함
   # level:
   #   '[org.egovframe]': DEBUG

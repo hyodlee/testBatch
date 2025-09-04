@@ -10,6 +10,7 @@
         <property name="dataSource" ref="dataSource-local"/>
         <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">
+            <!-- BatchManagementMapper.xml은 스테이징 전용으로, 로컬에서는 제외합니다. -->
             <list>
                 <value>classpath:/egovframework/batch/mapper/insa/insa_stg_to_local.xml</value>
                 <value>classpath:/egovframework/batch/mapper/erp/erp_stg_to_local.xml</value>
@@ -18,16 +19,18 @@
     </bean>
 
     <!-- 스테이징 MySQL (Primary)용 SqlSessionFactory -->
-    <bean id="sqlSessionFactory-stg" class="org.mybatis.spring.SqlSessionFactoryBean">
+    <bean id="sqlSessionFactory-stg" class="org.mybatis.spring.SqlSessionFactoryBean" primary="true">
         <property name="dataSource" ref="dataSource-stg"/>
         <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">
             <list>
                 <value>classpath:/egovframework/batch/mapper/insa/insa_stg_to_local.xml</value>
-                <value>classpath:/egovframework/batch/mapper/insa/insa_remote1_to_stg.xml</value>                
+                <value>classpath:/egovframework/batch/mapper/insa/insa_remote1_to_stg.xml</value>
                 <value>classpath:/egovframework/batch/mapper/erp/erp_stg_to_local.xml</value>
                 <value>classpath:/egovframework/batch/mapper/erp/erp_rest_to_stg.xml</value>
                 <value>classpath:/egovframework/batch/mapper/example/Egov_Example_SQL.xml</value>
+                <!-- 배치 관리 매퍼는 스테이징 환경에서만 사용됩니다. -->
+                <value>classpath:/egovframework/batch/mapper/batch/BatchManagementMapper.xml</value>
             </list>
         </property>
     </bean>

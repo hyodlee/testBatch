@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import egovframework.bat.management.JobProgressService;
+import egovframework.bat.service.JobLockService;
+
 /**
  * Remote1 시스템의 데이터를 중간 저장소로 옮기는 배치 잡을 REST API로 실행하기 위한 컨트롤러.
  */
@@ -32,6 +35,12 @@ public class Remote1ToStgJobController {
 
     // 잡 레지스트리를 통해 배치 잡을 조회하기 위한 레지스트리
     private final JobRegistry jobRegistry;
+
+    // 중복 실행 방지를 위한 락 서비스
+    private final JobLockService jobLockService;
+
+    // 진행 상황 전송 서비스
+    private final JobProgressService jobProgressService;
 
     /**
      * Remote1 데이터를 중간 저장소로 옮기는 배치 잡을 실행한다.
@@ -54,10 +63,22 @@ public class Remote1ToStgJobController {
         try {
             // 잡 레지스트리에서 배치 잡을 조회하여 실행
             Job job = jobRegistry.getJob("insaRemote1ToStgJob");
-            JobExecution execution = jobLauncher.run(job, jobParameters);
-            return ResponseEntity.ok(execution.getStatus());
+            String jobName = job.getName();
+            if (!jobLockService.tryLock(jobName)) {
+                LOGGER.warn("{} 작업이 이미 실행 중", jobName);
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(BatchStatus.FAILED);
+            }
+            jobProgressService.send(jobName, "STARTED");
+            try {
+                JobExecution execution = jobLauncher.run(job, jobParameters);
+                jobProgressService.send(jobName, execution.getStatus().toString());
+                return ResponseEntity.ok(execution.getStatus());
+            } finally {
+                jobLockService.unlock(jobName);
+            }
         } catch (Exception e) {
             LOGGER.error("Remote1 배치 실행 실패", e);
+            jobProgressService.send("insaRemote1ToStgJob", "FAILED");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(BatchStatus.FAILED);
         }

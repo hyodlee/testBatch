@@ -1,5 +1,6 @@
 package egovframework.bat.erp.tasklet;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import egovframework.bat.notification.NotificationSender;
 import java.util.Collections;
 import java.util.List;
@@ -36,7 +37,8 @@ public class FetchErpDataTaskletTest {
         };
 
         List<NotificationSender> senders = Collections.emptyList();
-        FetchErpDataTasklet tasklet = new FetchErpDataTasklet(builder, jdbcTemplate, senders, "http://example.com");
+        // ObjectMapper를 추가한 생성자 호출
+        FetchErpDataTasklet tasklet = new FetchErpDataTasklet(builder, jdbcTemplate, senders, new ObjectMapper(), "http://example.com");
 
         RepeatStatus status = tasklet.execute(null, null);
         assertEquals(RepeatStatus.FINISHED, status);
@@ -62,7 +64,8 @@ public class FetchErpDataTaskletTest {
         when(jdbcTemplate.update(anyString(), any(), any())).thenReturn(1);
 
         List<NotificationSender> senders = Collections.emptyList();
-        FetchErpDataTasklet tasklet = new FetchErpDataTasklet(builder, jdbcTemplate, senders, "http://example.com");
+        // ObjectMapper를 추가한 생성자 호출
+        FetchErpDataTasklet tasklet = new FetchErpDataTasklet(builder, jdbcTemplate, senders, new ObjectMapper(), "http://example.com");
 
         RepeatStatus status = tasklet.execute(null, null);
 

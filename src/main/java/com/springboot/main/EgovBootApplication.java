@@ -1,20 +1,12 @@
 package com.springboot.main;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.egovframe.rte.bat.core.launch.support.EgovSchedulerRunner;
+import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ImportResource;
 
 /**
  * @author 배치실행개발팀
@@ -32,10 +24,9 @@ import org.springframework.context.annotation.ImportResource;
 */
 
 @SpringBootApplication
-@ImportResource({
-    "classpath:/egovframework/batch/context-batch-scheduler.xml"
-})
 @ComponentScan(basePackages = {"com.springboot.main", "egovframework.bat"})
+// 서비스와 리포지토리 매퍼가 STG 데이터소스를 사용하도록 SqlSessionFactory 지정
+@MapperScan(basePackages = {"egovframework.bat.service", "egovframework.bat.repository"}, sqlSessionFactoryRef = "sqlSessionFactory-stg")
 public class EgovBootApplication implements CommandLineRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EgovBootApplication.class);
@@ -54,36 +45,9 @@ public class EgovBootApplication implements CommandLineRunner {
 //		LOGGER.info("##### EgovSampleBootApplication End #####");
 	}
 	
-	@Override
+    @Override
     public void run(String... args) throws Exception {
-		
-		List<String> jobPaths = new ArrayList<String>();
-
-		/*
-		 * 2. DB 실행 예제(DB To DB)에서 사용 할 Batch Job이 기술 된 xml파일 경로들(jobPaths)
-		 */
-		//example
-//        jobPaths.add("/egovframework/batch/job/example/mybatisToMybatisSampleJob.xml"); // 중복 로딩 방지를 위해 파일명 변경
-//        // remote1 시스템에서 STG로, 이어서 STG에서 Local로 이관하는 두 배치를 등록
-//        jobPaths.add("/egovframework/batch/job/insa/insaRemote1ToStgJob.xml");
-//        jobPaths.add("/egovframework/batch/job/insa/insaStgToLocalJob.xml");
-//        // ERP 시스템의 데이터를 STG와 Local로 이관하는 두 배치를 등록
-//        jobPaths.add("/egovframework/batch/job/erp/erpRestToStgJob.xml");
-//        jobPaths.add("/egovframework/batch/job/erp/erpStgToLocalJob.xml");
-
-		/*
-		 * EgovSchedulerRunner에 contextPath, schedulerJobPath, jobPaths를 인수로 넘겨서 실행한다.
-		 * contextPath: Batch Job 실행에 필요한 context 정보가 기술된 xml파일 경로
-		 * schedulerJobPath: Scheduler의 Trigger가 수행할 SchedulerJob(ex: QuartzJob)이 기술된 xml파일 경로
-		 * jobPaths: Batch Job이 기술 된 xml 파일 경로들
-		 * delayTime: Scheduler 실행을 위해 ApplicationContext를 종료를 지연시키는 시간(실행시간)
-		 *            (기본 30000 milliseconds: 30초) -> Long.MAX_VALUE (약 2.9억 년(292,471,208년))
-		 */
-//		EgovSchedulerRunner egovSchedulerRunner = new EgovSchedulerRunner("/egovframework/batch/context-batch-scheduler.xml", "/egovframework/batch/context-scheduler-job.xml",
-//				jobPaths, Long.MAX_VALUE);
-		// EgovSchedulerRunner 실행
-//		egovSchedulerRunner.start();
-		
+        // 자바 기반 배치 설정을 사용하므로 추가 실행 코드는 필요하지 않습니다.
     }
 
 }

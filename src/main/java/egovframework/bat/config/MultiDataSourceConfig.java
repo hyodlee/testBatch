@@ -11,8 +11,8 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-//@Configuration
-//@EnableTransactionManagement
+@Configuration
+@EnableTransactionManagement
 public class MultiDataSourceConfig {
 
     // 스테이징 MySQL (Primary) 데이타소스
@@ -53,7 +53,7 @@ public class MultiDataSourceConfig {
     // Remote1 CUBRID 데이타소스
     //@Bean(name = "egovremote1CubridDataSource")
     @Bean(name = "dataSource-remote1")
-    @ConfigurationProperties("spring.datasource.egovremote1-cubrid")
+    @ConfigurationProperties("spring.datasource.egovremote1-mysql")
     DataSource egovremote1CubridDataSource() {
         return DataSourceBuilder.create().build();
     }

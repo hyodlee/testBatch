@@ -25,8 +25,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.springboot.main", "egovframework.bat"})
-// BatchManagementMapper가 STG 데이터소스를 사용하도록 SqlSessionFactory 지정
-@MapperScan(basePackages = "egovframework.bat.service", sqlSessionFactoryRef = "sqlSessionFactory-stg")
+// 서비스와 리포지토리 매퍼가 STG 데이터소스를 사용하도록 SqlSessionFactory 지정
+@MapperScan(basePackages = {"egovframework.bat.service", "egovframework.bat.repository"}, sqlSessionFactoryRef = "sqlSessionFactory-stg")
 public class EgovBootApplication implements CommandLineRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EgovBootApplication.class);

@@ -5,8 +5,8 @@
     <!-- 실행환경에서 빈이름 참조(EgovAbstractDAO) -->
     <bean id="egov.lobHandler" class="org.springframework.jdbc.support.lob.DefaultLobHandler" lazy-init="true" />
 
-    <!-- 운영 MySQL용 SqlSessionFactory (기본 Bean) -->
-    <bean id="sqlSessionFactory-local" class="org.mybatis.spring.SqlSessionFactoryBean" primary="true">
+    <!-- 운영 MySQL용 SqlSessionFactory -->
+    <bean id="sqlSessionFactory-local" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource-local"/>
         <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">

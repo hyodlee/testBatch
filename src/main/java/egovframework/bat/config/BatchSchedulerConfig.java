@@ -16,7 +16,9 @@ import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
+import egovframework.bat.management.JobProgressService;
 import egovframework.bat.scheduler.EgovQuartzJobLauncher;
+import egovframework.bat.service.JobLockService;
 
 /**
  * XML 기반 스케줄러 설정(context-scheduler-job.xml, context-batch-scheduler.xml)을
@@ -27,7 +29,8 @@ public class BatchSchedulerConfig {
 
     // 공통 JobDetail 생성 메서드
     private JobDetailFactoryBean createJobDetail(String jobName, JobRegistry jobRegistry,
-            JobLauncher jobLauncher, boolean durability, Map<String, Object> extraData) {
+            JobLauncher jobLauncher, JobLockService jobLockService,
+            JobProgressService jobProgressService, boolean durability, Map<String, Object> extraData) {
         JobDetailFactoryBean factory = new JobDetailFactoryBean();
         factory.setJobClass(EgovQuartzJobLauncher.class);
         factory.setGroup("quartz-batch");
@@ -36,6 +39,8 @@ public class BatchSchedulerConfig {
         map.put("jobName", jobName);
         map.put("jobLocator", jobRegistry);
         map.put("jobLauncher", jobLauncher);
+        map.put("jobLockService", jobLockService);
+        map.put("jobProgressService", jobProgressService);
         if (extraData != null) {
             map.putAll(extraData);
         }
@@ -45,34 +50,44 @@ public class BatchSchedulerConfig {
 
     /** 샘플 잡 */
     @Bean
-    public JobDetailFactoryBean jobDetail(JobRegistry jobRegistry, JobLauncher jobLauncher) {
-        return createJobDetail("mybatisToMybatisSampleJob", jobRegistry, jobLauncher, false, null);
+    public JobDetailFactoryBean jobDetail(JobRegistry jobRegistry, JobLauncher jobLauncher,
+            JobLockService jobLockService, JobProgressService jobProgressService) {
+        return createJobDetail("mybatisToMybatisSampleJob", jobRegistry, jobLauncher,
+                jobLockService, jobProgressService, false, null);
     }
 
     /** insaRemote1ToStg 잡 */
     @Bean
-    public JobDetailFactoryBean insaRemote1ToStgJobDetail(JobRegistry jobRegistry, JobLauncher jobLauncher) {
-        return createJobDetail("insaRemote1ToStgJob", jobRegistry, jobLauncher, false, null);
+    public JobDetailFactoryBean insaRemote1ToStgJobDetail(JobRegistry jobRegistry, JobLauncher jobLauncher,
+            JobLockService jobLockService, JobProgressService jobProgressService) {
+        return createJobDetail("insaRemote1ToStgJob", jobRegistry, jobLauncher,
+                jobLockService, jobProgressService, false, null);
     }
 
     /** insaStgToLocal 잡 (durable) */
     @Bean
-    public JobDetailFactoryBean insaStgToLocalJobDetail(JobRegistry jobRegistry, JobLauncher jobLauncher) {
+    public JobDetailFactoryBean insaStgToLocalJobDetail(JobRegistry jobRegistry, JobLauncher jobLauncher,
+            JobLockService jobLockService, JobProgressService jobProgressService) {
         Map<String, Object> extra = new HashMap<>();
         extra.put("sourceSystem", "remote1");
-        return createJobDetail("insaStgToLocalJob", jobRegistry, jobLauncher, true, extra);
+        return createJobDetail("insaStgToLocalJob", jobRegistry, jobLauncher,
+                jobLockService, jobProgressService, true, extra);
     }
 
     /** erpRestToStg 잡 */
     @Bean
-    public JobDetailFactoryBean erpRestToStgJobDetail(JobRegistry jobRegistry, JobLauncher jobLauncher) {
-        return createJobDetail("erpRestToStgJob", jobRegistry, jobLauncher, false, null);
+    public JobDetailFactoryBean erpRestToStgJobDetail(JobRegistry jobRegistry, JobLauncher jobLauncher,
+            JobLockService jobLockService, JobProgressService jobProgressService) {
+        return createJobDetail("erpRestToStgJob", jobRegistry, jobLauncher,
+                jobLockService, jobProgressService, false, null);
     }
 
     /** erpStgToLocal 잡 (durable) */
     @Bean
-    public JobDetailFactoryBean erpStgToLocalJobDetail(JobRegistry jobRegistry, JobLauncher jobLauncher) {
-        return createJobDetail("erpStgToLocalJob", jobRegistry, jobLauncher, true, null);
+    public JobDetailFactoryBean erpStgToLocalJobDetail(JobRegistry jobRegistry, JobLauncher jobLauncher,
+            JobLockService jobLockService, JobProgressService jobProgressService) {
+        return createJobDetail("erpStgToLocalJob", jobRegistry, jobLauncher,
+                jobLockService, jobProgressService, true, null);
     }
 
     // 크론 트리거 생성 메서드

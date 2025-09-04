@@ -139,24 +139,29 @@ public class SampleTasklet implements Tasklet {
 
 ## ERP 배치 Job 구성(`erp`)
 
-`src/main/java/egovframework/bat/erp/config` 디렉터리는 ERP 관련 배치 Job 설정 클래스를 모아둔 곳입니다. 현재 포함된 Job은 다음과 같습니다.
+`src/main/java/egovframework/bat/erp/config` 디렉터리는 ERP 관련 배치 Job 설정 클래스를 모아둔 곳입니다. ERP 배치는 외부 시스템과의 양방향 연계를 지원합니다.
 
-- `erpRestToStgJob`
-- `erpStgToLocalJob`
+- 외부 → 내부: `erpRestToStgJob`, `erpStgToLocalJob`
+  - 외부 ERP REST API에서 데이터를 받아 STG를 거쳐 로컬 DB에 적재합니다.
+- 내부 → 외부: `erpLocalToRestJob`
+  - 로컬 DB에 있는 ERP 데이터를 외부 REST API로 전송합니다.
 
 다음은 관련된 주요 파일들입니다.
 
 - 잡 설정:
   - `src/main/java/egovframework/bat/erp/config/ErpRestToStgJobConfig.java`: ERP REST API에서 데이터를 조회하여 STG에 적재하는 Job 설정 클래스
   - `src/main/java/egovframework/bat/erp/config/ErpStgToLocalJobConfig.java`: STG에 적재된 ERP 데이터를 로컬 DB로 이관하는 Job 설정 클래스
+  - `src/main/java/egovframework/bat/erp/config/ErpLocalToRestJobConfig.java`: 로컬 DB 데이터를 외부 ERP API로 전송하는 Job 설정 클래스
 - 매퍼 파일:
   - `src/main/resources/egovframework/batch/mapper/erp/erp_rest_to_stg.xml`: ERP REST 데이터→STG 적재를 위한 SQL 매퍼
   - `src/main/resources/egovframework/batch/mapper/erp/erp_stg_to_local.xml`: STG→로컬 데이터 이동을 위한 SQL 매퍼
 - 공통, 도메인 및 유틸 클래스:
   - `src/main/java/egovframework/bat/erp/tasklet/FetchErpDataTasklet.java`: ERP 시스템에서 차량 정보를 조회하여 STG에 적재하는 Tasklet
+  - `src/main/java/egovframework/bat/erp/tasklet/SendErpDataTasklet.java`: 로컬 DB의 ERP 데이터를 외부 REST API로 전송하는 Tasklet
   - `src/main/java/egovframework/bat/erp/processor/VehicleInfoProcessor.java`: ERP 차량 정보를 처리하는 배치 프로세서
   - `src/main/java/egovframework/bat/erp/domain/VehicleInfo.java`: ERP 차량 정보를 담는 도메인 클래스
   - `src/main/java/egovframework/bat/erp/api/RestToStgJobController.java`: ERP REST 배치를 수동 실행하는 컨트롤러
+  - `src/main/java/egovframework/bat/erp/api/LocalToRestJobController.java`: 로컬→REST 배치를 수동 실행하는 컨트롤러
 
 ## 예제 배치 Job 구성(`example`)
 
@@ -185,7 +190,14 @@ public class SampleTasklet implements Tasklet {
 - **파라미터**: 없음
 - **응답**: 실행 결과 `BatchStatus`
 
+`LocalToRestJobController`를 통해 로컬 데이터를 ERP API로 전송하는 배치를 실행할 수 있습니다.
+
+- **URL**: `POST /api/batch/erp-local-to-rest`
+- **파라미터**: 없음
+- **응답**: 실행 결과 `BatchStatus`
+
 ### 인사 배치 잡 실행 API
+
 
 `insaRemote1ToStgJob`을 REST로 호출할 수 있습니다.
 

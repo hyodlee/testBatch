@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8" />
+    <title data-i18n="batch.title.list">배치 목록</title>
+    <link rel="stylesheet" href="/css/batch.css" />
+    <script src="/js/batch-common.js"></script>
+    <script src="/js/batch-list.js"></script>
+</head>
+<body>
+    <h1 data-i18n="batch.title.list">배치 목록</h1>
+    <form id="searchForm">
+        <input type="text" id="searchInput" placeholder="잡 이름" data-i18n-placeholder="batch.search.placeholder" />
+        <button type="submit" data-i18n="button.search">검색</button>
+    </form>
+    <table id="jobTable">
+        <thead>
+            <tr>
+                <th data-i18n="batch.label.jobName">잡 이름</th>
+                <th data-i18n="batch.label.status">상태</th>
+                <th data-i18n="batch.label.startTime" class="time-column">시작 시간</th>
+                <th data-i18n="batch.label.endTime" class="time-column">종료 시간</th>
+                <th data-i18n="batch.label.actions">액션</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    <div id="pagination"></div>
+</body>
+</html>

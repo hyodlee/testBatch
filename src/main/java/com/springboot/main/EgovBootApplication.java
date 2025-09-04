@@ -1,5 +1,6 @@
 package com.springboot.main;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -24,6 +25,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.springboot.main", "egovframework.bat"})
+// BatchManagementMapper가 STG 데이터소스를 사용하도록 SqlSessionFactory 지정
+@MapperScan(basePackages = "egovframework.bat.service", sqlSessionFactoryRef = "sqlSessionFactory-stg")
 public class EgovBootApplication implements CommandLineRunner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EgovBootApplication.class);

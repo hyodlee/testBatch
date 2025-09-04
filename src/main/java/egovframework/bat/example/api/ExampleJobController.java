@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import egovframework.bat.management.JobProgressService;
+import egovframework.bat.service.JobLockService;
+
 /**
  * 마이바티스 예제 배치 잡을 REST API로 실행하기 위한 컨트롤러.
  */
@@ -32,6 +35,12 @@ public class ExampleJobController {
 
     // 등록된 배치 잡을 조회하기 위한 잡 레지스트리
     private final JobRegistry jobRegistry;
+
+    // 중복 실행 방지를 위한 락 서비스
+    private final JobLockService jobLockService;
+
+    // 진행 상황 전송 서비스
+    private final JobProgressService jobProgressService;
 
     /**
      * 마이바티스 배치 잡을 실행한다.
@@ -54,10 +63,22 @@ public class ExampleJobController {
         try {
             // 잡 레지스트리에서 잡을 조회한 뒤 실행한다
             Job job = jobRegistry.getJob("mybatisToMybatisSampleJob");
-            JobExecution execution = jobLauncher.run(job, jobParameters);
-            return ResponseEntity.ok(execution.getStatus());
+            String jobName = job.getName();
+            if (!jobLockService.tryLock(jobName)) {
+                LOGGER.warn("{} 작업이 이미 실행 중", jobName);
+                return ResponseEntity.status(HttpStatus.CONFLICT).body(BatchStatus.FAILED);
+            }
+            jobProgressService.send(jobName, "STARTED");
+            try {
+                JobExecution execution = jobLauncher.run(job, jobParameters);
+                jobProgressService.send(jobName, execution.getStatus().toString());
+                return ResponseEntity.ok(execution.getStatus());
+            } finally {
+                jobLockService.unlock(jobName);
+            }
         } catch (Exception e) {
             LOGGER.error("마이바티스 배치 실행 실패", e);
+            jobProgressService.send("mybatisToMybatisSampleJob", "FAILED");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(BatchStatus.FAILED);
         }

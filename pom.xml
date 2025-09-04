@@ -74,6 +74,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-webflux</artifactId>
         </dependency>
+        <!-- Thymeleaf 템플릿 엔진 추가 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
         <!-- Log4j2 사용을 위한 의존성 명시 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -267,10 +272,11 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.13.0</version>
-					<configuration>
-						<source>${java.version}</source>
-						<target>${java.version}</target>
-					</configuration>
+                                        <configuration>
+                                                <!-- 소스/타겟 버전을 11로 맞춤 -->
+                                                <source>11</source>
+                                                <target>11</target>
+                                        </configuration>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

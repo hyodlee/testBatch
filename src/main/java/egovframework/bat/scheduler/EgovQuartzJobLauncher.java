@@ -22,11 +22,11 @@ import java.util.Map.Entry;
 import org.quartz.JobExecutionContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionException;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.configuration.JobLocator;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
@@ -51,14 +51,13 @@ import egovframework.bat.service.JobLockService;
 
 public class EgovQuartzJobLauncher extends QuartzJobBean {
 
-	/**
-	 * Special key in job data map for the name of a job to run.
-	 */
-	static final String JOB_NAME = "jobName";
+        /** JobDataMap에서 실행할 잡의 이름을 나타내는 키 */
+        static final String JOB_NAME = "jobName";
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(EgovQuartzJobLauncher.class);
 
-        private JobLocator jobLocator;
+        /** 실행할 배치 잡 */
+        private Job job;
 
         private JobLauncher jobLauncher;
 
@@ -68,20 +67,20 @@ public class EgovQuartzJobLauncher extends QuartzJobBean {
         /** 진행 상황 전송을 위한 서비스 */
         private JobProgressService jobProgressService;
 
-	/**
-	 * Public setter for the {@link JobLocator}.
-	 * @param jobLocator the {@link JobLocator} to set
-	 */
-	public void setJobLocator(JobLocator jobLocator) {
-		this.jobLocator = jobLocator;
-	}
-
-	/**
-	 * Public setter for the {@link JobLauncher}.
-	 * @param jobLauncher the {@link JobLauncher} to set
-	 */
+        /**
+         * Public setter for the {@link JobLauncher}.
+         * @param jobLauncher the {@link JobLauncher} to set
+         */
         public void setJobLauncher(JobLauncher jobLauncher) {
                 this.jobLauncher = jobLauncher;
+        }
+
+        /**
+         * 실행할 {@link Job} 주입.
+         * @param job 실행할 배치 잡
+         */
+        public void setJob(Job job) {
+                this.job = job;
         }
 
         /**
@@ -107,7 +106,7 @@ public class EgovQuartzJobLauncher extends QuartzJobBean {
 		Map<String, Object> jobDataMap = context.getMergedJobDataMap();
 		//LOGGER.debug("JobDataMap: {}", jobDataMap); // JobDataMap 디버그 로그
 		LOGGER.info("JobDataMap: {}", jobDataMap); // JobDataMap 디버그 로그
-		String jobName = (String) jobDataMap.get(JOB_NAME);
+                String jobName = (String) jobDataMap.get(JOB_NAME);
 
 		/*
 		 * 주기적으로 실행가능하도록 하기 위해, JobParamter의 timestamp 값을 갱신한다.
@@ -131,7 +130,7 @@ public class EgovQuartzJobLauncher extends QuartzJobBean {
         jobProgressService.send(jobName, "STARTED");
         try {
             LOGGER.info("{} 작업 시작", jobName); // 작업 시작 로그
-            JobExecution jobExecution = jobLauncher.run(jobLocator.getJob(jobName), jobParameters);
+            JobExecution jobExecution = jobLauncher.run(job, jobParameters);
             LOGGER.info("{} 작업 종료, 상태: {}", jobName, jobExecution.getStatus()); // 작업 종료 로그
             jobProgressService.send(jobName, jobExecution.getStatus().toString());
         } catch (JobExecutionException e) {

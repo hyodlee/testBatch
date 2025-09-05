@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package egovframework.bat.example.domain;
+package egovframework.bat.job.example.domain;
 
 import java.math.BigDecimal;
 

@@ -2,6 +2,7 @@ package egovframework.bat.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
@@ -20,6 +21,7 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.configuration.JobRegistry;
@@ -50,9 +52,14 @@ public class BatchManagementServiceTest {
     private JobRegistry jobRegistry;
 
     @Before
-    public void setUp() {
+    public void setUp() throws Exception {
         MockitoAnnotations.openMocks(this);
-        when(jobRegistry.getJob("mybatisToMybatisSampleJob")).thenReturn(mybatisJob);
+        try {
+            when(jobRegistry.getJob("mybatisToMybatisSampleJob")).thenReturn(mybatisJob);
+        } catch (NoSuchJobException e) {
+            // 예외 발생 시 테스트 실패
+            fail("지정된 잡을 찾지 못했습니다: " + e.getMessage());
+        }
 
         batchManagementService = new BatchManagementService(batchManagementMapper,
                 jobLauncher, jobExplorer, jobRepository, jobRegistry);

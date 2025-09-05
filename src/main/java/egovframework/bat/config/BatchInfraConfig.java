@@ -1,14 +1,8 @@
 package egovframework.bat.config;
 
-import java.beans.PropertyEditor;
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.sql.DataSource;
 
-import org.springframework.batch.support.IntArrayPropertyEditor;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.CustomEditorConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;

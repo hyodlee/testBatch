@@ -25,7 +25,7 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
 
 > ⚠️ 운영 데이터베이스에서 실행하기 전에 반드시 전체 백업을 완료하세요.
 
-## 배치 컨텍스트 파일 관계
+## 배치 컨피그 파일 관계
 
 **작성 순서**
   - context-batch-mapper.xml
@@ -38,6 +38,14 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
   - → 각 JobConfig.java
   - → BatchJobLauncherConfig.java
   - → context-batch-mapper.xml
+
+**배치 컨피그 파일 간단설명**
+  - MultiDataSourceConfig.java / BatchInfraConfig.java: 공통 데이터소스와 트랜잭션 매니저 등을 정의한다.
+  - context-batch-mapper.xml: MyBatis SqlSessionFactory와 매퍼 위치를 정의한다.
+  - BatchJobLauncherConfig.java: MyBatis 설정을 import하여 `JobLauncher`, `JobRepository` 등을 구성한다.
+  - BatchSchedulerConfig.java: Quartz `JobDetail`, 크론 트리거, `SchedulerFactoryBean` 및 잡 체이닝을 자바 설정으로 정의한다.
+  - 각 JobConfig.java: 각 업무의 배치 Job과 Step을 자바 설정으로 정의한다. `step` 안에 chunk를 사용하면 chunk 기반 Step, tasklet을 사용하면 tasklet 기반 Step이 된다.
+                       BatchSchedulerConfig.java에서 참조되어 스케줄러가 실행할 Job을 결정한다.
 
 ## 기타 공통 설정
 
@@ -103,14 +111,7 @@ public class SampleTasklet implements Tasklet {
 
 다음은 관련된 주요 파일들입니다.
 
-- 잡 설정 클래스:
-  - `src/main/java/egovframework/bat/job/insa/config/InsaRemote1ToStgJobConfig.java`: 원격 시스템에서 스테이징으로 데이터를 전송하는 Job 설정 클래스
-  - `src/main/java/egovframework/bat/job/insa/config/InsaStgToLocalJobConfig.java`: 스테이징 데이터를 로컬로 적재하는 Job 설정 클래스
-- `src/main/resources/egovframework/batch/mapper/job/example/Egov_Example_SQL.xml`: 예제 배치를 위한 SQL 매퍼 파일
-- `src/main/java/egovframework/bat/job/example/domain/CustomerCredit.java`: 고객 신용 정보를 담는 도메인 클래스
-- `src/main/java/egovframework/bat/job/example/processor/CustomerCreditIncreaseProcessor.java`: 신용 증가 로직을 처리하는 배치 프로세서
-- `src/main/java/egovframework/bat/scheduler/EgovQuartzJobLauncher.java`: Quartz 스케줄러에서 배치 Job을 실행하는 클래스
-- `src/main/resources/egovframework/batch/context-batch-mapper.xml`: 예제 SQL 매퍼와 데이터소스가 등록된 설정 파일
+이곳에 작성하시요
 
 ### 예제 배치 잡 실행 API
 

@@ -90,6 +90,15 @@ public class BatchSchedulerConfig {
                 jobLockService, jobProgressService, true, null);
     }
 
+    /** erpStgToRest 잡 */
+    @Bean
+    public JobDetailFactoryBean erpStgToRestJobDetail(JobRegistry jobRegistry, JobLauncher jobLauncher,
+            JobLockService jobLockService, JobProgressService jobProgressService) {
+        // 정각마다 실행될 ERP 스테이징 → REST 변환 잡
+        return createJobDetail("erpStgToRestJob", jobRegistry, jobLauncher,
+                jobLockService, jobProgressService, false, null);
+    }
+
     // 크론 트리거 생성 메서드
     private CronTriggerFactoryBean cronTrigger(JobDetail jobDetail, String expression) {
         CronTriggerFactoryBean factory = new CronTriggerFactoryBean();
@@ -112,6 +121,14 @@ public class BatchSchedulerConfig {
         return cronTrigger(jobDetail, "0 0/5 * * * ?");
     }
 
+    /** erpStgToRest 크론 트리거 */
+    @Bean
+    public CronTriggerFactoryBean erpStgToRestCronTrigger(
+            @Qualifier("erpStgToRestJobDetail") JobDetail jobDetail) {
+        // 매 정각마다 실행
+        return cronTrigger(jobDetail, "0 0 * * * ?");
+    }
+
     /** 잡 체이닝 리스너 */
     @Bean
     public JobChainingJobListener jobChainingJobListener() {
@@ -128,12 +145,14 @@ public class BatchSchedulerConfig {
     public SchedulerFactoryBean schedulerFactoryBean(
             @Qualifier("insaRemote1ToStgCronTrigger") Trigger insaRemote1ToStgCronTrigger,
             @Qualifier("erpRestToStgCronTrigger") Trigger erpRestToStgCronTrigger,
+            @Qualifier("erpStgToRestCronTrigger") Trigger erpStgToRestCronTrigger,
             @Qualifier("insaStgToLocalJobDetail") JobDetail insaStgToLocalJobDetail,
             @Qualifier("erpStgToLocalJobDetail") JobDetail erpStgToLocalJobDetail,
+            @Qualifier("erpStgToRestJobDetail") JobDetail erpStgToRestJobDetail,
             JobChainingJobListener jobChainingJobListener) {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
-        factory.setTriggers(insaRemote1ToStgCronTrigger, erpRestToStgCronTrigger);
-        factory.setJobDetails(insaStgToLocalJobDetail, erpStgToLocalJobDetail);
+        factory.setTriggers(insaRemote1ToStgCronTrigger, erpRestToStgCronTrigger, erpStgToRestCronTrigger);
+        factory.setJobDetails(insaStgToLocalJobDetail, erpStgToLocalJobDetail, erpStgToRestJobDetail);
         factory.setGlobalJobListeners(jobChainingJobListener);
         return factory;
     }

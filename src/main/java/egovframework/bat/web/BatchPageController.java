@@ -19,4 +19,10 @@ public class BatchPageController {
     public String detail() {
         return "batch/detail";
     }
+
+    // `/batch/log` 요청 시 templates/batch/log.html 렌더링
+    @GetMapping("/log")
+    public String log() {
+        return "batch/log";
+    }
 }

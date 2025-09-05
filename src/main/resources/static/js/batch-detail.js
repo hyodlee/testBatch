@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const logBtn = document.createElement('a');
             logBtn.textContent = '로그';
-            logBtn.href = `log.html?executionId=${exec.jobExecutionId}`;
+            logBtn.href = `/batch/log?executionId=${exec.jobExecutionId}`;
             actionTd.appendChild(logBtn);
 
             tr.appendChild(actionTd);

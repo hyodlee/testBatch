@@ -195,27 +195,36 @@ public class SampleTasklet implements Tasklet {
 
 ## API 엔드포인트
 
-| 메서드 | URL | 설명 |
-| --- | --- | --- |
-| `GET` | `/api/batch/jobs` | 등록된 배치 작업 목록 조회 |
-| `POST` | `/api/batch/executions/{execId}/restart` | 지정 실행 ID의 배치 재시작 |
-| `GET` | `/api/batch/executions/{execId}` | 특정 실행 ID 상세 조회 |
-| `GET` | `/api/batch/error-log` | 배치 에러 로그 조회 |
-| `GET` | `/api/batch/jobs/{jobName}/executions` | 특정 작업의 실행 이력 조회 |
-| `DELETE` | `/api/batch/executions/{execId}` | 실행 중인 배치 중지 |
-| `POST` | `/api/batch/erp-rest-to-stg` | ERP REST → STG 전송 배치 실행 |
-| `GET` | `/api/v1/vehicles` | 차량 목록 조회 |
-| `POST` | `/api/batch/mybatis` | MyBatis 기반 배치 실행 |
-| `POST` | `/api/batch/remote1-to-stg` | Remote1 → STG 전송 배치 실행 |
-| `POST` | `/api/batch/management/executions/{jobExecutionId}/restart` | 관리용 배치 재시작 |
-| `GET` | `/api/batch/management/jobs` | 관리용 배치 작업명 목록 |
-| `GET` | `/api/batch/management/executions/{jobExecutionId}/errors` | 특정 실행 ID 에러 로그 조회 |
-| `GET` | `/api/batch/management/jobs/{jobName}/executions` | 관리용 작업 실행 이력 조회 |
-| `POST` | `/api/batch/management/executions/{jobExecutionId}/stop` | 관리용 실행 중지 |
-| `GET` | `/api/batch/progress` (SSE) | 배치 진행 상태 스트림 |
-| `GET` | `/batch/detail` | 배치 상세 페이지 |
-| `GET` | `/batch/list` | 배치 목록 페이지 |
-| `GET` | `/error` | 오류 페이지 |
+### 일반 배치 관리 API
+- `GET /api/batch/jobs` – 등록된 배치 작업 목록 조회
+- `GET /api/batch/jobs/{jobName}/executions` – 특정 작업의 실행 이력 조회
+- `GET /api/batch/executions/{execId}` – 특정 실행 ID 상세 조회
+- `GET /api/batch/error-log` – 배치 에러 로그 조회
+
+### 배치 실행 제어 API
+- `POST /api/batch/executions/{execId}/restart` – 지정 실행 ID 재시작
+- `DELETE /api/batch/executions/{execId}` – 실행 중인 배치 중지
+- `GET /api/batch/progress` (SSE) – 배치 진행 상태 스트림
+
+### 개별 Job 실행 API
+- `POST /api/batch/erp-rest-to-stg` – ERP REST → STG 전송 배치 실행
+- `POST /api/batch/mybatis` – MyBatis 기반 배치 실행
+- `POST /api/batch/remote1-to-stg` – Remote1 → STG 전송 배치 실행
+
+### 관리용 배치 API
+- `GET /api/batch/management/jobs` – 관리용 배치 작업명 목록
+- `GET /api/batch/management/jobs/{jobName}/executions` – 관리용 작업 실행 이력 조회
+- `GET /api/batch/management/executions/{jobExecutionId}/errors` – 특정 실행 ID 에러 로그 조회
+- `POST /api/batch/management/executions/{jobExecutionId}/restart` – 관리용 배치 재시작
+- `POST /api/batch/management/executions/{jobExecutionId}/stop` – 관리용 실행 중지
+
+### 도메인 데이터 조회 API
+- `GET /api/v1/vehicles` – 차량 목록 조회
+
+### 페이지(HTML) 엔드포인트
+- `GET /batch/detail` – 배치 상세 페이지
+- `GET /batch/list` – 배치 목록 페이지
+- `GET /error` – 오류 페이지
 
 더 자세한 설명은 각 컨트롤러 소스 코드를 참고하세요.
 

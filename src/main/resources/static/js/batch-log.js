@@ -16,8 +16,9 @@ document.addEventListener('DOMContentLoaded', () => {
             return res.json();
         })
         .then(lines => {
-            // 조회된 내용이 있는지 확인
-            container.textContent = lines.length ? lines.join('\n') : '조회된 내용이 없습니다';
+            // 공백 행을 제거한 후 조회된 내용이 있는지 확인
+            const filteredLines = lines.filter(line => line.trim() !== '');
+            container.textContent = filteredLines.length ? filteredLines.join('\n') : '조회된 내용이 없습니다';
         })
         .catch(() => {
             // 요청 실패 시에도 동일한 메시지 표시

@@ -246,6 +246,11 @@ public class SampleTasklet implements Tasklet {
 
 CRM 배치는 신규 시스템 추가시의 예시입니다
 
+## 배치 잡 임시 비활성화 방법
+
+* **크론 기반 잡**: `application.yml`의 `scheduler.jobs` 항목에서 해당 잡의 크론 표현식을 주석 처리하거나 삭제하면 CronTrigger가 생성되지 않는다.
+* **JobChain으로 연결된 잡(예: `insaStgToLocalJob`)**: `application.yml`에서 잡 설정을 비활성화한 뒤, `BatchSchedulerConfig`의 `JobChainingJobListener`에서 체인 링크를 제거하거나 주석 처리해 연쇄 실행을 막는다.
+
 ## 스프링 배치 순차 실행 요약
 
 1. 스프링 배치는 Job → Step 구조를 기반으로 한다.

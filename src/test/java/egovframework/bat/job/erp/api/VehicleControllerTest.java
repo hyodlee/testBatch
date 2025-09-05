@@ -1,4 +1,4 @@
-package egovframework.bat.erp.api;
+package egovframework.bat.job.erp.api;
 
 import org.junit.Test;
 import org.springframework.test.web.servlet.MockMvc;

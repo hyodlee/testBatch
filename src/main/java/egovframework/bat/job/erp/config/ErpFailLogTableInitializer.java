@@ -1,4 +1,4 @@
-package egovframework.bat.erp.config;
+package egovframework.bat.job.erp.config;
 
 import javax.annotation.PostConstruct;
 import org.slf4j.Logger;

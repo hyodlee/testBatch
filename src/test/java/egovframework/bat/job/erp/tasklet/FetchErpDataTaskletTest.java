@@ -1,4 +1,4 @@
-package egovframework.bat.erp.tasklet;
+package egovframework.bat.job.erp.tasklet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import egovframework.bat.notification.NotificationSender;

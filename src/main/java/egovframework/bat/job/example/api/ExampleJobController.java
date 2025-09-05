@@ -60,10 +60,11 @@ public class ExampleJobController {
         }
 
         JobParameters jobParameters = builder.toJobParameters();
+        // 잡 이름은 예외 처리에서도 사용되므로 try 블록 밖에서 정의
+        String jobName = mybatisToMybatisSampleJob.getName();
 
         try {
             // @Qualifier로 주입된 잡 실행
-            String jobName = mybatisToMybatisSampleJob.getName();
             if (!jobLockService.tryLock(jobName)) {
                 LOGGER.warn("{} 작업이 이미 실행 중", jobName);
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(BatchStatus.FAILED);
@@ -78,7 +79,7 @@ public class ExampleJobController {
             }
         } catch (Exception e) {
             LOGGER.error("마이바티스 배치 실행 실패", e);
-            jobProgressService.send("mybatisToMybatisSampleJob", "FAILED");
+            jobProgressService.send(jobName, "FAILED");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(BatchStatus.FAILED);
         }

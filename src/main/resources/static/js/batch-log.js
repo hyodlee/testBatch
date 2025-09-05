@@ -8,13 +8,19 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
     }
     fetch(`/api/batch/management/executions/${id}/errors`)
-        .then(res => res.json())
-        .then(lines => {
-            // 에러 로그가 없는지 확인
-            if (lines.length === 0) {
-                container.textContent = '에러 로그가 없습니다.';
-            } else {
-                container.textContent = lines.join('\n');
+        .then(res => {
+            // 응답 상태가 성공인지 확인
+            if (!res.ok) {
+                throw new Error();
             }
+            return res.json();
+        })
+        .then(lines => {
+            // 조회된 내용이 있는지 확인
+            container.textContent = lines.length ? lines.join('\n') : '조회된 내용이 없습니다';
+        })
+        .catch(() => {
+            // 요청 실패 시에도 동일한 메시지 표시
+            container.textContent = '조회된 내용이 없습니다';
         });
 });

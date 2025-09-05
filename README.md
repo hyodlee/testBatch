@@ -125,8 +125,14 @@ public class SampleTasklet implements Tasklet {
   - `src/main/java/egovframework/bat/job/insa/domain/Orgnztinfo.java`
 - 테스트 코드
   - `src/test/java/egovframework/bat/job/insa/common/EsntlIdGeneratorTest.java`
+### 인사 배치 Job 추가시 확인 사항
 
-이곳에 작성하시요
+새로운 인사 배치 Job을 추가할 때는 다음 규칙을 지킵니다.
+
+- 설정 클래스: `src/main/java/egovframework/bat/job/insa/config`에 `<Source>To<Target>JobConfig.java` 형태로 작성합니다. 클래스명은 UpperCamelCase를 사용하며 반드시 `JobConfig`로 끝납니다.
+- 관련 도메인 클래스: `src/main/java/egovframework/bat/job/insa/domain` 아래에 작성하고 패키지 구조를 유지합니다.
+- 공통 클래스: `src/main/java/egovframework/bat/job/insa/common` 아래에 작성하고 패키지 구조를 유지합니다.
+- 테스트 코드: `src/test/java/egovframework/bat/job/insa/domain` 및 `src/test/java/egovframework/bat/job/insa/common`에 동일한 패키지 구조로 작성합니다.
 
 ## ERP 배치 잡 디렉터리(`erp`)
 

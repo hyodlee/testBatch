@@ -1,5 +1,7 @@
 package egovframework.bat.job.erp.api;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.BatchStatus;
@@ -8,6 +10,7 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +33,11 @@ public class StgToRestJobController {
     private final JobLauncher jobLauncher;
 
     /** STG 데이터를 외부로 전송하는 잡 */
+    @Qualifier("erpStgToRestJob")
     private final Job erpStgToRestJob;
+
+    /** 여러 잡을 이름으로 주입받기 위한 맵 */
+    private final Map<String, Job> jobs;
 
     /**
      * ERP STG 데이터를 외부 REST API로 전송하는 잡을 실행한다.
@@ -44,7 +51,8 @@ public class StgToRestJobController {
             .addLong("timestamp", System.currentTimeMillis())
             .toJobParameters();
         try {
-            JobExecution execution = jobLauncher.run(erpStgToRestJob, jobParameters);
+            Job job = jobs.getOrDefault("erpStgToRestJob", erpStgToRestJob);
+            JobExecution execution = jobLauncher.run(job, jobParameters);
             LOGGER.info("ERP STG→REST 배치 실행 완료: {}", execution.getStatus());
             return ResponseEntity.ok(execution.getStatus());
         } catch (Exception e) {

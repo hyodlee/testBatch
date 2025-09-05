@@ -18,7 +18,6 @@ import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -40,27 +39,18 @@ public class BatchManagementService {
     private final JobRepository jobRepository;
 
     /** 관리 대상 잡들을 보관하는 맵 */
-    private final Map<String, Job> jobMap = new HashMap<>();
+    private final Map<String, Job> jobMap;
 
     @Autowired
     public BatchManagementService(BatchManagementMapper batchManagementMapper,
             JobLauncher jobLauncher, JobExplorer jobExplorer, JobRepository jobRepository,
-            @Qualifier("mybatisToMybatisSampleJob") Job mybatisToMybatisSampleJob,
-            @Qualifier("erpRestToStgJob") Job erpRestToStgJob,
-            @Qualifier("erpStgToLocalJob") Job erpStgToLocalJob,
-            @Qualifier("erpStgToRestJob") Job erpStgToRestJob,
-            @Qualifier("insaRemote1ToStgJob") Job insaRemote1ToStgJob,
-            @Qualifier("insaStgToLocalJob") Job insaStgToLocalJob) {
+            Map<String, Job> jobBeans) {
         this.batchManagementMapper = batchManagementMapper;
         this.jobLauncher = jobLauncher;
         this.jobExplorer = jobExplorer;
         this.jobRepository = jobRepository;
-        jobMap.put(mybatisToMybatisSampleJob.getName(), mybatisToMybatisSampleJob);
-        jobMap.put(erpRestToStgJob.getName(), erpRestToStgJob);
-        jobMap.put(erpStgToLocalJob.getName(), erpStgToLocalJob);
-        jobMap.put(erpStgToRestJob.getName(), erpStgToRestJob);
-        jobMap.put(insaRemote1ToStgJob.getName(), insaRemote1ToStgJob);
-        jobMap.put(insaStgToLocalJob.getName(), insaStgToLocalJob);
+        // 주입받은 잡 빈들을 그대로 보관하여 자동 등록을 지원한다.
+        this.jobMap = new HashMap<>(jobBeans);
     }
 
     /**

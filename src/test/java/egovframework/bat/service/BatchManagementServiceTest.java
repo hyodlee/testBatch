@@ -10,6 +10,8 @@ import static org.mockito.ArgumentMatchers.eq;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -70,10 +72,16 @@ public class BatchManagementServiceTest {
         when(insaRemote1ToStgJob.getName()).thenReturn("insaRemote1ToStgJob");
         when(insaStgToLocalJob.getName()).thenReturn("insaStgToLocalJob");
 
+        Map<String, Job> jobBeans = new HashMap<>();
+        jobBeans.put(mybatisJob.getName(), mybatisJob);
+        jobBeans.put(erpRestToStgJob.getName(), erpRestToStgJob);
+        jobBeans.put(erpStgToLocalJob.getName(), erpStgToLocalJob);
+        jobBeans.put(erpStgToRestJob.getName(), erpStgToRestJob);
+        jobBeans.put(insaRemote1ToStgJob.getName(), insaRemote1ToStgJob);
+        jobBeans.put(insaStgToLocalJob.getName(), insaStgToLocalJob);
+
         batchManagementService = new BatchManagementService(batchManagementMapper,
-                jobLauncher, jobExplorer, jobRepository,
-                mybatisJob, erpRestToStgJob, erpStgToLocalJob,
-                erpStgToRestJob, insaRemote1ToStgJob, insaStgToLocalJob);
+                jobLauncher, jobExplorer, jobRepository, jobBeans);
     }
 
     @Test

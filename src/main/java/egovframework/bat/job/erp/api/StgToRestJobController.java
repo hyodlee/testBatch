@@ -1,7 +1,5 @@
 package egovframework.bat.job.erp.api;
 
-import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.BatchStatus;
@@ -36,9 +34,6 @@ public class StgToRestJobController {
     @Qualifier("erpStgToRestJob")
     private final Job erpStgToRestJob;
 
-    /** 여러 잡을 이름으로 주입받기 위한 맵 */
-    private final Map<String, Job> jobs;
-
     /**
      * ERP STG 데이터를 외부 REST API로 전송하는 잡을 실행한다.
      *
@@ -51,8 +46,8 @@ public class StgToRestJobController {
             .addLong("timestamp", System.currentTimeMillis())
             .toJobParameters();
         try {
-            Job job = jobs.getOrDefault("erpStgToRestJob", erpStgToRestJob);
-            JobExecution execution = jobLauncher.run(job, jobParameters);
+            // 주입된 잡 실행
+            JobExecution execution = jobLauncher.run(erpStgToRestJob, jobParameters);
             LOGGER.info("ERP STG→REST 배치 실행 완료: {}", execution.getStatus());
             return ResponseEntity.ok(execution.getStatus());
         } catch (Exception e) {

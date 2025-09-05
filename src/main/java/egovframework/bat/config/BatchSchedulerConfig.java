@@ -94,6 +94,10 @@ public class BatchSchedulerConfig {
 
     /**
      * 스케줄러 팩토리 빈
+     *
+     * <p>application.yml의 {@code scheduler.jobs} 값을 읽어 크론이 있는 잡은
+     * {@code CronTrigger}로 등록하고, 크론이 비어 있는 잡은 {@code JobDetail}만 생성한 뒤
+     * {@code JobChainingJobListener}로 체인 처리한다.</p>
      */
     @Bean
     public SchedulerFactoryBean schedulerFactoryBean(JobRegistry jobRegistry,

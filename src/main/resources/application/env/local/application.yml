@@ -39,6 +39,10 @@ spring:
       username: readuser
       password: read!1234
 
+  quartz:
+    jdbc:
+      initialize-schema: always  # Quartz 스키마를 항상 초기화
+
 logging:
   level:
     org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping: trace # 요청 매핑 로그 상세 출력

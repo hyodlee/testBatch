@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-import lombok.RequiredArgsConstructor;
 import egovframework.bat.service.dto.JobExecutionDto;
 import java.time.ZoneId;
 import java.util.Date;
@@ -18,6 +17,7 @@ import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +25,6 @@ import org.springframework.stereotype.Service;
  * 배치 잡 관리 기능을 제공하는 서비스.
  */
 @Service
-@RequiredArgsConstructor
 public class BatchManagementService {
 
     /** 배치 메타데이터 조회를 위한 매퍼 */
@@ -43,6 +42,7 @@ public class BatchManagementService {
     /** 관리 대상 잡들을 보관하는 맵 */
     private final Map<String, Job> jobMap = new HashMap<>();
 
+    @Autowired
     public BatchManagementService(BatchManagementMapper batchManagementMapper,
             JobLauncher jobLauncher, JobExplorer jobExplorer, JobRepository jobRepository,
             @Qualifier("mybatisToMybatisSampleJob") Job mybatisToMybatisSampleJob,

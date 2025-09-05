@@ -126,6 +126,12 @@ public class SampleTasklet implements Tasklet {
 - 테스트 코드
   - `src/test/java/egovframework/bat/job/insa/common/EsntlIdGeneratorTest.java`
 
+## ERP 배치 잡 디렉터리(`erp`)
+
+이곳에 작성하시요
+
+
+
 ### 예제 배치 잡 실행 API
 
 `ExampleJobController`를 통해 MyBatis 예제 잡을 REST로 호출할 수 있습니다.

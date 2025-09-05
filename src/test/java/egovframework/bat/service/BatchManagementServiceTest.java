@@ -10,8 +10,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -24,6 +22,7 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.configuration.JobRegistry;
 
 /**
  * BatchManagementService의 기능을 검증하는 단위 테스트.
@@ -48,40 +47,15 @@ public class BatchManagementServiceTest {
     private Job mybatisJob;
 
     @Mock
-    private Job erpRestToStgJob;
-
-    @Mock
-    private Job erpStgToLocalJob;
-
-    @Mock
-    private Job erpStgToRestJob;
-
-    @Mock
-    private Job insaRemote1ToStgJob;
-
-    @Mock
-    private Job insaStgToLocalJob;
+    private JobRegistry jobRegistry;
 
     @Before
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        when(mybatisJob.getName()).thenReturn("mybatisToMybatisSampleJob");
-        when(erpRestToStgJob.getName()).thenReturn("erpRestToStgJob");
-        when(erpStgToLocalJob.getName()).thenReturn("erpStgToLocalJob");
-        when(erpStgToRestJob.getName()).thenReturn("erpStgToRestJob");
-        when(insaRemote1ToStgJob.getName()).thenReturn("insaRemote1ToStgJob");
-        when(insaStgToLocalJob.getName()).thenReturn("insaStgToLocalJob");
-
-        Map<String, Job> jobBeans = new HashMap<>();
-        jobBeans.put(mybatisJob.getName(), mybatisJob);
-        jobBeans.put(erpRestToStgJob.getName(), erpRestToStgJob);
-        jobBeans.put(erpStgToLocalJob.getName(), erpStgToLocalJob);
-        jobBeans.put(erpStgToRestJob.getName(), erpStgToRestJob);
-        jobBeans.put(insaRemote1ToStgJob.getName(), insaRemote1ToStgJob);
-        jobBeans.put(insaStgToLocalJob.getName(), insaStgToLocalJob);
+        when(jobRegistry.getJob("mybatisToMybatisSampleJob")).thenReturn(mybatisJob);
 
         batchManagementService = new BatchManagementService(batchManagementMapper,
-                jobLauncher, jobExplorer, jobRepository, jobBeans);
+                jobLauncher, jobExplorer, jobRepository, jobRegistry);
     }
 
     @Test

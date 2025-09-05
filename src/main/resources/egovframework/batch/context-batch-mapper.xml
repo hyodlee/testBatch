@@ -12,7 +12,7 @@
         <property name="mapperLocations">
             <!-- BatchManagementMapper.xml은 스테이징 전용으로, 로컬에서는 제외합니다. -->
             <list>
-                <value>classpath:/egovframework/batch/mapper/insa/insa_stg_to_local.xml</value>
+                <value>classpath:/egovframework/batch/mapper/job/insa/insa_stg_to_local.xml</value>
                 <value>classpath:/egovframework/batch/mapper/job/erp/erp_stg_to_local.xml</value>
             </list>
         </property>
@@ -24,8 +24,8 @@
         <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">
             <list>
-                <value>classpath:/egovframework/batch/mapper/insa/insa_stg_to_local.xml</value>
-                <value>classpath:/egovframework/batch/mapper/insa/insa_remote1_to_stg.xml</value>
+                <value>classpath:/egovframework/batch/mapper/job/insa/insa_stg_to_local.xml</value>
+                <value>classpath:/egovframework/batch/mapper/job/insa/insa_remote1_to_stg.xml</value>
                 <value>classpath:/egovframework/batch/mapper/job/erp/erp_stg_to_local.xml</value>
                 <value>classpath:/egovframework/batch/mapper/job/erp/erp_rest_to_stg.xml</value>
                 <value>classpath:/egovframework/batch/mapper/job/example/Egov_Example_SQL.xml</value>
@@ -41,7 +41,7 @@
         <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">
             <list>
-                <value>classpath:/egovframework/batch/mapper/insa/insa_remote1_to_stg.xml</value>
+                <value>classpath:/egovframework/batch/mapper/job/insa/insa_remote1_to_stg.xml</value>
             </list>
         </property>
     </bean>
@@ -64,7 +64,7 @@
         <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
         <property name="mapperLocations">
             <list>
-                <value>classpath:/egovframework/batch/mapper/insa/gita_remote2_to_stg.xml</value>
+                <value>classpath:/egovframework/batch/mapper/job/insa/gita_remote2_to_stg.xml</value>
             </list>
         </property>
     </bean>    

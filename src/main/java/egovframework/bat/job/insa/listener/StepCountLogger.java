@@ -1,4 +1,4 @@
-package egovframework.bat.insa.listener;
+package egovframework.bat.job.insa.listener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

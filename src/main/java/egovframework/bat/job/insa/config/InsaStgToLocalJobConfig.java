@@ -1,4 +1,4 @@
-package egovframework.bat.insa.config;
+package egovframework.bat.job.insa.config;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter;
@@ -17,10 +17,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import egovframework.bat.insa.domain.EmployeeInfo;
-import egovframework.bat.insa.domain.Orgnztinfo;
-import egovframework.bat.insa.listener.StepCountLogger;
-import egovframework.bat.insa.processor.EmployeeInfoProcessor;
+import egovframework.bat.job.insa.domain.EmployeeInfo;
+import egovframework.bat.job.insa.domain.Orgnztinfo;
+import egovframework.bat.job.insa.listener.StepCountLogger;
+import egovframework.bat.job.insa.processor.EmployeeInfoProcessor;
 
 /**
  * STG에 적재된 조직/사원 정보를 로컬 DB로 이관하는 잡 구성.

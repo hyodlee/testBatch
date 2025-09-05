@@ -1,4 +1,4 @@
-package egovframework.bat.insa.common;
+package egovframework.bat.job.insa.common;
 
 import static org.junit.Assert.assertEquals;
 
@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import egovframework.bat.insa.common.EsntlIdGenerator;
+import egovframework.bat.job.insa.common.EsntlIdGenerator;
 
 /**
  * ESNTL_ID 생성기가 각 레코드마다 고유한 값을 부여하는지 검증하는 테스트

@@ -1,4 +1,4 @@
-package egovframework.bat.insa.tasklet;
+package egovframework.bat.job.insa.tasklet;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;

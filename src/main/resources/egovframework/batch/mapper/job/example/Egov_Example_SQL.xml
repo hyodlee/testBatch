@@ -3,7 +3,7 @@
 
 <mapper namespace="Customer">
 
-  <resultMap id="result" type="egovframework.bat.example.domain.CustomerCredit">
+  <resultMap id="result" type="egovframework.bat.job.example.domain.CustomerCredit">
     <result property="name" column="NAME" />
     <result property="credit" column="CREDIT" />
   </resultMap>
@@ -20,7 +20,7 @@
   	select NAME, CREDIT from CUSTOMER where ID = #{value}
   </select>
   
-  <update id="updateCredit" parameterType="egovframework.bat.example.domain.CustomerCredit" >
+  <update id="updateCredit" parameterType="egovframework.bat.job.example.domain.CustomerCredit" >
   	update CUSTOMER set CREDIT = #{credit} where NAME = #{name}
   </update>
   

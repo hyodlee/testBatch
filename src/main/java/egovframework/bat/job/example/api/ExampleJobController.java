@@ -1,4 +1,4 @@
-package egovframework.bat.example.api;
+package egovframework.bat.job.example.api;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

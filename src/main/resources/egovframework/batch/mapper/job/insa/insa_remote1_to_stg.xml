@@ -9,7 +9,7 @@
                          ORGNZT_ID,
                          ORGNZT_NM,
                          ORGNZT_DC
-                FROM egovremote1.COMTNORGNZTINFO
+                FROM COMTNORGNZTINFO
         </select>
 
         <!-- remote1 DB에서 STG 이관 시 ESNTL_ID와 SOURCE_SYSTEM을 제외하여 조회 -->
@@ -26,7 +26,7 @@
                          EMPLYR_STTUS_CODE,
                          REG_DTTM,
                          MOD_DTTM
-                FROM egovremote1.COMTNEMPLYRINFO
+                FROM COMTNEMPLYRINFO
         </select>
 
        <!-- STG DB에 조직 정보 적재 (STG 대상 테이블이 사전 TRUNCATE되므로 중복 갱신 없음) -->

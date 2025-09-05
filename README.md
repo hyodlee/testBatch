@@ -157,6 +157,9 @@ public class SampleTasklet implements Tasklet {
   - `src/test/java/egovframework/bat/job/erp/api/VehicleControllerTest.java`
   - `src/test/java/egovframework/bat/job/erp/api/DummyErpApiInfoTest.java`
 
+## EXAMPLE 배치 잡 디렉터리(`example`)
+
+이곳에 작성하시요
 
 
 ### 예제 배치 잡 실행 API

@@ -111,7 +111,9 @@ public class BatchSchedulerConfig {
     public SchedulerFactoryBean schedulerFactoryBean(JobRegistry jobRegistry,
             JobLauncher jobLauncher, JobLockService jobLockService,
             JobProgressService jobProgressService,
-            JobChainingJobListener jobChainingJobListener) throws Exception {
+            JobChainingJobListener jobChainingJobListener,
+            List<Job> jobBeans) throws Exception {
+        // jobBeans 파라미터는 모든 Job 빈을 조기 로딩하기 위한 것으로 실제로 사용하지 않는다.
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
 
         List<Trigger> triggers = new ArrayList<>();

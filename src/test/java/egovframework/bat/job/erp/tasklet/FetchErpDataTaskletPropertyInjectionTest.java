@@ -1,4 +1,4 @@
-package egovframework.bat.erp.tasklet;
+package egovframework.bat.job.erp.tasklet;
 
 import java.util.Collections;
 import java.util.List;

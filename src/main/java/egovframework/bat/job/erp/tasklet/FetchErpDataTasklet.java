@@ -1,7 +1,7 @@
-package egovframework.bat.erp.tasklet;
+package egovframework.bat.job.erp.tasklet;
 
-import egovframework.bat.erp.domain.VehicleInfo;
-import egovframework.bat.erp.exception.ErpApiException;
+import egovframework.bat.job.erp.domain.VehicleInfo;
+import egovframework.bat.job.erp.exception.ErpApiException;
 import egovframework.bat.notification.NotificationSender;
 import java.sql.Timestamp;
 import java.util.Arrays;

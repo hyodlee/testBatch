@@ -1,4 +1,4 @@
-package egovframework.bat.erp.config;
+package egovframework.bat.job.erp.config;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter;
@@ -16,8 +16,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import egovframework.bat.erp.domain.VehicleInfo;
-import egovframework.bat.erp.processor.VehicleInfoProcessor;
+import egovframework.bat.job.erp.domain.VehicleInfo;
+import egovframework.bat.job.erp.processor.VehicleInfoProcessor;
 import egovframework.bat.insa.listener.StepCountLogger;
 
 /**

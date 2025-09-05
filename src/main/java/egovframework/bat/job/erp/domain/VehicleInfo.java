@@ -1,4 +1,4 @@
-package egovframework.bat.erp.domain;
+package egovframework.bat.job.erp.domain;
 
 import java.util.Date;
 import java.math.BigDecimal;

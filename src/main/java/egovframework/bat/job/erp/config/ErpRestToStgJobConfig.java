@@ -1,7 +1,7 @@
-package egovframework.bat.erp.config;
+package egovframework.bat.job.erp.config;
 
-import egovframework.bat.erp.tasklet.FetchErpDataTasklet;
-import egovframework.bat.erp.tasklet.TruncateErpVehicleTasklet;
+import egovframework.bat.job.erp.tasklet.FetchErpDataTasklet;
+import egovframework.bat.job.erp.tasklet.TruncateErpVehicleTasklet;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;

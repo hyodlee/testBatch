@@ -1,10 +1,10 @@
-package egovframework.bat.erp.processor;
+package egovframework.bat.job.erp.processor;
 
 import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
-import egovframework.bat.erp.domain.VehicleInfo;
+import egovframework.bat.job.erp.domain.VehicleInfo;
 
 /**
  * 차량 정보를 후처리하는 프로세서.

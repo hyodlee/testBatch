@@ -1,4 +1,4 @@
-package egovframework.bat.erp.api;
+package egovframework.bat.job.erp.api;
 
 /**
  * 개발 중 ERP REST API 호출 테스트에 사용하는 더미 정보.

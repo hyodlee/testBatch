@@ -1,6 +1,6 @@
-package egovframework.bat.erp.api;
+package egovframework.bat.job.erp.api;
 
-import egovframework.bat.erp.domain.VehicleInfo;
+import egovframework.bat.job.erp.domain.VehicleInfo;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.Date;

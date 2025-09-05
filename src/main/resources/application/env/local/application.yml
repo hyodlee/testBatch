@@ -67,6 +67,8 @@ scheduler:
     erpRestToStgJob: "0 0/5 * * * ?"
     # CronTrigger로 즉시 스케줄됨
     erpStgToRestJob: "0 0 * * * ?"
+    # CronTrigger로 즉시 스케줄됨
+    mybatisToMybatisSampleJob: "0 0 * * * ?"
     # 선행 잡 종료 후 체인으로 실행됨
     insaStgToLocalJob: ""
     # 선행 잡 종료 후 체인으로 실행됨

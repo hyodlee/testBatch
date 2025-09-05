@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+
+import javax.sql.DataSource;
 
 import org.quartz.JobDetail;
 import org.quartz.JobKey;
@@ -11,6 +14,7 @@ import org.quartz.Trigger;
 import org.quartz.listeners.JobChainingJobListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.launch.JobLauncher;
@@ -112,9 +116,19 @@ public class BatchSchedulerConfig {
             JobLauncher jobLauncher, JobLockService jobLockService,
             JobProgressService jobProgressService,
             JobChainingJobListener jobChainingJobListener,
-            List<Job> jobBeans) throws Exception {
+            List<Job> jobBeans,
+            @Qualifier("dataSource-stg") DataSource quartzDataSource) throws Exception {
         // jobBeans 파라미터는 모든 Job 빈을 조기 로딩하기 위한 것으로 실제로 사용하지 않는다.
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
+        // Quartz 스케줄러에서 사용할 데이터소스 지정
+        factory.setDataSource(quartzDataSource);
+
+        Properties props = new Properties();
+        props.setProperty("org.quartz.jobStore.class", "org.quartz.impl.jdbcjobstore.JobStoreTX"); // JDBC JobStore 사용
+        props.setProperty("org.quartz.jobStore.driverDelegateClass", "org.quartz.impl.jdbcjobstore.StdJDBCDelegate"); // MySQL용 delegate
+        props.setProperty("org.quartz.jobStore.tablePrefix", "QRTZ_"); // 테이블 prefix
+        props.setProperty("org.quartz.threadPool.threadCount", "10"); // 풀 사이즈
+        factory.setQuartzProperties(props);
 
         List<Trigger> triggers = new ArrayList<>();
         List<JobDetail> jobDetails = new ArrayList<>();

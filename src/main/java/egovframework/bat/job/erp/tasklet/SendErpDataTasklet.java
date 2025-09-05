@@ -44,11 +44,13 @@ public class SendErpDataTasklet implements Tasklet {
 
     public SendErpDataTasklet(WebClient.Builder builder,
                               @Qualifier("migstgJdbcTemplate") JdbcTemplate jdbcTemplate,
-                              List<NotificationSender> notificationSenders,
+                              @Qualifier("emailNotificationSender") NotificationSender emailNotificationSender,
+                              @Qualifier("smsNotificationSender") NotificationSender smsNotificationSender,
                               @Value("${erp.outbound-api-url}") String apiUrl) {
         this.webClient = builder.build();
         this.jdbcTemplate = jdbcTemplate;
-        this.notificationSenders = notificationSenders;
+        // 주입받은 알림 전송기를 리스트로 구성
+        this.notificationSenders = List.of(emailNotificationSender, smsNotificationSender);
         this.apiUrl = apiUrl;
     }
 

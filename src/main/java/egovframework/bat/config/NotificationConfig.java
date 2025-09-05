@@ -3,6 +3,7 @@ package egovframework.bat.config;
 import egovframework.bat.notification.EmailNotificationSender;
 import egovframework.bat.notification.NotificationSender;
 import egovframework.bat.notification.SmsNotificationSender;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -18,6 +19,7 @@ public class NotificationConfig {
      * @return EmailNotificationSender 인스턴스
      */
     @Bean
+    @Qualifier("emailNotificationSender")
     public NotificationSender emailNotificationSender() {
         return new EmailNotificationSender();
     }
@@ -28,6 +30,7 @@ public class NotificationConfig {
      * @return SmsNotificationSender 인스턴스
      */
     @Bean
+    @Qualifier("smsNotificationSender")
     public NotificationSender smsNotificationSender() {
         return new SmsNotificationSender();
     }

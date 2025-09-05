@@ -117,13 +117,17 @@ public class BatchSchedulerConfig {
             boolean durability = (cron == null || cron.isEmpty());
             JobDetail jobDetail = createJobDetail(job, jobLauncher, jobLockService,
                     jobProgressService, durability, extraData(jobName));
-            jobDetails.add(jobDetail);
 
-            if (!durability) {
+            if (durability) {
+                // 크론이 없으면 영속 JobDetail로만 등록
+                jobDetails.add(jobDetail);
+            } else {
+                // 크론이 있으면 트리거만 등록
                 triggers.add(cronTrigger(jobDetail, cron));
             }
         }
 
+        // 영속 잡들만 스케줄러에 직접 등록
         factory.setJobDetails(jobDetails.toArray(new JobDetail[0]));
         factory.setTriggers(triggers.toArray(new Trigger[0]));
         factory.setGlobalJobListeners(jobChainingJobListener);

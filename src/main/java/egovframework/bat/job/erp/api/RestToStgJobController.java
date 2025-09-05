@@ -9,6 +9,7 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,6 +33,7 @@ public class RestToStgJobController {
     private final JobLauncher jobLauncher;
 
     // ERP REST 데이터를 STG 테이블에 적재하는 배치 잡
+    @Qualifier("erpRestToStgJob")
     private final Job erpRestToStgJob;
 
     // 중복 실행 방지를 위한 락 서비스

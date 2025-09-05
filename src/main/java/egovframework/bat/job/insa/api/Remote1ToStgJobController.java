@@ -60,10 +60,11 @@ public class Remote1ToStgJobController {
         }
 
         JobParameters jobParameters = builder.toJobParameters();
+        // 예외 처리까지 동일한 잡 이름을 사용하기 위해 밖에서 정의
+        String jobName = insaRemote1ToStgJob.getName();
 
         try {
             // @Qualifier로 주입된 잡 실행
-            String jobName = insaRemote1ToStgJob.getName();
             if (!jobLockService.tryLock(jobName)) {
                 LOGGER.warn("{} 작업이 이미 실행 중", jobName);
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(BatchStatus.FAILED);
@@ -78,7 +79,7 @@ public class Remote1ToStgJobController {
             }
         } catch (Exception e) {
             LOGGER.error("Remote1 배치 실행 실패", e);
-            jobProgressService.send("insaRemote1ToStgJob", "FAILED");
+            jobProgressService.send(jobName, "FAILED");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(BatchStatus.FAILED);
         }

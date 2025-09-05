@@ -53,9 +53,10 @@ public class RestToStgJobController {
         JobParameters jobParameters = new JobParametersBuilder()
             .addLong("timestamp", System.currentTimeMillis())
             .toJobParameters();
+        // 예외 처리에서도 사용할 수 있도록 잡 이름을 미리 정의
+        String jobName = erpRestToStgJob.getName();
 
         try {
-            String jobName = erpRestToStgJob.getName();
             if (!jobLockService.tryLock(jobName)) {
                 LOGGER.warn("{} 작업이 이미 실행 중", jobName);
                 return ResponseEntity.status(HttpStatus.CONFLICT).body(BatchStatus.FAILED);
@@ -71,7 +72,7 @@ public class RestToStgJobController {
             }
         } catch (Exception e) {
             LOGGER.error("ERP REST 배치 실행 실패", e);
-            jobProgressService.send("erpRestToStgJob", "FAILED");
+            jobProgressService.send(jobName, "FAILED");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(BatchStatus.FAILED);
         }

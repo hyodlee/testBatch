@@ -5,6 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
     fetch(`/api/batch/management/executions/${id}/errors`)
         .then(res => res.json())
         .then(lines => {
-            container.textContent = lines.join('\n');
+            // 에러 로그가 없는지 확인
+            if (lines.length === 0) {
+                container.textContent = '에러 로그가 없습니다.';
+            } else {
+                container.textContent = lines.join('\n');
+            }
         });
 });

@@ -14,6 +14,10 @@ mvn -Pprod package    # 운영 환경 빌드
 
 migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.sql`을 실행해 테이블 구조를 생성합니다. STG 연결 정보는 각 환경별 `application-<프로필>.yml` 파일의 관련 항목을 참고하세요. 해당 스크립트에는 REST 호출 실패 로그 테이블(`erp_api_fail_log`)과 DB 적재 실패 로그 테이블(`erp_db_fail_log`) DDL이 포함되어 있으며, `FetchErpDataTasklet`이 DB 적재 실패 시 이 테이블에 로그를 남깁니다.
 
+## Quartz 스키마 초기화
+
+`src/main/resources/schema-quartz.sql`을 이용해 Quartz 테이블을 생성합니다. 애플리케이션 시작 시 `spring.sql.init.schema-locations` 설정으로 자동 실행되며, 이미 운영 DB가 있다면 스크립트를 수동 실행해 테이블을 구성해야 합니다.
+
 ## 배치 실행 기본
 
 배치 잡 실행 시 `sourceSystem` 파라미터를 생략하면 `LND` 프리픽스로 ESNTL_ID가 생성됩니다.

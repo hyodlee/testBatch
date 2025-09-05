@@ -2,19 +2,13 @@ package egovframework.bat.config;
 
 import javax.sql.DataSource;
 
-import org.egovframe.rte.bat.core.launch.support.EgovBatchRunner;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
-import org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.explore.support.JobExplorerFactoryBean;
 import org.springframework.batch.core.launch.JobLauncher;
-import org.springframework.batch.core.launch.JobOperator;
 import org.springframework.batch.core.launch.support.SimpleJobLauncher;
-import org.springframework.batch.core.launch.support.SimpleJobOperator;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.repository.support.JobRepositoryFactoryBean;
-import org.springframework.batch.core.configuration.JobRegistry;
-import org.springframework.batch.core.configuration.support.MapJobRegistry;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
@@ -33,15 +27,6 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class BatchJobLauncherConfig {
 
     /**
-     * 배치 실행을 돕는 러너 빈 정의
-     */
-    @Bean
-    public EgovBatchRunner eGovBatchRunner(JobOperator jobOperator,
-            JobExplorer jobExplorer, JobRepository jobRepository) {
-        return new EgovBatchRunner(jobOperator, jobExplorer, jobRepository);
-    }
-
-    /**
      * 단순 잡 런처 설정
      */
     @Bean
@@ -49,16 +34,6 @@ public class BatchJobLauncherConfig {
         SimpleJobLauncher launcher = new SimpleJobLauncher();
         launcher.setJobRepository(jobRepository);
         return launcher;
-    }
-
-    /**
-     * 잡 레지스트리 후처리기 등록
-     */
-    @Bean
-    public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor(JobRegistry jobRegistry) {
-        JobRegistryBeanPostProcessor processor = new JobRegistryBeanPostProcessor();
-        processor.setJobRegistry(jobRegistry);
-        return processor;
     }
 
     /**
@@ -77,20 +52,6 @@ public class BatchJobLauncherConfig {
     }
 
     /**
-     * 잡 오퍼레이터 설정
-     */
-    @Bean
-    public JobOperator jobOperator(JobLauncher jobLauncher, JobExplorer jobExplorer,
-            JobRepository jobRepository, JobRegistry jobRegistry) {
-        SimpleJobOperator operator = new SimpleJobOperator();
-        operator.setJobLauncher(jobLauncher);
-        operator.setJobExplorer(jobExplorer);
-        operator.setJobRepository(jobRepository);
-        operator.setJobRegistry(jobRegistry);
-        return operator;
-    }
-
-    /**
      * 잡 탐색기 설정
      */
     @Bean
@@ -99,14 +60,6 @@ public class BatchJobLauncherConfig {
         factory.setDataSource(dataSource);
         factory.afterPropertiesSet();
         return factory.getObject();
-    }
-
-    /**
-     * 잡 레지스트리 빈 정의
-     */
-    @Bean
-    public JobRegistry jobRegistry() {
-        return new MapJobRegistry();
     }
 
     /**

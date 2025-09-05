@@ -85,28 +85,27 @@ public class BatchManagementController {
     }
 
     /**
-     * 실패한 잡 실행을 재실행한다.
+     * 실패한 잡을 재실행한다.
      *
-     * @param jobExecutionId 잡 실행 ID
+     * @param jobName 잡 이름
      * @return 처리 결과
      * @throws Exception 재실행 중 예외 발생 시
      */
-    @PostMapping("/executions/{jobExecutionId}/restart")
-    public ResponseEntity<Void> restart(@PathVariable Long jobExecutionId) throws Exception {
-        batchManagementService.restart(jobExecutionId);
+    @PostMapping("/jobs/{jobName}/restart")
+    public ResponseEntity<Void> restart(@PathVariable String jobName) throws Exception {
+        batchManagementService.restart(jobName);
         return ResponseEntity.ok().build();
     }
 
     /**
      * 실행 중인 잡을 중지한다.
      *
-     * @param jobExecutionId 잡 실행 ID
+     * @param jobName 잡 이름
      * @return 처리 결과
-     * @throws Exception 중지 중 예외 발생 시
      */
-    @PostMapping("/executions/{jobExecutionId}/stop")
-    public ResponseEntity<Void> stop(@PathVariable Long jobExecutionId) throws Exception {
-        batchManagementService.stop(jobExecutionId);
+    @PostMapping("/jobs/{jobName}/stop")
+    public ResponseEntity<Void> stop(@PathVariable String jobName) {
+        batchManagementService.stop(jobName);
         return ResponseEntity.ok().build();
     }
 }

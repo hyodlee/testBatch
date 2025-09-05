@@ -89,28 +89,27 @@ public class BatchApiController {
     }
 
     /**
-     * 실패한 잡 실행을 재시작한다.
+     * 주어진 잡을 재시작한다.
      *
-     * @param execId 재실행할 잡 실행 ID
+     * @param jobName 재실행할 잡 이름
      * @return 성공 여부
-     * @throws Exception JobOperator에서 발생한 예외
+     * @throws Exception 잡 실행 중 예외 발생 시
      */
-    @PostMapping("/executions/{execId}/restart")
-    public ResponseEntity<Void> restart(@PathVariable Long execId) throws Exception {
-        batchManagementService.restart(execId);
+    @PostMapping("/jobs/{jobName}/restart")
+    public ResponseEntity<Void> restart(@PathVariable String jobName) throws Exception {
+        batchManagementService.restart(jobName);
         return ResponseEntity.ok().build();
     }
 
     /**
      * 실행 중인 잡을 중지한다.
      *
-     * @param execId 중지할 잡 실행 ID
+     * @param jobName 중지할 잡 이름
      * @return 성공 여부
-     * @throws Exception JobOperator에서 발생한 예외
      */
-    @DeleteMapping("/executions/{execId}")
-    public ResponseEntity<Void> stop(@PathVariable Long execId) throws Exception {
-        batchManagementService.stop(execId);
+    @DeleteMapping("/jobs/{jobName}")
+    public ResponseEntity<Void> stop(@PathVariable String jobName) {
+        batchManagementService.stop(jobName);
         return ResponseEntity.noContent().build();
     }
 }

@@ -139,7 +139,7 @@ public class SampleTasklet implements Tasklet {
 
 ## ERP 배치 Job 구성(`erp`)
 
-`src/main/java/egovframework/bat/erp/config` 디렉터리는 ERP 관련 배치 Job 설정 클래스를 모아둔 곳입니다. 현재 포함된 Job은 다음과 같습니다.
+`src/main/java/egovframework/bat/job/erp/config` 디렉터리는 ERP 관련 배치 Job 설정 클래스를 모아둔 곳입니다. 현재 포함된 Job은 다음과 같습니다.
 
 - `erpRestToStgJob`
 - `erpStgToLocalJob`
@@ -147,25 +147,25 @@ public class SampleTasklet implements Tasklet {
 다음은 관련된 주요 파일들입니다.
 
 - 잡 설정:
-  - `src/main/java/egovframework/bat/erp/config/ErpRestToStgJobConfig.java`: ERP REST API에서 데이터를 조회하여 STG에 적재하는 Job 설정 클래스
-  - `src/main/java/egovframework/bat/erp/config/ErpStgToLocalJobConfig.java`: STG에 적재된 ERP 데이터를 로컬 DB로 이관하는 Job 설정 클래스
+  - `src/main/java/egovframework/bat/job/erp/config/ErpRestToStgJobConfig.java`: ERP REST API에서 데이터를 조회하여 STG에 적재하는 Job 설정 클래스
+  - `src/main/java/egovframework/bat/job/erp/config/ErpStgToLocalJobConfig.java`: STG에 적재된 ERP 데이터를 로컬 DB로 이관하는 Job 설정 클래스
 - 매퍼 파일:
-  - `src/main/resources/egovframework/batch/mapper/erp/erp_rest_to_stg.xml`: ERP REST 데이터→STG 적재를 위한 SQL 매퍼
-  - `src/main/resources/egovframework/batch/mapper/erp/erp_stg_to_local.xml`: STG→로컬 데이터 이동을 위한 SQL 매퍼
+  - `src/main/resources/egovframework/batch/mapper/job/erp/erp_rest_to_stg.xml`: ERP REST 데이터→STG 적재를 위한 SQL 매퍼
+  - `src/main/resources/egovframework/batch/mapper/job/erp/erp_stg_to_local.xml`: STG→로컬 데이터 이동을 위한 SQL 매퍼
 - 공통, 도메인 및 유틸 클래스:
-  - `src/main/java/egovframework/bat/erp/tasklet/FetchErpDataTasklet.java`: ERP 시스템에서 차량 정보를 조회하여 STG에 적재하는 Tasklet
-  - `src/main/java/egovframework/bat/erp/processor/VehicleInfoProcessor.java`: ERP 차량 정보를 처리하는 배치 프로세서
-  - `src/main/java/egovframework/bat/erp/domain/VehicleInfo.java`: ERP 차량 정보를 담는 도메인 클래스
-  - `src/main/java/egovframework/bat/erp/api/RestToStgJobController.java`: ERP REST 배치를 수동 실행하는 컨트롤러
+  - `src/main/java/egovframework/bat/job/erp/tasklet/FetchErpDataTasklet.java`: ERP 시스템에서 차량 정보를 조회하여 STG에 적재하는 Tasklet
+  - `src/main/java/egovframework/bat/job/erp/processor/VehicleInfoProcessor.java`: ERP 차량 정보를 처리하는 배치 프로세서
+  - `src/main/java/egovframework/bat/job/erp/domain/VehicleInfo.java`: ERP 차량 정보를 담는 도메인 클래스
+  - `src/main/java/egovframework/bat/job/erp/api/RestToStgJobController.java`: ERP REST 배치를 수동 실행하는 컨트롤러
 
 ## 예제 배치 Job 구성(`example`)
 
-`src/main/java/egovframework/bat/example/config` 디렉터리는 예제 배치 Job 설정 클래스를 모아둔 곳입니다. 예제 Job과 관련된 주요 파일은 다음과 같습니다.
+`src/main/java/egovframework/bat/job/example/config` 디렉터리는 예제 배치 Job 설정 클래스를 모아둔 곳입니다. 예제 Job과 관련된 주요 파일은 다음과 같습니다.
 
-- `src/main/java/egovframework/bat/example/config/MybatisToMybatisJobConfig.java`: MyBatis 간 데이터 이동을 정의한 배치 Job 설정 클래스(잡 ID: `mybatisToMybatisSampleJob`)
-- `src/main/resources/egovframework/batch/mapper/example/Egov_Example_SQL.xml`: 예제 배치를 위한 SQL 매퍼 파일
-- `src/main/java/egovframework/bat/example/domain/CustomerCredit.java`: 고객 신용 정보를 담는 도메인 클래스
-- `src/main/java/egovframework/bat/example/processor/CustomerCreditIncreaseProcessor.java`: 신용 증가 로직을 처리하는 배치 프로세서
+- `src/main/java/egovframework/bat/job/example/config/MybatisToMybatisJobConfig.java`: MyBatis 간 데이터 이동을 정의한 배치 Job 설정 클래스(잡 ID: `mybatisToMybatisSampleJob`)
+- `src/main/resources/egovframework/batch/mapper/job/example/Egov_Example_SQL.xml`: 예제 배치를 위한 SQL 매퍼 파일
+- `src/main/java/egovframework/bat/job/example/domain/CustomerCredit.java`: 고객 신용 정보를 담는 도메인 클래스
+- `src/main/java/egovframework/bat/job/example/processor/CustomerCreditIncreaseProcessor.java`: 신용 증가 로직을 처리하는 배치 프로세서
 - `src/main/java/egovframework/bat/scheduler/EgovQuartzJobLauncher.java`: Quartz 스케줄러에서 배치 Job을 실행하는 클래스
 - `src/main/resources/egovframework/batch/context-batch-mapper.xml`: 예제 SQL 매퍼와 데이터소스가 등록된 설정 파일
 

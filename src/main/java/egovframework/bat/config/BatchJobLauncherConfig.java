@@ -2,7 +2,9 @@ package egovframework.bat.config;
 
 import javax.sql.DataSource;
 
+import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
+import org.springframework.batch.core.configuration.support.JobRegistryBeanPostProcessor;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.explore.support.JobExplorerFactoryBean;
 import org.springframework.batch.core.launch.JobLauncher;
@@ -60,6 +62,17 @@ public class BatchJobLauncherConfig {
         factory.setDataSource(dataSource);
         factory.afterPropertiesSet();
         return factory.getObject();
+    }
+
+    /**
+     * 잡을 {@link JobRegistry}에 자동 등록하는 빈
+     */
+    @Bean
+    public JobRegistryBeanPostProcessor jobRegistryBeanPostProcessor(
+            JobRegistry jobRegistry) {
+        JobRegistryBeanPostProcessor processor = new JobRegistryBeanPostProcessor();
+        processor.setJobRegistry(jobRegistry);
+        return processor;
     }
 
     /**

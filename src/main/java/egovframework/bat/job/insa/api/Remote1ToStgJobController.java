@@ -1,4 +1,4 @@
-package egovframework.bat.insa.api;
+package egovframework.bat.job.insa.api;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

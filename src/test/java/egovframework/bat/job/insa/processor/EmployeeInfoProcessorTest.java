@@ -1,4 +1,4 @@
-package egovframework.bat.insa.processor;
+package egovframework.bat.job.insa.processor;
 
 import static org.junit.Assert.assertEquals;
 
@@ -6,8 +6,8 @@ import java.lang.reflect.Field;
 
 import org.junit.Test;
 
-import egovframework.bat.insa.common.EsntlIdGenerator;
-import egovframework.bat.insa.domain.EmployeeInfo;
+import egovframework.bat.job.insa.common.EsntlIdGenerator;
+import egovframework.bat.job.insa.domain.EmployeeInfo;
 
 /**
  * EmployeeInfoProcessor의 기능을 검증하는 테스트

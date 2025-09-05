@@ -1,4 +1,4 @@
-package egovframework.bat.insa.processor;
+package egovframework.bat.job.insa.processor;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -8,9 +8,9 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import egovframework.bat.insa.domain.EmployeeInfo;
-import egovframework.bat.insa.common.EsntlIdGenerator;
-import egovframework.bat.insa.common.SourceSystemPrefix;
+import egovframework.bat.job.insa.domain.EmployeeInfo;
+import egovframework.bat.job.insa.common.EsntlIdGenerator;
+import egovframework.bat.job.insa.common.SourceSystemPrefix;
 import lombok.RequiredArgsConstructor;
 
 /**

@@ -18,7 +18,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import egovframework.bat.job.erp.domain.VehicleInfo;
 import egovframework.bat.job.erp.processor.VehicleInfoProcessor;
-import egovframework.bat.insa.listener.StepCountLogger;
+import egovframework.bat.job.insa.listener.StepCountLogger;
 
 /**
  * STG DB에 적재된 ERP 차량 정보를 로컬 DB로 이관하는 잡 구성.

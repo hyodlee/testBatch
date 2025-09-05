@@ -149,8 +149,16 @@ public class BatchSchedulerConfig {
             @Qualifier("erpStgToLocalJobDetail") JobDetail erpStgToLocalJobDetail,
             JobChainingJobListener jobChainingJobListener) {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
-        factory.setTriggers(insaRemote1ToStgCronTrigger, erpRestToStgCronTrigger, erpStgToRestCronTrigger);
-        factory.setJobDetails(insaStgToLocalJobDetail, erpStgToLocalJobDetail);
+        //작동을 멈추고 싶은 작업이 있으면, 아래의 작업이름에 주석을 하면 됨
+        factory.setTriggers(
+        		insaRemote1ToStgCronTrigger
+        		, erpRestToStgCronTrigger
+        		, erpStgToRestCronTrigger
+        		);
+        factory.setJobDetails(
+        		insaStgToLocalJobDetail
+        		, erpStgToLocalJobDetail
+        		);
         factory.setGlobalJobListeners(jobChainingJobListener);
         return factory;
     }

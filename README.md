@@ -126,7 +126,14 @@ public class SampleTasklet implements Tasklet {
 - 테스트 코드
   - `src/test/java/egovframework/bat/job/insa/common/EsntlIdGeneratorTest.java`
 
-이곳에 작성하시요
+### 인사 배치 Job 추가시 확인 사항
+
+새로운 인사 배치 Job을 추가할 때는 다음 규칙을 지킵니다.
+
+- 설정 클래스: `src/main/java/egovframework/bat/job/insa/config`에 `<Source>To<Target>JobConfig.java` 형태로 작성합니다. 클래스명은 UpperCamelCase를 사용하며 반드시 `JobConfig`로 끝납니다.
+- 관련 도메인 클래스: `src/main/java/egovframework/bat/job/insa/domain` 아래에 작성하고 패키지 구조를 유지합니다.
+- 공통 클래스: `src/main/java/egovframework/bat/job/insa/common` 아래에 작성하고 패키지 구조를 유지합니다.
+- 테스트 코드: `src/test/java/egovframework/bat/job/insa/domain` 및 `src/test/java/egovframework/bat/job/insa/common`에 동일한 패키지 구조로 작성합니다.
 
 ## ERP 배치 잡 디렉터리(`erp`)
 
@@ -253,7 +260,7 @@ public class SampleTasklet implements Tasklet {
 ## 완전 새로운 배치 작업 추가시 매뉴얼
 
 1. Job 설정 클래스 작성: `src/main/java/egovframework/bat/crm/config/NewcrmJobConfig.java` - 새 작업의 단계와 흐름을 정의합니다.
-2. 매퍼 XML 작성: `src/main/resources/egovframework/batch/mapper/crm/crm_new_sample.xml` - 데이터 조회와 저장 SQL을 작성합니다.
+2. 매퍼 XML 작성: `src/main/resources/egovframework/batch/mapper/crm/` 아래에 매퍼 XML을 생성해 데이터 조회와 저장 SQL을 작성합니다.
 3. 도메인 클래스 생성: `src/main/java/egovframework/bat/crm/domain/Newcrm.java` - 배치에서 사용할 데이터 구조를 정의합니다.
 4. 프로세서 클래스 구현: `src/main/java/egovframework/bat/crm/processor/NewcrmProcessor.java` - 도메인 데이터를 가공하는 로직을 구현합니다.
 5. (선택) 테스트 코드 추가: `src/test/java/egovframework/bat/crm/processor/NewcrmProcessorTest.java` - 주요 기능이 예상대로 동작하는지 검증합니다.
@@ -261,7 +268,6 @@ public class SampleTasklet implements Tasklet {
 예시 파일 구조:
 
 - `src/main/java/egovframework/bat/crm/config/NewcrmJobConfig.java`
-- `src/main/resources/egovframework/batch/mapper/crm/crm_new_sample.xml`
 - `src/main/java/egovframework/bat/crm/domain/Newcrm.java`
 - `src/main/java/egovframework/bat/crm/processor/NewcrmProcessor.java`
 - `src/test/java/egovframework/bat/crm/processor/NewcrmProcessorTest.java`

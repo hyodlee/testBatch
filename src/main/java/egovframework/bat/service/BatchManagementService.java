@@ -1,8 +1,6 @@
 package egovframework.bat.service;
 
 import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
 
 import egovframework.bat.service.dto.JobExecutionDto;
 import java.time.ZoneId;
@@ -17,6 +15,7 @@ import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.explore.JobExplorer;
 import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -38,19 +37,18 @@ public class BatchManagementService {
     /** 실행 상태 갱신을 위한 레포지토리 */
     private final JobRepository jobRepository;
 
-    /** 관리 대상 잡들을 보관하는 맵 */
-    private final Map<String, Job> jobMap;
+    /** 등록된 잡을 조회하기 위한 레지스트리 */
+    private final JobRegistry jobRegistry;
 
     @Autowired
     public BatchManagementService(BatchManagementMapper batchManagementMapper,
             JobLauncher jobLauncher, JobExplorer jobExplorer, JobRepository jobRepository,
-            Map<String, Job> jobBeans) {
+            JobRegistry jobRegistry) {
         this.batchManagementMapper = batchManagementMapper;
         this.jobLauncher = jobLauncher;
         this.jobExplorer = jobExplorer;
         this.jobRepository = jobRepository;
-        // 주입받은 잡 빈들을 그대로 보관하여 자동 등록을 지원한다.
-        this.jobMap = new HashMap<>(jobBeans);
+        this.jobRegistry = jobRegistry;
     }
 
     /**
@@ -117,10 +115,7 @@ public class BatchManagementService {
      * @throws Exception 잡 실행 중 예외 발생 시
      */
     public void restart(String jobName) throws Exception {
-        Job job = jobMap.get(jobName);
-        if (job == null) {
-            throw new IllegalArgumentException("알 수 없는 잡: " + jobName);
-        }
+        Job job = jobRegistry.getJob(jobName);
         JobParameters params = new JobParametersBuilder()
                 .addLong("timestamp", System.currentTimeMillis())
                 .toJobParameters();

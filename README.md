@@ -128,7 +128,34 @@ public class SampleTasklet implements Tasklet {
 
 ## ERP 배치 잡 디렉터리(`erp`)
 
-이곳에 작성하시요
+`src/main/java/egovframework/bat/job/erp/config` 디렉터리는 ERP 관련 배치 Job 설정 클래스를 모아두는 곳입니다. 현재 포함된 Job은 다음과 같습니다.
+
+- `erpRestToStgJob`
+- `erpStgToLocalJob`
+- `erpStgToRestJob`
+
+다음은 관련된 주요 파일들입니다.
+
+- 잡 설정 클래스
+  - `src/main/java/egovframework/bat/job/erp/config/ErpRestToStgJobConfig.java`
+  - `src/main/java/egovframework/bat/job/erp/config/ErpStgToLocalJobConfig.java`
+  - `src/main/java/egovframework/bat/job/erp/config/ErpStgToRestJobConfig.java`
+  - `src/main/java/egovframework/bat/job/erp/config/ErpFailLogTableInitializer.java`
+- 매퍼 파일
+  - `src/main/resources/egovframework/batch/mapper/job/erp/erp_rest_to_stg.xml`
+  - `src/main/resources/egovframework/batch/mapper/job/erp/erp_stg_to_local.xml`
+- 공통·도메인·유틸 클래스
+  - `src/main/java/egovframework/bat/job/erp/domain/VehicleInfo.java`
+  - `src/main/java/egovframework/bat/job/erp/processor/VehicleInfoProcessor.java`
+  - `src/main/java/egovframework/bat/job/erp/exception/ErpApiException.java`
+  - `src/main/java/egovframework/bat/job/erp/tasklet/FetchErpDataTasklet.java`
+  - `src/main/java/egovframework/bat/job/erp/tasklet/SendErpDataTasklet.java`
+  - `src/main/java/egovframework/bat/job/erp/tasklet/TruncateErpVehicleTasklet.java`
+- 테스트 코드
+  - `src/test/java/egovframework/bat/job/erp/tasklet/FetchErpDataTaskletTest.java`
+  - `src/test/java/egovframework/bat/job/erp/tasklet/FetchErpDataTaskletPropertyInjectionTest.java`
+  - `src/test/java/egovframework/bat/job/erp/api/VehicleControllerTest.java`
+  - `src/test/java/egovframework/bat/job/erp/api/DummyErpApiInfoTest.java`
 
 
 

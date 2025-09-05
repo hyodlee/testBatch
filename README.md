@@ -1,6 +1,6 @@
 # 빌드 가이드
 
-이 프로젝트는 환경별 설정을 Maven 프로필로 관리합니다. 아래 명령을 사용하여 원하는 환경으로 빌드할 수 있습니다.
+이 프로젝트는 환경별 설정을 Maven 프로필로 관리합니다. 아래 명령으로 원하는 환경에 맞춰 빌드할 수 있습니다.
 
 ```bash
 mvn -Plocal package   # 로컬 환경 빌드
@@ -14,10 +14,10 @@ mvn -Pprod package    # 운영 환경 빌드
 
 migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.sql`을 실행해 테이블 구조를 생성합니다. STG 연결 정보는 각 환경별 `application-<프로필>.yml` 파일의 관련 항목을 참고하세요. 해당 스크립트에는 REST 호출 실패 로그 테이블(`erp_api_fail_log`)과 DB 적재 실패 로그 테이블(`erp_db_fail_log`) DDL이 포함되어 있으며, `FetchErpDataTasklet`이 DB 적재 실패 시 이 테이블에 로그를 남깁니다.
 
-배치 잡 실행 시 `sourceSystem` 파라미터를 생략하면 `LND` 프리픽스로 ESNTL_ID가 생성됩니다.
+## 배치 실행 기본
 
-잡을 반복 실행해야 할 경우 `RunIdIncrementer`를 사용해 실행할 때마다 Run ID를 증가시킬 수 있습니다.
-또는 실행 명령에 임의의 `JobParameters`를 추가해도 동일한 효과를 얻을 수 있습니다.
+배치 잡 실행 시 `sourceSystem` 파라미터를 생략하면 `LND` 프리픽스로 ESNTL_ID가 생성됩니다.
+잡을 반복 실행해야 할 경우 `RunIdIncrementer`를 사용하거나 실행 명령에 임의의 `JobParameters`를 추가해 Run ID를 증가시킬 수 있습니다.
 
 ## 배치 메타데이터 정리
 
@@ -26,19 +26,12 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
 > ⚠️ 운영 데이터베이스에서 실행하기 전에 반드시 전체 백업을 완료하세요.
 
 ## 배치 컨텍스트 파일 관계
+
 **작성 순서**
   - context-batch-mapper.xml
   - → BatchJobLauncherConfig.java
   - → BatchSchedulerConfig.java
   - → 각 JobConfig.java
-
-
-  - MultiDataSourceConfig.java / BatchInfraConfig.java: 공통 데이터소스와 트랜잭션 매니저 등을 정의한다.
-  - context-batch-mapper.xml: MyBatis SqlSessionFactory와 매퍼 위치를 정의한다.
-  - BatchJobLauncherConfig.java: MyBatis 설정을 import하여 `JobLauncher`, `JobRepository` 등을 구성한다.
-  - BatchSchedulerConfig.java: Quartz `JobDetail`, 크론 트리거, `SchedulerFactoryBean` 및 잡 체이닝을 자바 설정으로 정의한다.
-  - 각 JobConfig.java: 각 업무의 배치 Job과 Step을 자바 설정으로 정의한다. `<step>` 안에 `<chunk>`를 사용하면 청크 기반 Step, `<tasklet>`을 사용하면 Tasklet 기반 Step이 된다.
-                    BatchSchedulerConfig.java에서 참조되어 스케줄러가 실행할 Job을 결정한다.
 
 **상위→하위 참조 구조**
   - BatchSchedulerConfig.java
@@ -47,9 +40,8 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
   - → context-batch-mapper.xml
 
 ## 기타 공통 설정
-WebClient처럼 이미 자바 설정으로 작성된 클래스(`WebClientConfig`)는 좋은 예시입니다.
-반복적으로 사용하는 공통 빈(예: 로깅, 글로벌 메시지)은 별도의 `@Configuration` 클래스에 배치하여 응집력을 높입니다.
-예를 들어, `NotificationConfig`는 이메일 및 SMS 알림 전송기를 빈으로 등록합니다.
+
+WebClient처럼 이미 자바 설정으로 작성된 클래스(`WebClientConfig`)는 좋은 예시입니다. 반복적으로 사용하는 공통 빈(예: 로깅, 글로벌 메시지)은 별도의 `@Configuration` 클래스에 배치하여 응집력을 높입니다. 예를 들어, `NotificationConfig`는 이메일 및 SMS 알림 전송기를 빈으로 등록합니다.
 
 ## Spring Batch 처리 방식: Chunk와 Tasklet
 
@@ -65,8 +57,7 @@ Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.
 
 ### StepCountLogger 활용
 
-`StepCountLogger`는 스텝 종료 후 읽기·쓰기·스킵 건수를 로그로 남기는 `StepExecutionListener`입니다. \
-클래스 경로: `src/main/java/egovframework/bat/insa/listener/StepCountLogger.java`
+`StepCountLogger`는 스텝 종료 후 읽기·쓰기·스킵 건수를 로그로 남기는 `StepExecutionListener`입니다. 클래스 경로: `src/main/java/egovframework/bat/job/insa/listener/StepCountLogger.java`
 
 #### Chunk 기반 스텝에서의 사용
 
@@ -88,8 +79,7 @@ public Step sampleStep(StepBuilderFactory stepBuilderFactory,
 
 #### Tasklet 기반 스텝에서의 사용
 
-Tasklet 스텝은 `StepContribution`의 카운트를 자동 증가시키지 않으므로,
-처리 건수를 수동으로 갱신해야 `StepCountLogger`가 정확한 값을 출력합니다.
+Tasklet 스텝은 `StepContribution`의 카운트를 자동 증가시키지 않으므로, 처리 건수를 수동으로 갱신해야 `StepCountLogger`가 정확한 값을 출력합니다.
 
 ```java
 public class SampleTasklet implements Tasklet {
@@ -106,7 +96,7 @@ public class SampleTasklet implements Tasklet {
 
 ## 인사 배치 잡 디렉터리(`insa`)
 
-`src/main/java/egovframework/bat/insa/config` 디렉터리는 인사 관련 배치 Job 설정 클래스를 모아두는 곳입니다. 현재 포함된 Job은 다음과 같습니다.
+`src/main/java/egovframework/bat/job/insa/config` 디렉터리는 인사 관련 배치 Job 설정 클래스를 모아두는 곳입니다. 현재 포함된 Job은 다음과 같습니다.
 
 - `insaRemote1ToStgJob`
 - `insaStgToLocalJob`
@@ -114,55 +104,8 @@ public class SampleTasklet implements Tasklet {
 다음은 관련된 주요 파일들입니다.
 
 - 잡 설정 클래스:
-  - `src/main/java/egovframework/bat/insa/config/InsaRemote1ToStgJobConfig.java`: 원격 시스템에서 스테이징으로 데이터를 전송하는 Job 설정 클래스
-  - `src/main/java/egovframework/bat/insa/config/InsaStgToLocalJobConfig.java`: 스테이징에서 로컬로 데이터를 이동하는 Job 설정 클래스
-- 매퍼 파일:
-  - `src/main/resources/egovframework/batch/mapper/insa/insa_remote1_to_stg.xml`: 원격→스테이징 데이터 이동을 위한 SQL 매퍼
-  - `src/main/resources/egovframework/batch/mapper/insa/insa_stg_to_local.xml`: 스테이징→로컬 데이터 이동을 위한 SQL 매퍼
-- 공통, 도메인 및 유틸 클래스:
-  - `src/main/java/egovframework/bat/insa/common/SourceSystemPrefix.java`: 시스템 구분을 위한 접두어 상수 정의 클래스
-  - `src/main/java/egovframework/bat/insa/processor/EmployeeInfoProcessor.java`: 직원 정보를 처리하는 배치 프로세서
-  - `src/main/java/egovframework/bat/insa/common/EsntlIdGenerator.java`: ESNTL_ID를 생성하는 유틸리티 클래스
-  - `src/main/java/egovframework/bat/insa/domain/EmployeeInfo.java`: 직원 정보를 담는 도메인 클래스
-  - `src/main/java/egovframework/bat/insa/domain/Orgnztinfo.java`: 조직 정보를 표현하는 도메인 클래스
-- 테스트 코드:
-  - `src/test/java/egovframework/bat/insa/common/EsntlIdGeneratorTest.java`: ESNTL_ID 생성 로직을 검증하는 테스트
-
-### 인사 배치 Job 추가시 확인 사항
-
-새로운 인사 배치 Job을 추가할 때는 다음 규칙을 지킵니다.
-
-- 설정 클래스: `src/main/java/egovframework/bat/insa/config`에 `<Source>To<Target>JobConfig.java` 형태로 작성합니다. 클래스명은 UpperCamelCase를 사용하며 반드시 `JobConfig`로 끝납니다.
-- 관련 도메인 클래스: `src/main/java/egovframework/bat/insa/domain` 아래에 작성하고 패키지 구조를 유지합니다.
-- 공통 클래스: `src/main/java/egovframework/bat/insa/common` 아래에 작성하고 패키지 구조를 유지합니다.
-- 테스트 코드: `src/test/java/egovframework/bat/insa/domain` 및 `src/test/java/egovframework/bat/insa/common`에 동일한 패키지 구조로 작성합니다.
-
-## ERP 배치 Job 구성(`erp`)
-
-`src/main/java/egovframework/bat/job/erp/config` 디렉터리는 ERP 관련 배치 Job 설정 클래스를 모아둔 곳입니다. 현재 포함된 Job은 다음과 같습니다.
-
-- `erpRestToStgJob`
-- `erpStgToLocalJob`
-
-다음은 관련된 주요 파일들입니다.
-
-- 잡 설정:
-  - `src/main/java/egovframework/bat/job/erp/config/ErpRestToStgJobConfig.java`: ERP REST API에서 데이터를 조회하여 STG에 적재하는 Job 설정 클래스
-  - `src/main/java/egovframework/bat/job/erp/config/ErpStgToLocalJobConfig.java`: STG에 적재된 ERP 데이터를 로컬 DB로 이관하는 Job 설정 클래스
-- 매퍼 파일:
-  - `src/main/resources/egovframework/batch/mapper/job/erp/erp_rest_to_stg.xml`: ERP REST 데이터→STG 적재를 위한 SQL 매퍼
-  - `src/main/resources/egovframework/batch/mapper/job/erp/erp_stg_to_local.xml`: STG→로컬 데이터 이동을 위한 SQL 매퍼
-- 공통, 도메인 및 유틸 클래스:
-  - `src/main/java/egovframework/bat/job/erp/tasklet/FetchErpDataTasklet.java`: ERP 시스템에서 차량 정보를 조회하여 STG에 적재하는 Tasklet
-  - `src/main/java/egovframework/bat/job/erp/processor/VehicleInfoProcessor.java`: ERP 차량 정보를 처리하는 배치 프로세서
-  - `src/main/java/egovframework/bat/job/erp/domain/VehicleInfo.java`: ERP 차량 정보를 담는 도메인 클래스
-  - `src/main/java/egovframework/bat/job/erp/api/RestToStgJobController.java`: ERP REST 배치를 수동 실행하는 컨트롤러
-
-## 예제 배치 Job 구성(`example`)
-
-`src/main/java/egovframework/bat/job/example/config` 디렉터리는 예제 배치 Job 설정 클래스를 모아둔 곳입니다. 예제 Job과 관련된 주요 파일은 다음과 같습니다.
-
-- `src/main/java/egovframework/bat/job/example/config/MybatisToMybatisJobConfig.java`: MyBatis 간 데이터 이동을 정의한 배치 Job 설정 클래스(잡 ID: `mybatisToMybatisSampleJob`)
+  - `src/main/java/egovframework/bat/job/insa/config/InsaRemote1ToStgJobConfig.java`: 원격 시스템에서 스테이징으로 데이터를 전송하는 Job 설정 클래스
+  - `src/main/java/egovframework/bat/job/insa/config/InsaStgToLocalJobConfig.java`: 스테이징 데이터를 로컬로 적재하는 Job 설정 클래스
 - `src/main/resources/egovframework/batch/mapper/job/example/Egov_Example_SQL.xml`: 예제 배치를 위한 SQL 매퍼 파일
 - `src/main/java/egovframework/bat/job/example/domain/CustomerCredit.java`: 고객 신용 정보를 담는 도메인 클래스
 - `src/main/java/egovframework/bat/job/example/processor/CustomerCreditIncreaseProcessor.java`: 신용 증가 로직을 처리하는 배치 프로세서
@@ -179,21 +122,25 @@ public class SampleTasklet implements Tasklet {
 
 ### ERP 배치 잡 실행 API
 
-`RestToStgJobController`를 통해 ERP 배치를 REST로 호출할 수 있습니다.
+`RestToStgJobController`와 `StgToRestJobController`를 통해 ERP 배치를 REST로 호출할 수 있습니다.
 
 - **URL**: `POST /api/batch/erp-rest-to-stg`
 - **파라미터**: 없음
 - **응답**: 실행 결과 `BatchStatus`
 
+- **URL**: `POST /api/batch/erp-stg-to-rest`
+- **파라미터**: 없음
+- **응답**: 실행 결과 `BatchStatus`
+
 ### 인사 배치 잡 실행 API
 
-`insaRemote1ToStgJob`을 REST로 호출할 수 있습니다.
+`Remote1ToStgJobController`를 통해 인사 배치를 REST로 호출할 수 있습니다.
 
 - **URL**: `POST /api/batch/remote1-to-stg`
 - **파라미터**: `sourceSystem` (선택)
 - **응답**: 실행 결과 `BatchStatus`
 
-# 컨트롤러별 역할과 주소
+## 컨트롤러별 역할과 주소
 
 | 컨트롤러 | 역할 요약 | 기본 URL | 주요 하위 경로 |
 | --- | --- | --- | --- |
@@ -223,6 +170,7 @@ public class SampleTasklet implements Tasklet {
 
 ### 개별 Job 실행 API
 - `POST /api/batch/erp-rest-to-stg` – ERP REST → STG 전송 배치 실행
+- `POST /api/batch/erp-stg-to-rest` – STG → ERP REST 전송 배치 실행
 - `POST /api/batch/mybatis` – MyBatis 기반 배치 실행
 - `POST /api/batch/remote1-to-stg` – Remote1 → STG 전송 배치 실행
 
@@ -279,4 +227,5 @@ CRM 배치는 신규 시스템 추가시의 예시입니다
 9. 기본 기능만으로도 단순한 순차 실행부터 복잡한 플로우 구성까지 가능하다.
 10. 재사용성과 확장성이 높아 대규모 배치 처리에 적합하다.
 
-※ ID이름이 중복되지 않게 신경쓸것. (예로 step태그의 ID가 다른 업무와 같게 구성할경우, 에러가 발생하지 않는데, 그 작업이 실행되지 않는 현상을 경험할 수 있음) 
+※ ID이름이 중복되지 않게 신경쓸것. (예로 step태그의 ID가 다른 업무와 같게 구성할경우, 에러가 발생하지 않는데, 그 작업이 실행되지 않는 현상을 경험할 수 있음)
+

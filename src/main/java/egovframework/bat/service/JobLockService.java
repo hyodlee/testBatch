@@ -33,7 +33,10 @@ public class JobLockService {
     public void unlock(String jobName) {
         ReentrantLock lock = locks.get(jobName);
         if (lock != null && lock.isHeldByCurrentThread()) {
+            // 현재 스레드가 보유한 락을 해제한다
             lock.unlock();
+            // 사용이 끝난 락은 맵에서 제거한다
+            locks.remove(jobName, lock);
         }
     }
 

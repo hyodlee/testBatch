@@ -1,4 +1,8 @@
 spring:
+  sql:
+    init:
+      mode: always # 외부 DB에서도 스크립트 실행
+      schema-locations: classpath:schema-quartz.sql
   main:
     # Spring Framework 5.*에서 같은 이름의 빈을 등록할 때 발생하는 BeanDefinitionOverrideException 방지
     allow-bean-definition-overriding: true
@@ -41,7 +45,7 @@ spring:
 
   quartz:
     jdbc:
-      initialize-schema: always  # Quartz 스키마를 항상 초기화
+      initialize-schema: never  # Quartz 스키마를 자동 초기화하지 않음
 
 logging:
   level:

@@ -27,7 +27,7 @@ import egovframework.bat.service.JobLockService;
 @Configuration
 public class BatchSchedulerConfig {
 
-    // 공통 JobDetail 생성 메서드
+	/** 공통 JobDetail 생성 메서드 */
     private JobDetailFactoryBean createJobDetail(String jobName, JobRegistry jobRegistry,
             JobLauncher jobLauncher, JobLockService jobLockService,
             JobProgressService jobProgressService, boolean durability, Map<String, Object> extraData) {
@@ -94,12 +94,11 @@ public class BatchSchedulerConfig {
     @Bean
     public JobDetailFactoryBean erpStgToRestJobDetail(JobRegistry jobRegistry, JobLauncher jobLauncher,
             JobLockService jobLockService, JobProgressService jobProgressService) {
-        // 정각마다 실행될 ERP 스테이징 → REST 변환 잡
         return createJobDetail("erpStgToRestJob", jobRegistry, jobLauncher,
                 jobLockService, jobProgressService, false, null);
     }
 
-    // 크론 트리거 생성 메서드
+    /** 크론 트리거 생성 메서드 */
     private CronTriggerFactoryBean cronTrigger(JobDetail jobDetail, String expression) {
         CronTriggerFactoryBean factory = new CronTriggerFactoryBean();
         factory.setJobDetail(jobDetail);
@@ -148,11 +147,10 @@ public class BatchSchedulerConfig {
             @Qualifier("erpStgToRestCronTrigger") Trigger erpStgToRestCronTrigger,
             @Qualifier("insaStgToLocalJobDetail") JobDetail insaStgToLocalJobDetail,
             @Qualifier("erpStgToLocalJobDetail") JobDetail erpStgToLocalJobDetail,
-            @Qualifier("erpStgToRestJobDetail") JobDetail erpStgToRestJobDetail,
             JobChainingJobListener jobChainingJobListener) {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         factory.setTriggers(insaRemote1ToStgCronTrigger, erpRestToStgCronTrigger, erpStgToRestCronTrigger);
-        factory.setJobDetails(insaStgToLocalJobDetail, erpStgToLocalJobDetail, erpStgToRestJobDetail);
+        factory.setJobDetails(insaStgToLocalJobDetail, erpStgToLocalJobDetail);
         factory.setGlobalJobListeners(jobChainingJobListener);
         return factory;
     }

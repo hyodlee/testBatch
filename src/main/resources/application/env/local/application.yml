@@ -32,7 +32,7 @@ spring:
     # 원격1 CUBRID
     egovremote1-cubrid:
       driver-class-name: cubrid.jdbc.driver.CUBRIDDriver
-      url: "jdbc:cubrid:192.168.0.10:33000:egovremote1:::"
+      url: "jdbc:cubrid:localhost:33000:egovremote1:::"
       username: readuser
       password: read!1234
 

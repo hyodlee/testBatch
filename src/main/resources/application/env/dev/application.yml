@@ -56,3 +56,11 @@ erp:
   api-url: http://127.0.0.1:8080/api/v1/vehicles
   # ERP 시스템으로 데이터를 전송할 때 사용할 URL
   outbound-api-url: http://127.0.0.1:8080/api/v1/vehicles
+
+scheduler:
+  jobs:
+    insaRemote1ToStgJob: "0 * * * * ?"
+    erpRestToStgJob: "0 0/5 * * * ?"
+    erpStgToRestJob: "0 0 * * * ?"
+    insaStgToLocalJob: ""
+    erpStgToLocalJob: ""

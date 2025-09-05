@@ -102,6 +102,7 @@ public class SampleTasklet implements Tasklet {
 }
 ```
 
+
 ## 인사 배치 잡 디렉터리(`insa`)
 
 `src/main/java/egovframework/bat/job/insa/config` 디렉터리는 인사 관련 배치 Job 설정 클래스를 모아두는 곳입니다. 현재 포함된 Job은 다음과 같습니다.

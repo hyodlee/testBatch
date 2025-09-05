@@ -1,6 +1,8 @@
 package egovframework.bat.service;
 
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import lombok.RequiredArgsConstructor;
 import egovframework.bat.service.dto.JobExecutionDto;
@@ -9,8 +11,14 @@ import java.util.Date;
 import java.util.stream.Collectors;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
+import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
-import org.springframework.batch.core.launch.JobOperator;
+import org.springframework.batch.core.JobParameters;
+import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.explore.JobExplorer;
+import org.springframework.batch.core.repository.JobRepository;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,8 +31,37 @@ public class BatchManagementService {
     /** 배치 메타데이터 조회를 위한 매퍼 */
     private final BatchManagementMapper batchManagementMapper;
 
-    /** 잡 재실행 및 중지를 위한 JobOperator */
-    private final JobOperator jobOperator;
+    /** 잡 실행을 위한 런처 */
+    private final JobLauncher jobLauncher;
+
+    /** 실행 중인 잡 조회를 위한 탐색기 */
+    private final JobExplorer jobExplorer;
+
+    /** 실행 상태 갱신을 위한 레포지토리 */
+    private final JobRepository jobRepository;
+
+    /** 관리 대상 잡들을 보관하는 맵 */
+    private final Map<String, Job> jobMap = new HashMap<>();
+
+    public BatchManagementService(BatchManagementMapper batchManagementMapper,
+            JobLauncher jobLauncher, JobExplorer jobExplorer, JobRepository jobRepository,
+            @Qualifier("mybatisToMybatisSampleJob") Job mybatisToMybatisSampleJob,
+            @Qualifier("erpRestToStgJob") Job erpRestToStgJob,
+            @Qualifier("erpStgToLocalJob") Job erpStgToLocalJob,
+            @Qualifier("erpStgToRestJob") Job erpStgToRestJob,
+            @Qualifier("insaRemote1ToStgJob") Job insaRemote1ToStgJob,
+            @Qualifier("insaStgToLocalJob") Job insaStgToLocalJob) {
+        this.batchManagementMapper = batchManagementMapper;
+        this.jobLauncher = jobLauncher;
+        this.jobExplorer = jobExplorer;
+        this.jobRepository = jobRepository;
+        jobMap.put(mybatisToMybatisSampleJob.getName(), mybatisToMybatisSampleJob);
+        jobMap.put(erpRestToStgJob.getName(), erpRestToStgJob);
+        jobMap.put(erpStgToLocalJob.getName(), erpStgToLocalJob);
+        jobMap.put(erpStgToRestJob.getName(), erpStgToRestJob);
+        jobMap.put(insaRemote1ToStgJob.getName(), insaRemote1ToStgJob);
+        jobMap.put(insaStgToLocalJob.getName(), insaStgToLocalJob);
+    }
 
     /**
      * 등록된 배치 잡 이름 목록을 반환한다.
@@ -84,23 +121,32 @@ public class BatchManagementService {
     }
 
     /**
-     * 실패한 잡 실행을 재시도한다.
+     * 주어진 이름의 잡을 재실행한다.
      *
-     * @param jobExecutionId 재실행할 잡 실행 ID
-     * @throws Exception JobOperator에서 발생한 예외
+     * @param jobName 재실행할 잡 이름
+     * @throws Exception 잡 실행 중 예외 발생 시
      */
-    public void restart(Long jobExecutionId) throws Exception {
-        jobOperator.restart(jobExecutionId);
+    public void restart(String jobName) throws Exception {
+        Job job = jobMap.get(jobName);
+        if (job == null) {
+            throw new IllegalArgumentException("알 수 없는 잡: " + jobName);
+        }
+        JobParameters params = new JobParametersBuilder()
+                .addLong("timestamp", System.currentTimeMillis())
+                .toJobParameters();
+        jobLauncher.run(job, params);
     }
 
     /**
      * 실행 중인 잡을 중지한다.
      *
-     * @param jobExecutionId 중지할 잡 실행 ID
-     * @throws Exception JobOperator에서 발생한 예외
+     * @param jobName 중지할 잡 이름
      */
-    public void stop(Long jobExecutionId) throws Exception {
-        jobOperator.stop(jobExecutionId);
+    public void stop(String jobName) {
+        jobExplorer.findRunningJobExecutions(jobName).forEach(execution -> {
+            execution.stop();
+            jobRepository.update(execution);
+        });
     }
 }
 

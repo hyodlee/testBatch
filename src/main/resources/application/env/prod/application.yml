@@ -5,6 +5,9 @@ spring:
   output:
     ansi:
       enabled: never   # ANSI 색상 끄기, Eclipse 콘솔의 ANSI Support 체크박스 끄기
+  batch:
+    job:
+      enabled: false # 애플리케이션 시작 시 배치 잡 자동 실행 방지
   profiles:
     active: prod
   datasource:

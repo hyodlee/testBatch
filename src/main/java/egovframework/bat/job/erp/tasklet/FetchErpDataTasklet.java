@@ -51,14 +51,16 @@ public class FetchErpDataTasklet implements Tasklet {
 
     public FetchErpDataTasklet(WebClient.Builder builder,
                                @Qualifier("jdbcTemplateLocal") JdbcTemplate jdbcTemplate,
-                               List<NotificationSender> notificationSenders,
+                               @Qualifier("emailNotificationSender") NotificationSender emailNotificationSender,
+                               @Qualifier("smsNotificationSender") NotificationSender smsNotificationSender,
                                ObjectMapper objectMapper,
                                @Value("${erp.api-url}") String apiUrl) {
                                //@Value("${Globals.Erp.ApiUrl}") String apiUrl) {
         // WebClient 생성
         this.webClient = builder.build();
         this.jdbcTemplate = jdbcTemplate;
-        this.notificationSenders = notificationSenders;
+        // 주입받은 알림 전송기를 리스트로 구성
+        this.notificationSenders = List.of(emailNotificationSender, smsNotificationSender);
         this.objectMapper = objectMapper;
         this.apiUrl = apiUrl;
     }

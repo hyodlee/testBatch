@@ -2,8 +2,6 @@ package egovframework.bat.job.erp.tasklet;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import egovframework.bat.notification.NotificationSender;
-import java.util.Collections;
-import java.util.List;
 import org.junit.Test;
 import org.springframework.batch.repeat.RepeatStatus;
 import org.springframework.dao.DataAccessResourceFailureException;
@@ -36,9 +34,10 @@ public class FetchErpDataTaskletTest {
             }
         };
 
-        List<NotificationSender> senders = Collections.emptyList();
+        NotificationSender emailSender = message -> {};
+        NotificationSender smsSender = message -> {};
         // ObjectMapper를 추가한 생성자 호출
-        FetchErpDataTasklet tasklet = new FetchErpDataTasklet(builder, jdbcTemplate, senders, new ObjectMapper(), "http://example.com");
+        FetchErpDataTasklet tasklet = new FetchErpDataTasklet(builder, jdbcTemplate, emailSender, smsSender, new ObjectMapper(), "http://example.com");
 
         RepeatStatus status = tasklet.execute(null, null);
         assertEquals(RepeatStatus.FINISHED, status);
@@ -63,9 +62,10 @@ public class FetchErpDataTaskletTest {
             .thenThrow(new DataAccessResourceFailureException("insert fail"));
         when(jdbcTemplate.update(anyString(), any(), any())).thenReturn(1);
 
-        List<NotificationSender> senders = Collections.emptyList();
+        NotificationSender emailSender = message -> {};
+        NotificationSender smsSender = message -> {};
         // ObjectMapper를 추가한 생성자 호출
-        FetchErpDataTasklet tasklet = new FetchErpDataTasklet(builder, jdbcTemplate, senders, new ObjectMapper(), "http://example.com");
+        FetchErpDataTasklet tasklet = new FetchErpDataTasklet(builder, jdbcTemplate, emailSender, smsSender, new ObjectMapper(), "http://example.com");
 
         RepeatStatus status = tasklet.execute(null, null);
 

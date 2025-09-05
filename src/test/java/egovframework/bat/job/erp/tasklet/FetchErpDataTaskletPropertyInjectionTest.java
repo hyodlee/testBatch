@@ -1,12 +1,11 @@
 package egovframework.bat.job.erp.tasklet;
 
-import java.util.Collections;
-import java.util.List;
 import java.util.Properties;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -53,14 +52,23 @@ public class FetchErpDataTaskletPropertyInjectionTest {
         }
 
         // Tasklet이 기대하는 이름과 동일하게 빈을 등록
-        @Bean(name = "migstgJdbcTemplate")
+        @Bean(name = "jdbcTemplateLocal")
         public JdbcTemplate jdbcTemplate() {
             return new JdbcTemplate();
         }
 
+        // 이메일 알림 전송기 빈
         @Bean
-        public List<NotificationSender> notificationSenders() {
-            return Collections.emptyList();
+        @Qualifier("emailNotificationSender")
+        public NotificationSender emailNotificationSender() {
+            return message -> {};
+        }
+
+        // SMS 알림 전송기 빈
+        @Bean
+        @Qualifier("smsNotificationSender")
+        public NotificationSender smsNotificationSender() {
+            return message -> {};
         }
     }
 

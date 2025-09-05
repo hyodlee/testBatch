@@ -2,6 +2,7 @@ package egovframework.bat.management.api;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -75,7 +76,11 @@ public class BatchManagementController {
      * @return 에러 로그 목록
      */
     @GetMapping("/executions/{jobExecutionId}/errors")
-    public ResponseEntity<List<String>> getErrorLogs(@PathVariable Long jobExecutionId) {
+    public ResponseEntity<List<String>> getErrorLogs(@PathVariable(required = false) Long jobExecutionId) {
+        // jobExecutionId가 없으면 빈 리스트 반환
+        if (jobExecutionId == null) {
+            return ResponseEntity.ok(Collections.emptyList());
+        }
         return ResponseEntity.ok(batchManagementService.getErrorLogs(jobExecutionId));
     }
 

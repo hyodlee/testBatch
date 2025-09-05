@@ -111,7 +111,20 @@ public class SampleTasklet implements Tasklet {
 
 다음은 관련된 주요 파일들입니다.
 
-이곳에 작성하시요
+- 잡 설정 클래스
+  - `src/main/java/egovframework/bat/job/insa/config/InsaRemote1ToStgJobConfig.java`
+  - `src/main/java/egovframework/bat/job/insa/config/InsaStgToLocalJobConfig.java`
+- 매퍼 파일
+  - `src/main/resources/egovframework/batch/mapper/job/insa/insa_remote1_to_stg.xml`
+  - `src/main/resources/egovframework/batch/mapper/job/insa/insa_stg_to_local.xml`
+- 공통·도메인·유틸 클래스
+  - `src/main/java/egovframework/bat/job/insa/common/SourceSystemPrefix.java`
+  - `src/main/java/egovframework/bat/job/insa/processor/EmployeeInfoProcessor.java`
+  - `src/main/java/egovframework/bat/job/insa/common/EsntlIdGenerator.java`
+  - `src/main/java/egovframework/bat/job/insa/domain/EmployeeInfo.java`
+  - `src/main/java/egovframework/bat/job/insa/domain/Orgnztinfo.java`
+- 테스트 코드
+  - `src/test/java/egovframework/bat/job/insa/common/EsntlIdGeneratorTest.java`
 
 ### 예제 배치 잡 실행 API
 

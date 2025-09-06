@@ -239,6 +239,12 @@ public class SampleTasklet implements Tasklet {
 - `DELETE /api/batch/executions/{execId}` – 실행 중인 배치 중지
 - `GET /api/batch/progress` (SSE) – 배치 진행 상태 스트림
 
+### 스케줄러 관리 API
+- `POST /api/scheduler/jobs` – 새 잡 등록 (`jobName`, `jobClass`, `cronExpression` 필요)
+- `POST /api/scheduler/jobs/{jobName}/pause` – 해당 잡 일시 중지
+- `POST /api/scheduler/jobs/{jobName}/resume` – 해당 잡 재개
+- `DELETE /api/scheduler/jobs/{jobName}` – 해당 잡 삭제
+
 ### 개별 Job 실행 API
 - `POST /api/batch/erp-rest-to-stg` – ERP REST → STG 전송 배치 실행
 - `POST /api/batch/erp-stg-to-rest` – STG → ERP REST 전송 배치 실행

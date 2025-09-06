@@ -126,6 +126,8 @@ public class BatchSchedulerConfig {
         props.setProperty("org.quartz.jobStore.tablePrefix", "QRTZ_"); // 테이블 접두사
         props.setProperty("org.quartz.threadPool.threadCount", "10"); // 스레드 풀 크기
         factory.setQuartzProperties(props);
+        // DB에 저장된 기존 스케줄 정보를 유지하기 위해 덮어쓰지 않음
+        factory.setOverwriteExistingJobs(false);
 
         List<Trigger> triggers = new ArrayList<>();
         List<JobDetail> jobDetails = new ArrayList<>();

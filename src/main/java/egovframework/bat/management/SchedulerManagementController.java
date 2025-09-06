@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -80,6 +82,21 @@ public class SchedulerManagementController {
     @DeleteMapping("/jobs/{jobName}")
     public ResponseEntity<Void> deleteJob(@PathVariable String jobName) throws SchedulerException {
         schedulerManagementService.deleteJob(jobName);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 등록된 잡의 크론 표현식을 변경한다.
+     *
+     * @param jobName        잡 이름
+     * @param cronExpression 새 크론 표현식
+     * @return 처리 결과
+     * @throws SchedulerException 스케줄러 작업 실패 시 발생
+     */
+    @PutMapping("/jobs/{jobName}")
+    public ResponseEntity<Void> updateJobCron(@PathVariable String jobName,
+            @RequestBody String cronExpression) throws SchedulerException {
+        schedulerManagementService.updateJobCron(jobName, cronExpression);
         return ResponseEntity.ok().build();
     }
 

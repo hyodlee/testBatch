@@ -124,10 +124,13 @@ public class BatchSchedulerConfig {
         factory.setDataSource(quartzDataSource);
 
         Properties props = new Properties();
-        props.setProperty("org.quartz.jobStore.class", "org.quartz.impl.jdbcjobstore.JobStoreTX"); // JDBC JobStore 사용
-        props.setProperty("org.quartz.jobStore.driverDelegateClass", "org.quartz.impl.jdbcjobstore.StdJDBCDelegate"); // MySQL용 delegate
-        props.setProperty("org.quartz.jobStore.tablePrefix", "QRTZ_"); // 테이블 prefix
-        props.setProperty("org.quartz.threadPool.threadCount", "10"); // 풀 사이즈
+        // Spring 제공 JobStore를 사용하여 DataSource 이름 없이도 동작하도록 설정
+        props.setProperty("org.quartz.jobStore.class",
+                "org.springframework.scheduling.quartz.LocalDataSourceJobStore"); // Spring 전용 JobStore
+        props.setProperty("org.quartz.jobStore.driverDelegateClass",
+                "org.quartz.impl.jdbcjobstore.StdJDBCDelegate"); // MySQL용 델리게이트
+        props.setProperty("org.quartz.jobStore.tablePrefix", "QRTZ_"); // 테이블 접두사
+        props.setProperty("org.quartz.threadPool.threadCount", "10"); // 스레드 풀 크기
         factory.setQuartzProperties(props);
 
         List<Trigger> triggers = new ArrayList<>();

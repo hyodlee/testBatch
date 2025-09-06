@@ -17,19 +17,16 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.JobRegistry;
-import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.scheduling.quartz.AutowireCapableBeanJobFactory;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
-
-import egovframework.bat.management.JobProgressService;
 import egovframework.bat.scheduler.EgovQuartzJobLauncher;
-import egovframework.bat.service.JobLockService;
 
 /**
  * XML 기반 스케줄러 설정을 자바 기반으로 전환한 구성 클래스이다.
@@ -56,9 +53,8 @@ public class BatchSchedulerConfig {
     /**
      * 공통 JobDetail 생성 메서드
      */
-    private JobDetail createJobDetail(Job job, JobLauncher jobLauncher,
-            JobLockService jobLockService, JobProgressService jobProgressService,
-            boolean durability, Map<String, Object> extraData) throws Exception {
+    private JobDetail createJobDetail(Job job, boolean durability,
+            Map<String, Object> extraData) throws Exception {
         JobDetailFactoryBean factory = new JobDetailFactoryBean();
         factory.setName(job.getName() + "Detail");
         factory.setJobClass(EgovQuartzJobLauncher.class);
@@ -68,9 +64,6 @@ public class BatchSchedulerConfig {
         Map<String, Object> map = new HashMap<>();
         map.put("job", job); // 실행할 Job 인스턴스
         map.put("jobName", job.getName()); // 잡 이름
-        map.put("jobLauncher", jobLauncher);
-        map.put("jobLockService", jobLockService);
-        map.put("jobProgressService", jobProgressService);
         if (extraData != null) {
             map.putAll(extraData);
         }
@@ -113,8 +106,6 @@ public class BatchSchedulerConfig {
     @Bean
     @DependsOn("jobRegistryBeanPostProcessor") // 잡 등록이 완료된 후 스케줄러 생성
     public SchedulerFactoryBean schedulerFactoryBean(JobRegistry jobRegistry,
-            JobLauncher jobLauncher, JobLockService jobLockService,
-            JobProgressService jobProgressService,
             JobChainingJobListener jobChainingJobListener,
             List<Job> jobBeans,
             @Qualifier("dataSource-stg") DataSource quartzDataSource) throws Exception {
@@ -122,6 +113,8 @@ public class BatchSchedulerConfig {
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         // Quartz 스케줄러에서 사용할 데이터소스 지정
         factory.setDataSource(quartzDataSource);
+        // Quartz 잡 클래스에 스프링 빈 주입을 가능하게 하는 JobFactory 설정
+        factory.setJobFactory(new AutowireCapableBeanJobFactory());
 
         Properties props = new Properties();
         // Spring 제공 JobStore를 사용하여 DataSource 이름 없이도 동작하도록 설정
@@ -150,8 +143,7 @@ public class BatchSchedulerConfig {
             }
 
             boolean durability = (cron == null || cron.isEmpty());
-            JobDetail jobDetail = createJobDetail(job, jobLauncher, jobLockService,
-                    jobProgressService, durability, extraData(jobName));
+            JobDetail jobDetail = createJobDetail(job, durability, extraData(jobName));
 
             if (durability) {
                 // 크론이 없으면 영속 JobDetail로만 등록

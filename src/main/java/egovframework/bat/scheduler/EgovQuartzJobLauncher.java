@@ -28,6 +28,7 @@ import org.springframework.batch.core.JobExecutionException;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import egovframework.bat.management.JobProgressService;
@@ -59,21 +60,17 @@ public class EgovQuartzJobLauncher extends QuartzJobBean {
         /** 실행할 배치 잡 */
         private Job job;
 
+        /** 배치 잡 실행을 위한 런처 */
+        @Autowired
         private JobLauncher jobLauncher;
 
         /** 중복 실행을 방지하기 위한 락 서비스 */
+        @Autowired
         private JobLockService jobLockService;
 
         /** 진행 상황 전송을 위한 서비스 */
+        @Autowired
         private JobProgressService jobProgressService;
-
-        /**
-         * Public setter for the {@link JobLauncher}.
-         * @param jobLauncher the {@link JobLauncher} to set
-         */
-        public void setJobLauncher(JobLauncher jobLauncher) {
-                this.jobLauncher = jobLauncher;
-        }
 
         /**
          * 실행할 {@link Job} 주입.
@@ -81,22 +78,6 @@ public class EgovQuartzJobLauncher extends QuartzJobBean {
          */
         public void setJob(Job job) {
                 this.job = job;
-        }
-
-        /**
-         * {@link JobLockService} 주입.
-         * @param jobLockService 락 서비스
-         */
-        public void setJobLockService(JobLockService jobLockService) {
-                this.jobLockService = jobLockService;
-        }
-
-        /**
-         * {@link JobProgressService} 주입.
-         * @param jobProgressService 진행 상황 서비스
-         */
-        public void setJobProgressService(JobProgressService jobProgressService) {
-                this.jobProgressService = jobProgressService;
         }
 
 	@Override

@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.launch.NoSuchJobException;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
@@ -26,28 +25,24 @@ import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import egovframework.bat.scheduler.EgovQuartzJobLauncher;
+import egovframework.bat.repository.SchedulerJobMapper;
+import egovframework.bat.repository.dto.SchedulerJobDto;
+import lombok.RequiredArgsConstructor;
 
 /**
  * XML 기반 스케줄러 설정을 자바 기반으로 전환한 구성 클래스이다.
- * 잡 이름과 크론 표현식을 프로퍼티에서 읽어 동적으로 스케줄러에 등록한다.
+ * 잡 이름과 크론 표현식을 데이터베이스에서 읽어 동적으로 스케줄러에 등록한다.
  */
+
 @Configuration
-@ConfigurationProperties(prefix = "scheduler")
+@RequiredArgsConstructor
 public class BatchSchedulerConfig {
 
     /** 로그 기록용 로거 */
     private static final Logger LOGGER = LoggerFactory.getLogger(BatchSchedulerConfig.class);
 
-    /** 프로퍼티에서 주입받은 잡 이름과 크론 표현식 */
-    private Map<String, String> jobs = new HashMap<>();
-
-    public Map<String, String> getJobs() {
-        return jobs;
-    }
-
-    public void setJobs(Map<String, String> jobs) {
-        this.jobs = jobs;
-    }
+    /** 스케줄러 잡 정보를 조회하기 위한 매퍼 */
+    private final SchedulerJobMapper schedulerJobMapper;
 
     /**
      * 공통 JobDetail 생성 메서드
@@ -132,9 +127,9 @@ public class BatchSchedulerConfig {
         List<Trigger> triggers = new ArrayList<>();
         List<JobDetail> jobDetails = new ArrayList<>();
 
-        for (Map.Entry<String, String> entry : jobs.entrySet()) {
-            String jobName = entry.getKey();
-            String cron = entry.getValue();
+        for (SchedulerJobDto jobDto : schedulerJobMapper.findAll()) {
+            String jobName = jobDto.getJobName();
+            String cron = jobDto.getCronExpression();
 
             Job job;
             try {

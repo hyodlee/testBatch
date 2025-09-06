@@ -16,7 +16,6 @@ CREATE TABLE `comtnorgnztinfo` (
 
 -- 직원 테이블
 CREATE TABLE `comtnemplyrinfo` (
-  `ESNTL_ID` varchar(20) DEFAULT NULL COMMENT '고유ID',
   `EMPLYR_ID` varchar(20) NOT NULL COMMENT '업무사용자ID',
   `ORGNZT_ID` char(20) DEFAULT NULL COMMENT '조직ID',
   `USER_NM` varchar(60) NOT NULL COMMENT '사용자명',
@@ -30,7 +29,6 @@ CREATE TABLE `comtnemplyrinfo` (
   `MOD_DTTM` datetime DEFAULT NULL COMMENT '수정일자',
   PRIMARY KEY (`EMPLYR_ID`),
   UNIQUE KEY `COMTNEMPLYRINFO_PK` (`EMPLYR_ID`),
-  UNIQUE KEY `COMTNEMPLYRINFO_u01` (`ESNTL_ID`),
   KEY `COMTNEMPLYRINFO_i01` (`ORGNZT_ID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='업무사용자정보';
 

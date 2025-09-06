@@ -29,6 +29,8 @@ public class StgToLocalEmployeeTasklet implements Tasklet {
         try (SqlSession session = sqlSessionFactory.openSession()) {
             // 기존 사원 정보 갱신
             int updateCount = session.update("insaStgToLoc.updateEmployee");
+            // ESNTL_ID 시퀀스 초기화
+            session.update("insaStgToLoc.initEmployeeSeq");
             // 신규 사원 정보 추가
             int insertCount = session.insert("insaStgToLoc.insertEmployeeIncremental");
             session.commit();

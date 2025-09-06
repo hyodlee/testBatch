@@ -50,7 +50,7 @@
        <!-- 신규 사원 추가 전에 ESNTL_ID 시퀀스 초기화 -->
        <update id="initEmployeeSeq">
                SET @seq := (
-                 SELECT MAX(CAST(SUBSTR(ESNTL_ID, 4) AS UNSIGNED))
+                 SELECT IFNULL(MAX(CAST(SUBSTR(ESNTL_ID, 4) AS UNSIGNED)), 0)
                  FROM egovlocal.COMTNEMPLYRINFO
                )
        </update>

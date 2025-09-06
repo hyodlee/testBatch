@@ -16,6 +16,12 @@ spring:
   profiles:
     active: local
   datasource:
+    # 기본 데이터베이스  
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/migstg?useSSL=false&serverTimezone=Asia/Seoul
+    username: miguser
+    password: mig!1234
+
     # 스테이징 MySQL (주 데이터베이스)
     migstg-mysql:
       driver-class-name: com.mysql.cj.jdbc.Driver

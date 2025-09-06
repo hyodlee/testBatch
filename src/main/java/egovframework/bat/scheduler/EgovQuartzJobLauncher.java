@@ -27,7 +27,9 @@ import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobExecutionException;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
@@ -57,9 +59,6 @@ public class EgovQuartzJobLauncher extends QuartzJobBean {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(EgovQuartzJobLauncher.class);
 
-        /** 실행할 배치 잡 */
-        private Job job;
-
         /** 배치 잡 실행을 위한 런처 */
         @Autowired
         private JobLauncher jobLauncher;
@@ -72,22 +71,26 @@ public class EgovQuartzJobLauncher extends QuartzJobBean {
         @Autowired
         private JobProgressService jobProgressService;
 
-        /**
-         * 실행할 {@link Job} 주입.
-         * @param job 실행할 배치 잡
-         */
-        public void setJob(Job job) {
-                this.job = job;
-        }
+        /** 잡을 조회하기 위한 레지스트리 */
+        @Autowired
+        private JobRegistry jobRegistry;
 
 	@Override
 	@SuppressWarnings("unchecked")
 	protected void executeInternal(JobExecutionContext context) {
 		Long timestamp = null;
-		Map<String, Object> jobDataMap = context.getMergedJobDataMap();
-		//LOGGER.debug("JobDataMap: {}", jobDataMap); // JobDataMap 디버그 로그
-		LOGGER.info("JobDataMap: {}", jobDataMap); // JobDataMap 디버그 로그
+                Map<String, Object> jobDataMap = context.getMergedJobDataMap();
+                //LOGGER.debug("JobDataMap: {}", jobDataMap); // JobDataMap 디버그 로그
+                LOGGER.info("JobDataMap: {}", jobDataMap); // JobDataMap 디버그 로그
                 String jobName = (String) jobDataMap.get(JOB_NAME);
+
+                Job job;
+                try {
+                        job = jobRegistry.getJob(jobName); // 잡 조회
+                } catch (NoSuchJobException e) {
+                        LOGGER.error("등록되지 않은 잡 '{}'을(를) 실행할 수 없습니다. 사유: {}", jobName, e.getMessage());
+                        return;
+                }
 
 		/*
 		 * 주기적으로 실행가능하도록 하기 위해, JobParamter의 timestamp 값을 갱신한다.

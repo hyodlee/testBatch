@@ -61,9 +61,10 @@ public class BatchSchedulerConfig {
         factory.setDurability(durability);
 
         Map<String, Object> map = new HashMap<>();
-        map.put("job", job); // 실행할 Job 인스턴스
+        // 잡 이름만 JobDataMap에 저장하여 직렬화 문제를 방지한다
         map.put("jobName", job.getName()); // 잡 이름
         if (extraData != null) {
+            // 필요 시 추가 데이터를 포함
             map.putAll(extraData);
         }
         factory.setJobDataAsMap(map);

@@ -30,10 +30,10 @@
                 FROM migstg.COMTNEMPLYRINFO
         </select>
 
-        <!-- ESNTL_ID로 기존 사원 정보를 갱신 -->
+        <!-- EMPLYR_ID를 기준으로 기존 사원 정보를 갱신 -->
         <update id="updateEmployee">
                 UPDATE egovlocal.COMTNEMPLYRINFO u
-                JOIN migstg.COMTNEMPLYRINFO s ON u.ESNTL_ID = s.ESNTL_ID
+                JOIN migstg.COMTNEMPLYRINFO s ON u.EMPLYR_ID = s.EMPLYR_ID
                 SET u.EMPLYR_ID = s.EMPLYR_ID,
                     u.USER_NM = s.USER_NM,
                     u.ORGNZT_ID = s.ORGNZT_ID,

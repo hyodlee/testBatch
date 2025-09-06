@@ -12,9 +12,10 @@
                 FROM migstg.COMTNORGNZTINFO
         </select>
 
-        <!-- STG DB에서 로컬 DB로 이관할 사원 목록 조회 (ESNTL_ID는 로컬 적재 시 생성) -->
+        <!-- STG DB에서 로컬 DB로 이관할 사원 목록 조회 -->
         <select id="selectEmployeeList" resultType="egovframework.bat.job.insa.domain.EmployeeInfo">
                 SELECT
+                         ESNTL_ID,
                          EMPLYR_ID,
                          ORGNZT_ID,
                          USER_NM,
@@ -28,6 +29,37 @@
                          MOD_DTTM
                 FROM migstg.COMTNEMPLYRINFO
         </select>
+
+        <!-- ESNTL_ID로 기존 사원 정보를 갱신 -->
+        <update id="updateEmployee">
+                UPDATE egovlocal.COMTNEMPLYRINFO u
+                JOIN migstg.COMTNEMPLYRINFO s ON u.ESNTL_ID = s.ESNTL_ID
+                SET u.EMPLYR_ID = s.EMPLYR_ID,
+                    u.USER_NM = s.USER_NM,
+                    u.ORGNZT_ID = s.ORGNZT_ID,
+                    u.SEXDSTN_CODE = s.SEXDSTN_CODE,
+                    u.BRTHDY = s.BRTHDY,
+                    u.MBTLNUM = s.MBTLNUM,
+                    u.EMAIL_ADRES = s.EMAIL_ADRES,
+                    u.OFCPS_NM = s.OFCPS_NM,
+                    u.EMPLYR_STTUS_CODE = s.EMPLYR_STTUS_CODE,
+                    u.REG_DTTM = s.REG_DTTM,
+                    u.MOD_DTTM = s.MOD_DTTM
+        </update>
+
+        <!-- STG에만 존재하는 사원을 로컬 DB에 신규 추가 -->
+        <insert id="insertEmployeeIncremental">
+                SET @seq := (
+                  SELECT MAX(CAST(SUBSTR(ESNTL_ID, 4) AS UNSIGNED))
+                  FROM egovlocal.COMTNEMPLYRINFO
+                );
+                INSERT INTO egovlocal.COMTNEMPLYRINFO (ESNTL_ID, EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)
+                SELECT CONCAT('LND', LPAD(@seq := @seq + 1, 7, '0')) AS ESNTL_ID,
+                       s.EMPLYR_ID, s.ORGNZT_ID, s.USER_NM, s.SEXDSTN_CODE, s.BRTHDY, s.MBTLNUM, s.EMAIL_ADRES, s.OFCPS_NM, s.EMPLYR_STTUS_CODE, s.REG_DTTM, s.MOD_DTTM
+                FROM migstg.COMTNEMPLYRINFO s
+                LEFT JOIN egovlocal.COMTNEMPLYRINFO u ON u.ESNTL_ID = s.ESNTL_ID
+                WHERE u.ESNTL_ID IS NULL;
+        </insert>
 
         <!-- 로컬 DB에 조직 정보 적재 -->
         <insert id="insertOrganization" parameterType="egovframework.bat.job.insa.domain.EmployeeInfo">

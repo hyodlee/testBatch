@@ -17,10 +17,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import egovframework.bat.job.insa.domain.EmployeeInfo;
 import egovframework.bat.job.insa.domain.Orgnztinfo;
 import egovframework.bat.job.insa.listener.StepCountLogger;
-import egovframework.bat.job.insa.processor.EmployeeInfoProcessor;
+import egovframework.bat.job.insa.tasklet.StgToLocalEmployeeTasklet;
 
 /**
  * STG에 적재된 조직/사원 정보를 로컬 DB로 이관하는 잡 구성.
@@ -56,33 +55,6 @@ public class InsaStgToLocalJobConfig {
     }
 
     /**
-     * STG DB에서 사원 정보를 읽어오는 리더.
-     */
-    @Bean
-    @StepScope
-    public EgovMyBatisPagingItemReader<EmployeeInfo> stgToLocalEmployeeReader(
-            @Qualifier("sqlSessionFactory-stg") SqlSessionFactory sqlSessionFactory) {
-        EgovMyBatisPagingItemReader<EmployeeInfo> reader = new EgovMyBatisPagingItemReader<>();
-        reader.setSqlSessionFactory(sqlSessionFactory);
-        reader.setQueryId("insaStgToLoc.selectEmployeeList");
-        reader.setPageSize(100);
-        return reader;
-    }
-
-    /**
-     * 로컬 DB에 사원 정보를 적재하는 라이터.
-     */
-    @Bean
-    @StepScope
-    public EgovMyBatisBatchItemWriter<EmployeeInfo> stgToLocalEmployeeWriter(
-            @Qualifier("sqlSessionFactory-local") SqlSessionFactory sqlSessionFactory) {
-        EgovMyBatisBatchItemWriter<EmployeeInfo> writer = new EgovMyBatisBatchItemWriter<>();
-        writer.setSqlSessionFactory(sqlSessionFactory);
-        writer.setStatementId("insaStgToLoc.insertEmployee");
-        return writer;
-    }
-
-    /**
      * 조직 정보를 이관하는 스텝 정의.
      */
     @Bean
@@ -101,20 +73,26 @@ public class InsaStgToLocalJobConfig {
     }
 
     /**
-     * 사원 정보를 이관하는 스텝 정의.
+     * 사원 정보를 동기화하는 Tasklet 빈.
+     */
+    @Bean
+    public StgToLocalEmployeeTasklet stgToLocalEmployeeTasklet(
+            @Qualifier("sqlSessionFactory-local") SqlSessionFactory sqlSessionFactory) {
+        StgToLocalEmployeeTasklet tasklet = new StgToLocalEmployeeTasklet();
+        tasklet.setSqlSessionFactory(sqlSessionFactory);
+        return tasklet;
+    }
+
+    /**
+     * 사원 정보를 동기화하는 스텝 정의.
      */
     @Bean
     public Step insaStgToLocalEmployeeStep(JobRepository jobRepository,
             PlatformTransactionManager transactionManager,
-            ItemReader<EmployeeInfo> stgToLocalEmployeeReader,
-            EmployeeInfoProcessor employeeInfoProcessor,
-            ItemWriter<EmployeeInfo> stgToLocalEmployeeWriter,
+            StgToLocalEmployeeTasklet stgToLocalEmployeeTasklet,
             StepCountLogger stepCountLogger) {
         return new StepBuilder("insaStgToLocalEmployeeStep").repository(jobRepository)
-                .<EmployeeInfo, EmployeeInfo>chunk(500)
-                .reader(stgToLocalEmployeeReader)
-                .processor(employeeInfoProcessor)
-                .writer(stgToLocalEmployeeWriter)
+                .tasklet(stgToLocalEmployeeTasklet)
                 .listener(stepCountLogger)
                 .transactionManager(transactionManager)
                 .build();

@@ -2,7 +2,13 @@ package egovframework.bat.management;
 
 import lombok.RequiredArgsConstructor;
 import org.quartz.*;
+import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import egovframework.bat.management.dto.ScheduledJobDto;
 
 /**
  * Quartz 스케줄러를 제어하기 위한 서비스.
@@ -65,6 +71,55 @@ public class SchedulerManagementService {
      */
     public void deleteJob(String jobName) throws SchedulerException {
         scheduler.deleteJob(JobKey.jobKey(jobName));
+    }
+
+    /**
+     * 등록된 모든 잡의 정보를 조회한다.
+     *
+     * @return 잡 정보 목록
+     * @throws SchedulerException 스케줄러 작업 실패 시 발생
+     */
+    public List<ScheduledJobDto> listJobs() throws SchedulerException {
+        List<ScheduledJobDto> jobs = new ArrayList<>();
+        for (JobKey jobKey : scheduler.getJobKeys(GroupMatcher.anyGroup())) {
+            List<? extends Trigger> triggers = scheduler.getTriggersOfJob(jobKey);
+            String cronExpression = "";
+            String status = "";
+            if (!triggers.isEmpty()) {
+                Trigger trigger = triggers.get(0);
+                if (trigger instanceof CronTrigger) {
+                    cronExpression = ((CronTrigger) trigger).getCronExpression();
+                }
+                status = scheduler.getTriggerState(trigger.getKey()).name();
+            }
+            jobs.add(new ScheduledJobDto(jobKey.getName(), cronExpression, status));
+        }
+        return jobs;
+    }
+
+    /**
+     * 특정 잡의 정보를 조회한다.
+     *
+     * @param jobName 잡 이름
+     * @return 잡 정보, 존재하지 않을 경우 null
+     * @throws SchedulerException 스케줄러 작업 실패 시 발생
+     */
+    public ScheduledJobDto getJob(String jobName) throws SchedulerException {
+        JobKey jobKey = JobKey.jobKey(jobName);
+        if (!scheduler.checkExists(jobKey)) {
+            return null;
+        }
+        List<? extends Trigger> triggers = scheduler.getTriggersOfJob(jobKey);
+        String cronExpression = "";
+        String status = "";
+        if (!triggers.isEmpty()) {
+            Trigger trigger = triggers.get(0);
+            if (trigger instanceof CronTrigger) {
+                cronExpression = ((CronTrigger) trigger).getCronExpression();
+            }
+            status = scheduler.getTriggerState(trigger.getKey()).name();
+        }
+        return new ScheduledJobDto(jobName, cronExpression, status);
     }
 }
 

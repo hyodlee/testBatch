@@ -74,6 +74,22 @@ public class SchedulerManagementService {
     }
 
     /**
+     * 등록된 잡의 크론 표현식을 변경한다.
+     *
+     * @param jobName        잡 이름
+     * @param cronExpression 새 크론 표현식
+     * @throws SchedulerException 스케줄러 작업 실패 시 발생
+     */
+    public void updateJobCron(String jobName, String cronExpression) throws SchedulerException {
+        TriggerKey triggerKey = TriggerKey.triggerKey(jobName + "Trigger");
+        Trigger newTrigger = TriggerBuilder.newTrigger()
+                .withIdentity(triggerKey)
+                .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
+                .build();
+        scheduler.rescheduleJob(triggerKey, newTrigger);
+    }
+
+    /**
      * 등록된 모든 잡의 정보를 조회한다.
      *
      * @return 잡 정보 목록

@@ -249,7 +249,9 @@ public class SampleTasklet implements Tasklet {
 - `POST /api/scheduler/jobs` – 새 잡 등록 (`jobName`, `jobClass`, `cronExpression` 필요)
 - `POST /api/scheduler/jobs/{jobName}/pause` – 해당 잡 일시 중지
 - `POST /api/scheduler/jobs/{jobName}/resume` – 해당 잡 재개
+- `PUT /api/scheduler/jobs/{jobName}` – 해당 잡의 크론 표현식 변경 (요청 본문에 크론식 전달)
 - `DELETE /api/scheduler/jobs/{jobName}` – 해당 잡 삭제
+* 크론 표현식 변경 내용은 Quartz DB에 저장되어 재시작 후에도 유지된다.
 
 ### 개별 Job 실행 API
 - `POST /api/batch/erp-rest-to-stg` – ERP REST → STG 전송 배치 실행

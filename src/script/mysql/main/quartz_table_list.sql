@@ -1,3 +1,5 @@
+/testBatch/src/main/resources/schema-quartz.sql
+
 qrtz_blob_triggers	
 qrtz_calendars	
 qrtz_cron_triggers	

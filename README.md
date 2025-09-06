@@ -10,9 +10,15 @@ mvn -Pprod package    # 운영 환경 빌드
 
 각 프로필은 해당 환경의 `application-<프로필>.yml` 설정 파일을 사용합니다.
 
+## 최초 기동 전에 STG-DB에 다음 스크립트를 실행하여, 기본 테이블을 생성해야 한다
+1.schema-quartz.sql 파일을 실행하면, quartz관련 테이블이 생성된다 (/src/main/resources/schema-quartz.sql)
+2.schema-ddl-mysql.sql 파일을 실행하면, 스프링 배치관련 테이블이 생성된다 (/src/script/mysql/main/schema-ddl-mysql.sql)
+3.schema-insert-mysql.sql 파일을 실행하면, 스프링 배치관련 기초 데이터가 입력된다 /src/script/mysql/main/schema-insert-mysql.sql
+
 ## STG 환경용 DDL 스크립트
 
-migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.sql`을 실행해 테이블 구조를 생성합니다. STG 연결 정보는 각 환경별 `application-<프로필>.yml` 파일의 관련 항목을 참고하세요. 해당 스크립트에는 REST 호출 실패 로그 테이블(`erp_api_fail_log`)과 DB 적재 실패 로그 테이블(`erp_db_fail_log`) DDL이 포함되어 있으며, `FetchErpDataTasklet`이 DB 적재 실패 시 이 테이블에 로그를 남깁니다.
+migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.sql`을 실행해 테이블 구조를 생성합니다. STG 연결 정보는 각 환경별 `application-<프로필>.yml` 파일의 관련 항목을 참고하세요. 
+해당 스크립트에는 REST 호출 실패 로그 테이블(`erp_api_fail_log`)과 DB 적재 실패 로그 테이블(`erp_db_fail_log`) DDL이 포함되어 있으며, `FetchErpDataTasklet`이 DB 적재 실패 시 이 테이블에 로그를 남깁니다.
 
 ## Quartz 스키마 초기화
 

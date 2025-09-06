@@ -61,7 +61,6 @@
                SELECT CONCAT('LND', LPAD(@seq := @seq + 1, 7, '0')) AS ESNTL_ID,
                       s.EMPLYR_ID, s.ORGNZT_ID, s.USER_NM, s.SEXDSTN_CODE, s.BRTHDY, s.MBTLNUM, s.EMAIL_ADRES, s.OFCPS_NM, s.EMPLYR_STTUS_CODE, s.REG_DTTM, s.MOD_DTTM
                FROM migstg.COMTNEMPLYRINFO s
-               -- EMPLYR_ID를 기준으로 로컬 DB 존재 여부 확인
                LEFT JOIN egovlocal.COMTNEMPLYRINFO u ON u.EMPLYR_ID = s.EMPLYR_ID
                WHERE u.EMPLYR_ID IS NULL
        </insert>

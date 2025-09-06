@@ -47,19 +47,23 @@
                     u.MOD_DTTM = s.MOD_DTTM
         </update>
 
-        <!-- STG에만 존재하는 사원을 로컬 DB에 신규 추가 -->
-        <insert id="insertEmployeeIncremental">
-                SET @seq := (
-                  SELECT MAX(CAST(SUBSTR(ESNTL_ID, 4) AS UNSIGNED))
-                  FROM egovlocal.COMTNEMPLYRINFO
-                );
-                INSERT INTO egovlocal.COMTNEMPLYRINFO (ESNTL_ID, EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)
-                SELECT CONCAT('LND', LPAD(@seq := @seq + 1, 7, '0')) AS ESNTL_ID,
-                       s.EMPLYR_ID, s.ORGNZT_ID, s.USER_NM, s.SEXDSTN_CODE, s.BRTHDY, s.MBTLNUM, s.EMAIL_ADRES, s.OFCPS_NM, s.EMPLYR_STTUS_CODE, s.REG_DTTM, s.MOD_DTTM
-                FROM migstg.COMTNEMPLYRINFO s
-                LEFT JOIN egovlocal.COMTNEMPLYRINFO u ON u.ESNTL_ID = s.ESNTL_ID
-                WHERE u.ESNTL_ID IS NULL;
-        </insert>
+       <!-- 신규 사원 추가 전에 ESNTL_ID 시퀀스 초기화 -->
+       <update id="initEmployeeSeq">
+               SET @seq := (
+                 SELECT MAX(CAST(SUBSTR(ESNTL_ID, 4) AS UNSIGNED))
+                 FROM egovlocal.COMTNEMPLYRINFO
+               )
+       </update>
+
+       <!-- STG에만 존재하는 사원을 로컬 DB에 신규 추가 -->
+       <insert id="insertEmployeeIncremental">
+               INSERT INTO egovlocal.COMTNEMPLYRINFO (ESNTL_ID, EMPLYR_ID, ORGNZT_ID, USER_NM, SEXDSTN_CODE, BRTHDY, MBTLNUM, EMAIL_ADRES, OFCPS_NM, EMPLYR_STTUS_CODE, REG_DTTM, MOD_DTTM)
+               SELECT CONCAT('LND', LPAD(@seq := @seq + 1, 7, '0')) AS ESNTL_ID,
+                      s.EMPLYR_ID, s.ORGNZT_ID, s.USER_NM, s.SEXDSTN_CODE, s.BRTHDY, s.MBTLNUM, s.EMAIL_ADRES, s.OFCPS_NM, s.EMPLYR_STTUS_CODE, s.REG_DTTM, s.MOD_DTTM
+               FROM migstg.COMTNEMPLYRINFO s
+               LEFT JOIN egovlocal.COMTNEMPLYRINFO u ON u.ESNTL_ID = s.ESNTL_ID
+               WHERE u.ESNTL_ID IS NULL
+       </insert>
 
         <!-- 로컬 DB에 조직 정보 적재 -->
         <insert id="insertOrganization" parameterType="egovframework.bat.job.insa.domain.EmployeeInfo">

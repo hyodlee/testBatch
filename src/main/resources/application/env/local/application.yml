@@ -50,9 +50,28 @@ spring:
       username: readuser
       password: read!1234
 
+#  quartz:
+#    jdbc:
+      #initialize-schema: never  # Quartz 스키마를 자동 초기화하지 않음
+#      initialize-schema: always  # Quartz 스키마를 자동 초기화하지 않음
+
   quartz:
+    job-store-type: jdbc           # JDBCJobStore 사용
     jdbc:
-      initialize-schema: never  # Quartz 스키마를 자동 초기화하지 않음
+      initialize-schema: never     # 스키마 자동 생성: always/embedded/never
+    properties:
+      # 필요없는 properties는 지울것
+      org.quartz.scheduler.instanceName: MyJdbcScheduler
+      org.quartz.scheduler.instanceId: AUTO
+      org.quartz.threadPool.class: org.quartz.simpl.SimpleThreadPool
+      org.quartz.threadPool.threadCount: 15
+      # JobStore 직접 지정(선택): 미지정 시 Boot가 jdbc 선택에 맞춰 구성
+      org.quartz.jobStore.class: org.quartz.impl.jdbcjobstore.JobStoreTX
+      org.quartz.jobStore.misfireThreshold: 60000
+      org.quartz.jobStore.tablePrefix: QRTZ_
+      org.quartz.jobStore.isClustered: true
+      #스케줄을 DB에 저장관리하기 위해서 설정 
+      org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate      
 
 logging:
   level:

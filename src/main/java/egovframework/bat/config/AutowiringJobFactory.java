@@ -2,6 +2,7 @@ package egovframework.bat.config;
 
 import org.quartz.Job;
 import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
 import org.quartz.spi.JobFactory;
 import org.quartz.spi.TriggerFiredBundle;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -24,7 +25,7 @@ public class AutowiringJobFactory implements JobFactory {
     }
 
     @Override
-    public Job newJob(TriggerFiredBundle bundle, Scheduler scheduler) throws Exception {
+    public Job newJob(TriggerFiredBundle bundle, Scheduler scheduler) throws SchedulerException {
         // 스프링 팩토리로부터 잡을 생성하여 의존성을 자동 주입한다.
         return beanFactory.createBean(bundle.getJobDetail().getJobClass());
     }

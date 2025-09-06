@@ -35,7 +35,8 @@ public class StgToLocalEmployeeTasklet implements Tasklet {
 
             // 처리 건수를 스텝 컨트리뷰션에 반영
             int total = updateCount + insertCount;
-            contribution.incrementReadCount(total);
+            // StepExecution을 직접 사용하여 읽기 건수를 설정
+            contribution.getStepExecution().setReadCount(total);
             contribution.incrementWriteCount(total);
         }
         return RepeatStatus.FINISHED;

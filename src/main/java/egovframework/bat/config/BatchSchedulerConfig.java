@@ -22,7 +22,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.scheduling.quartz.AutowireCapableBeanJobFactory;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
@@ -108,13 +107,14 @@ public class BatchSchedulerConfig {
     public SchedulerFactoryBean schedulerFactoryBean(JobRegistry jobRegistry,
             JobChainingJobListener jobChainingJobListener,
             List<Job> jobBeans,
-            @Qualifier("dataSource-stg") DataSource quartzDataSource) throws Exception {
+            @Qualifier("dataSource-stg") DataSource quartzDataSource,
+            AutowiringJobFactory autowiringJobFactory) throws Exception {
         // jobBeans 파라미터는 모든 Job 빈을 조기 로딩하기 위한 것으로 실제로 사용하지 않는다.
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         // Quartz 스케줄러에서 사용할 데이터소스 지정
         factory.setDataSource(quartzDataSource);
         // Quartz 잡 클래스에 스프링 빈 주입을 가능하게 하는 JobFactory 설정
-        factory.setJobFactory(new AutowireCapableBeanJobFactory());
+        factory.setJobFactory(autowiringJobFactory);
 
         Properties props = new Properties();
         // Spring 제공 JobStore를 사용하여 DataSource 이름 없이도 동작하도록 설정

@@ -4,11 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.quartz.SchedulerException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+import egovframework.bat.management.dto.ScheduledJobDto;
 
 /**
  * Quartz 스케줄러 제어를 위한 REST 컨트롤러.
@@ -76,6 +81,33 @@ public class SchedulerManagementController {
     public ResponseEntity<Void> deleteJob(@PathVariable String jobName) throws SchedulerException {
         schedulerManagementService.deleteJob(jobName);
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 등록된 모든 잡의 정보를 조회한다.
+     *
+     * @return 잡 정보 목록
+     * @throws SchedulerException 스케줄러 작업 실패 시 발생
+     */
+    @GetMapping("/jobs")
+    public ResponseEntity<List<ScheduledJobDto>> listJobs() throws SchedulerException {
+        return ResponseEntity.ok(schedulerManagementService.listJobs());
+    }
+
+    /**
+     * 특정 잡의 정보를 조회한다.
+     *
+     * @param jobName 잡 이름
+     * @return 잡 정보
+     * @throws SchedulerException 스케줄러 작업 실패 시 발생
+     */
+    @GetMapping("/jobs/{jobName}")
+    public ResponseEntity<ScheduledJobDto> getJob(@PathVariable String jobName) throws SchedulerException {
+        ScheduledJobDto job = schedulerManagementService.getJob(jobName);
+        if (job == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(job);
     }
 }
 

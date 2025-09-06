@@ -11,7 +11,7 @@ import lombok.Data;
 @Data
 public class VehicleInfo {
 
-    private String vehicleId;     /** 차량ID (EsntlIdGenerator 등을 통해 생성) */
+    private String vehicleId;     /** 차량ID (SQL에서 생성) */
     private String model;         /** 모델명 */
     private String manufacturer;  /** 제조사 */
     private BigDecimal price;     /** 가격 */

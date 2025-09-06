@@ -130,12 +130,9 @@ public class SampleTasklet implements Tasklet {
   - `src/main/resources/egovframework/batch/mapper/job/insa/insa_stg_to_local.xml`
 - 공통·도메인·유틸 클래스
   - `src/main/java/egovframework/bat/job/insa/common/SourceSystemPrefix.java`
-  - `src/main/java/egovframework/bat/job/insa/processor/EmployeeInfoProcessor.java`
-  - `src/main/java/egovframework/bat/job/insa/common/EsntlIdGenerator.java`
   - `src/main/java/egovframework/bat/job/insa/domain/EmployeeInfo.java`
   - `src/main/java/egovframework/bat/job/insa/domain/Orgnztinfo.java`
-- 테스트 코드
-  - `src/test/java/egovframework/bat/job/insa/common/EsntlIdGeneratorTest.java`
+> **참고**: 빌드 및 배치 실행 시 ESNTL_ID와 같은 ID 값은 SQL에서 생성되므로 별도의 ID 생성기나 프로세서가 필요하지 않습니다.
 
 ### 인사 배치 Job 추가시 확인 사항
 

@@ -48,7 +48,9 @@ public class SchedulerManagementServiceTest {
                 .withIdentity("testJobTrigger")
                 .withSchedule(CronScheduleBuilder.cronSchedule("0/5 * * * * ?"))
                 .build();
-        when(scheduler.getTriggersOfJob(jobKey)).thenReturn(Collections.singletonList(trigger));
+        // 트리거 리스트 생성
+        List<Trigger> triggers = Collections.<Trigger>singletonList(trigger);
+        when(scheduler.getTriggersOfJob(jobKey)).thenReturn(triggers);
         when(scheduler.getTriggerState(trigger.getKey())).thenReturn(Trigger.TriggerState.NORMAL);
 
         List<ScheduledJobDto> jobs = schedulerManagementService.listJobs();
@@ -71,7 +73,9 @@ public class SchedulerManagementServiceTest {
                 .withIdentity("testJobTrigger")
                 .withSchedule(CronScheduleBuilder.cronSchedule("0/5 * * * * ?"))
                 .build();
-        when(scheduler.getTriggersOfJob(jobKey)).thenReturn(Collections.singletonList(trigger));
+        // 트리거 리스트 생성
+        List<Trigger> triggers = Collections.<Trigger>singletonList(trigger);
+        when(scheduler.getTriggersOfJob(jobKey)).thenReturn(triggers);
         when(scheduler.getTriggerState(trigger.getKey())).thenReturn(Trigger.TriggerState.NORMAL);
 
         ScheduledJobDto job = schedulerManagementService.getJob("testJob");

@@ -241,8 +241,8 @@ public class SampleTasklet implements Tasklet {
 - `GET /api/batch/error-log` – 배치 에러 로그 조회
 
 ### 배치 실행 제어 API
-- `POST /api/batch/executions/{execId}/restart` – 지정 실행 ID 재시작
-- `DELETE /api/batch/executions/{execId}` – 실행 중인 배치 중지
+- `POST /api/batch/jobs/{jobName}/restart` – 지정 작업 재시작
+- `DELETE /api/batch/jobs/{jobName}` – 지정 작업 중지
 - `GET /api/batch/progress` (SSE) – 배치 진행 상태 스트림
 
 ### 스케줄러 관리 API
@@ -263,8 +263,8 @@ public class SampleTasklet implements Tasklet {
 - `GET /api/batch/management/jobs` – 관리용 배치 작업명 목록
 - `GET /api/batch/management/jobs/{jobName}/executions` – 관리용 작업 실행 이력 조회
 - `GET /api/batch/management/executions/{jobExecutionId}/errors` – 특정 실행 ID 에러 로그 조회
-- `POST /api/batch/management/executions/{jobExecutionId}/restart` – 관리용 배치 재시작
-- `POST /api/batch/management/executions/{jobExecutionId}/stop` – 관리용 실행 중지
+- `POST /api/batch/management/jobs/{jobName}/restart` – 관리용 작업 재시작
+- `POST /api/batch/management/jobs/{jobName}/stop` – 관리용 작업 중지
 
 ### 도메인 데이터 조회 API
 - `GET /api/v1/vehicles` – 차량 목록 조회

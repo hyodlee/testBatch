@@ -23,7 +23,7 @@ JobProgressController.java : 배치 진행 상황을 SSE 스트림으로 전달
 
 ## egovframework.bat.management.dto
 JobProgress.java : 작업명과 상태를 담는 진행 상황 DTO
-ScheduledJobDto.java : 잡 이름·크론 표현식·상태를 담는 스케줄 DTO
+ScheduledJobDto.java : 잡 이름·크론 표현식·상태·내구성 여부를 담는 스케줄 DTO
 
 ## egovframework.bat.management
 JobProgressService.java : Reactor Sinks로 진행 상황을 전송하는 서비스

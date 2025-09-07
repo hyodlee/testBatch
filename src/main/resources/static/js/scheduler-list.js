@@ -22,6 +22,10 @@ document.addEventListener('DOMContentLoaded', () => {
                     statusTd.textContent = job.status;
                     tr.appendChild(statusTd);
 
+                    const durableTd = document.createElement('td');
+                    durableTd.textContent = job.durable;
+                    tr.appendChild(durableTd);
+
                     const actionTd = document.createElement('td');
                     const btn = document.createElement('button');
                     btn.textContent = '크론 수정';

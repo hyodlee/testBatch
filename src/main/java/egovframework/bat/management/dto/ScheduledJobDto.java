@@ -15,4 +15,6 @@ public class ScheduledJobDto {
     private String cronExpression;
     /** 현재 상태 */
     private String status;
+    /** 내구성 여부 */
+    private boolean durable;
 }

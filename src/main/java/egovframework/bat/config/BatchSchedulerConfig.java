@@ -44,8 +44,8 @@ public class BatchSchedulerConfig {
     private static final Logger LOGGER = LoggerFactory.getLogger(BatchSchedulerConfig.class);
 
     /** application.yml에서 읽어 온 잡 정보 (잡 이름: 크론 표현식) */
-    @Value("#{${scheduler.jobs}}")
-    private final Map<String, String> jobs;
+    @Value("#{${scheduler.jobs:{}}}")
+    private final Map<String, String> jobs; // 설정이 없으면 빈 Map 주입
 
 
     /**

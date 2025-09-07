@@ -42,8 +42,16 @@ document.addEventListener('DOMContentLoaded', () => {
                                 fetch(`/api/scheduler/jobs/${job.jobName}`, {
                                     method: 'PUT',
                                     headers: { 'Content-Type': 'application/json' },
-                                    body: JSON.stringify(cron)
-                                }).then(() => load());
+                                    body: JSON.stringify({ cronExpression: cron }) // 크론 표현식을 JSON으로 전송
+                                })
+                                    .then(res => {
+                                        if (res.ok) {
+                                            load(); // 성공 시 목록 갱신
+                                        } else {
+                                            res.text().then(text => alert(text || '크론 수정에 실패했습니다.'));
+                                        }
+                                    })
+                                    .catch(() => alert('크론 수정 중 오류가 발생했습니다.'));
                             }
                         });
                     }

@@ -48,7 +48,35 @@
     async function loadContent(url) {
       const res = await fetch(url);
       const html = await res.text();
-      document.getElementById('content').innerHTML = html;
+
+      // DOMParser로 전체 HTML 문자열을 파싱
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+
+      const container = document.getElementById('content');
+      // 기존 내용을 비움
+      container.innerHTML = '';
+
+      // body의 자식 노드만 현재 문서에 삽입
+      Array.from(doc.body.childNodes).forEach(node => {
+        container.appendChild(document.importNode(node, true));
+      });
+
+      // 삽입된 영역의 스크립트 태그를 새로 생성하여 실행
+      container.querySelectorAll('script').forEach(oldScript => {
+        const newScript = document.createElement('script');
+
+        // 기존 스크립트의 속성 복사
+        Array.from(oldScript.attributes).forEach(attr => {
+          newScript.setAttribute(attr.name, attr.value);
+        });
+
+        // 인라인 스크립트 내용 복사
+        newScript.textContent = oldScript.textContent;
+
+        // 기존 스크립트를 새 스크립트로 교체하여 실행
+        oldScript.replaceWith(newScript);
+      });
     }
   </script>
 </head>

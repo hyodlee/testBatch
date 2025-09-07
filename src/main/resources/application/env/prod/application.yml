@@ -45,8 +45,19 @@ spring:
       password: read!1234
 
   quartz:
+    job-store-type: jdbc           # JDBCJobStore 사용
     jdbc:
       initialize-schema: never  # 운영 환경에서는 Quartz 스키마를 초기화하지 않음
+    properties:
+      org.quartz.scheduler.instanceName: MyJdbcScheduler
+      org.quartz.scheduler.instanceId: AUTO
+      org.quartz.threadPool.class: org.quartz.simpl.SimpleThreadPool
+      org.quartz.threadPool.threadCount: 15
+      org.quartz.jobStore.class: org.quartz.impl.jdbcjobstore.JobStoreTX
+      org.quartz.jobStore.misfireThreshold: 60000
+      org.quartz.jobStore.tablePrefix: QRTZ_
+      org.quartz.jobStore.isClustered: true
+      org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
 
 logging:
   level:

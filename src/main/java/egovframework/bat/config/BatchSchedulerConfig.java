@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.sql.DataSource;
 
@@ -24,6 +23,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+import org.springframework.boot.autoconfigure.quartz.QuartzProperties;
 import egovframework.bat.scheduler.EgovQuartzJobLauncher;
 import egovframework.bat.repository.SchedulerJobMapper;
 import egovframework.bat.repository.dto.SchedulerJobDto;
@@ -104,23 +104,16 @@ public class BatchSchedulerConfig {
             JobChainingJobListener jobChainingJobListener,
             List<Job> jobBeans,
             @Qualifier("dataSource-stg") DataSource quartzDataSource,
-            AutowiringJobFactory autowiringJobFactory) throws Exception {
+            AutowiringJobFactory autowiringJobFactory,
+            QuartzProperties quartzProperties) throws Exception {
         // jobBeans 파라미터는 모든 Job 빈을 조기 로딩하기 위한 것으로 실제로 사용하지 않는다.
         SchedulerFactoryBean factory = new SchedulerFactoryBean();
         // Quartz 스케줄러에서 사용할 데이터소스 지정
         factory.setDataSource(quartzDataSource);
         // Quartz 잡 클래스에 스프링 빈 주입을 가능하게 하는 JobFactory 설정
         factory.setJobFactory(autowiringJobFactory);
-
-        Properties props = new Properties();
-        // Spring 제공 JobStore를 사용하여 DataSource 이름 없이도 동작하도록 설정
-        props.setProperty("org.quartz.jobStore.class",
-                "org.springframework.scheduling.quartz.LocalDataSourceJobStore"); // Spring 전용 JobStore
-        props.setProperty("org.quartz.jobStore.driverDelegateClass",
-                "org.quartz.impl.jdbcjobstore.StdJDBCDelegate"); // MySQL용 델리게이트
-        props.setProperty("org.quartz.jobStore.tablePrefix", "QRTZ_"); // 테이블 접두사
-        props.setProperty("org.quartz.threadPool.threadCount", "10"); // 스레드 풀 크기
-        factory.setQuartzProperties(props);
+        // application.yml에 정의된 Quartz 속성 적용
+        factory.setQuartzProperties(quartzProperties.toProperties());
         // DB에 저장된 기존 스케줄 정보를 유지하기 위해 덮어쓰지 않음
         factory.setOverwriteExistingJobs(false);
 

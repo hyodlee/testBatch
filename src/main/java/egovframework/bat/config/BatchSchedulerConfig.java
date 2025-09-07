@@ -115,8 +115,9 @@ public class BatchSchedulerConfig {
         Properties quartzProps = new Properties();
         quartzProps.putAll(quartzProperties.getProperties());
         factory.setQuartzProperties(quartzProps);
-        // true 로 설정하면 qrtz_* 테이블에 존재하는 스케줄 정보를 기반으로 덮어쓴다
-        factory.setOverwriteExistingJobs(true);
+        // true : qrtz_* 테이블에 존재하는 스케줄 정보를 기반으로 덮어쓴다
+        // false : DB에 저장된 기존 스케줄 정보를 덮어쓰지 않음 (DB정보 유지)
+        factory.setOverwriteExistingJobs(false);
 
         List<Trigger> triggers = new ArrayList<>();
         List<JobDetail> jobDetails = new ArrayList<>();

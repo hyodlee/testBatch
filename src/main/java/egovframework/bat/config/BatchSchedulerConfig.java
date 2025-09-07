@@ -139,8 +139,8 @@ public class BatchSchedulerConfig {
             // DB 정보가 없으면 설정된 jobs 맵을 기반으로 초기 등록
             // application.yml에서 가져온 Map 사용 (잡 이름: 크론 표현식)
             Map<String, String> jobs = schedulerProps.getJobs();            
-            LOGGER.info("DB 스케줄 정보가 없어 scheduler.jobs로 초기 등록합니다.");
-            LOGGER.info("jobs.entrySet():", jobs.entrySet());
+            LOGGER.info("DB 스케줄 정보 없음. application.yml의 scheduler.jobs로 초기 등록합니다. size={}", jobs.size());
+            LOGGER.info("jobs.entrySet(): {}", jobs.entrySet());
 
             for (Map.Entry<String, String> entry : jobs.entrySet()) {
                 String jobName = entry.getKey();

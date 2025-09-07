@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.sql.DataSource;
 
@@ -112,8 +113,10 @@ public class BatchSchedulerConfig {
         factory.setDataSource(quartzDataSource);
         // Quartz 잡 클래스에 스프링 빈 주입을 가능하게 하는 JobFactory 설정
         factory.setJobFactory(autowiringJobFactory);
-        // application.yml에 정의된 Quartz 속성 적용
-        factory.setQuartzProperties(quartzProperties.toProperties());
+        // application.yml 설정을 Properties 객체로 변환해 적용
+        Properties quartzProps = new Properties();
+        quartzProps.putAll(quartzProperties.getProperties());
+        factory.setQuartzProperties(quartzProps);
         // DB에 저장된 기존 스케줄 정보를 유지하기 위해 덮어쓰지 않음
         factory.setOverwriteExistingJobs(false);
 

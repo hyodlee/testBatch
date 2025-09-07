@@ -25,14 +25,14 @@ import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.boot.autoconfigure.quartz.QuartzProperties;
+import org.springframework.jdbc.core.JdbcTemplate;
 import egovframework.bat.scheduler.EgovQuartzJobLauncher;
-import egovframework.bat.repository.SchedulerJobMapper;
 import egovframework.bat.repository.dto.SchedulerJobDto;
 import lombok.RequiredArgsConstructor;
 
 /**
  * XML 기반 스케줄러 설정을 자바 기반으로 전환한 구성 클래스이다.
- * 잡 이름과 크론 표현식을 데이터베이스에서 읽어 동적으로 스케줄러에 등록한다.
+ * 잡 이름과 크론 표현식을 Quartz 테이블에서 읽어 동적으로 스케줄러에 등록한다.
  */
 
 @Configuration
@@ -42,8 +42,6 @@ public class BatchSchedulerConfig {
     /** 로그 기록용 로거 */
     private static final Logger LOGGER = LoggerFactory.getLogger(BatchSchedulerConfig.class);
 
-    /** 스케줄러 잡 정보를 조회하기 위한 매퍼 */
-    private final SchedulerJobMapper schedulerJobMapper;
 
     /**
      * 공통 JobDetail 생성 메서드
@@ -117,14 +115,21 @@ public class BatchSchedulerConfig {
         Properties quartzProps = new Properties();
         quartzProps.putAll(quartzProperties.getProperties());
         factory.setQuartzProperties(quartzProps);
-        // false : DB에 저장된 기존 스케줄 정보를 덮어쓰지 않음 (DB정보 유지)
-        // true : yml에 있는 cron 정보로 덮어씀
-        factory.setOverwriteExistingJobs(false);
+        // true 로 설정하면 qrtz_* 테이블에 존재하는 스케줄 정보를 기반으로 덮어쓴다
+        factory.setOverwriteExistingJobs(true);
 
         List<Trigger> triggers = new ArrayList<>();
         List<JobDetail> jobDetails = new ArrayList<>();
 
-        for (SchedulerJobDto jobDto : schedulerJobMapper.findAll()) {
+        // Quartz에서 관리하는 크론 트리거 정보를 조회한다
+        JdbcTemplate jdbcTemplate = new JdbcTemplate(quartzDataSource);
+        List<SchedulerJobDto> jobDtos = jdbcTemplate.query(
+                "SELECT t.JOB_NAME, c.CRON_EXPRESSION FROM qrtz_triggers t "
+                        + "JOIN qrtz_cron_triggers c ON t.TRIGGER_NAME = c.TRIGGER_NAME AND t.TRIGGER_GROUP = c.TRIGGER_GROUP",
+                (rs, rowNum) -> new SchedulerJobDto(rs.getString(\"JOB_NAME\"), rs.getString(\"CRON_EXPRESSION\"))
+        );
+
+        for (SchedulerJobDto jobDto : jobDtos) {
             String jobName = jobDto.getJobName();
             String cron = jobDto.getCronExpression();
 
@@ -132,7 +137,7 @@ public class BatchSchedulerConfig {
             try {
                 job = jobRegistry.getJob(jobName);
             } catch (NoSuchJobException e) {
-                // 등록되지 않은 잡은 경고 로그 후 건너뜀
+                // 등록되지 않은 잡은 경고 로그 후 건너뜁니다
                 LOGGER.warn("등록되지 않은 잡 '{}'을(를) 건너뜁니다. 사유: {}", jobName, e.getMessage());
                 continue;
             }

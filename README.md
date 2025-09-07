@@ -26,6 +26,8 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
 
 `src/main/resources/schema-quartz.sql`을 이용해 Quartz 테이블을 생성합니다. 애플리케이션 시작 시 `spring.sql.init.schema-locations` 설정으로 자동 실행되며, 이미 운영 DB가 있다면 스크립트를 수동 실행해 테이블을 구성해야 합니다.
 
+Quartz는 스케줄 정보를 `qrtz_cron_triggers` 테이블에 저장하므로 별도의 `scheduler_job` 테이블을 사용하지 않습니다. 크론 표현식 수정 사항도 해당 테이블에 자동으로 반영됩니다.
+
 ## 배치 실행 기본
 
 잡을 반복 실행해야 할 경우 `RunIdIncrementer`를 사용하거나 실행 명령에 임의의 `JobParameters`를 추가해 Run ID를 증가시킬 수 있습니다.

@@ -14,21 +14,22 @@ import org.quartz.Trigger;
 import org.quartz.listeners.JobChainingJobListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.launch.NoSuchJobException;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.quartz.QuartzProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
-import org.springframework.boot.autoconfigure.quartz.QuartzProperties;
-import org.springframework.jdbc.core.JdbcTemplate;
-import egovframework.bat.scheduler.EgovQuartzJobLauncher;
+
 import egovframework.bat.repository.dto.SchedulerJobDto;
+import egovframework.bat.scheduler.EgovQuartzJobLauncher;
 import lombok.RequiredArgsConstructor;
 
 /**
@@ -38,14 +39,14 @@ import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
+@EnableConfigurationProperties(SchedulerProps.class)
 public class BatchSchedulerConfig {
 
     /** 로그 기록용 로거 */
     private static final Logger LOGGER = LoggerFactory.getLogger(BatchSchedulerConfig.class);
 
-    /** application.yml에서 읽어 온 잡 정보 (잡 이름: 크론 표현식) */
-    @Value("#{${scheduler.jobs:{}}}")
-    private final Map<String, String> jobs; // 설정이 없으면 빈 Map 주입
+    /** application.yml에서 읽어 온 scheduler 정보 */
+    private final SchedulerProps schedulerProps;
 
 
     /**
@@ -136,7 +137,11 @@ public class BatchSchedulerConfig {
         );
         if (jobDtos.isEmpty()) {
             // DB 정보가 없으면 설정된 jobs 맵을 기반으로 초기 등록
+            // application.yml에서 가져온 Map 사용 (잡 이름: 크론 표현식)
+            Map<String, String> jobs = schedulerProps.getJobs();            
             LOGGER.info("DB 스케줄 정보가 없어 scheduler.jobs로 초기 등록합니다.");
+            LOGGER.info("jobs.entrySet():", jobs.entrySet());
+
             for (Map.Entry<String, String> entry : jobs.entrySet()) {
                 String jobName = entry.getKey();
                 String cron = entry.getValue();

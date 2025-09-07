@@ -126,7 +126,7 @@ public class BatchSchedulerConfig {
         List<SchedulerJobDto> jobDtos = jdbcTemplate.query(
                 "SELECT t.JOB_NAME, c.CRON_EXPRESSION FROM qrtz_triggers t "
                         + "JOIN qrtz_cron_triggers c ON t.TRIGGER_NAME = c.TRIGGER_NAME AND t.TRIGGER_GROUP = c.TRIGGER_GROUP",
-                (rs, rowNum) -> new SchedulerJobDto(rs.getString(\"JOB_NAME\"), rs.getString(\"CRON_EXPRESSION\"))
+                (rs, rowNum) -> new SchedulerJobDto(rs.getString("JOB_NAME"), rs.getString("CRON_EXPRESSION"))
         );
 
         for (SchedulerJobDto jobDto : jobDtos) {

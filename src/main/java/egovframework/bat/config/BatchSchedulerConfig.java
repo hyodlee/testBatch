@@ -14,6 +14,7 @@ import org.quartz.Trigger;
 import org.quartz.listeners.JobChainingJobListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.JobRegistry;
@@ -41,6 +42,10 @@ public class BatchSchedulerConfig {
 
     /** 로그 기록용 로거 */
     private static final Logger LOGGER = LoggerFactory.getLogger(BatchSchedulerConfig.class);
+
+    /** application.yml에서 읽어 온 잡 정보 (잡 이름: 크론 표현식) */
+    @Value("#{${scheduler.jobs}}")
+    private final Map<String, String> jobs;
 
 
     /**
@@ -129,29 +134,55 @@ public class BatchSchedulerConfig {
                         + "JOIN qrtz_cron_triggers c ON t.TRIGGER_NAME = c.TRIGGER_NAME AND t.TRIGGER_GROUP = c.TRIGGER_GROUP",
                 (rs, rowNum) -> new SchedulerJobDto(rs.getString("JOB_NAME"), rs.getString("CRON_EXPRESSION"))
         );
+        if (jobDtos.isEmpty()) {
+            // DB 정보가 없으면 설정된 jobs 맵을 기반으로 초기 등록
+            LOGGER.info("DB 스케줄 정보가 없어 scheduler.jobs로 초기 등록합니다.");
+            for (Map.Entry<String, String> entry : jobs.entrySet()) {
+                String jobName = entry.getKey();
+                String cron = entry.getValue();
 
-        for (SchedulerJobDto jobDto : jobDtos) {
-            String jobName = jobDto.getJobName();
-            String cron = jobDto.getCronExpression();
+                Job job;
+                try {
+                    job = jobRegistry.getJob(jobName);
+                } catch (NoSuchJobException e) {
+                    LOGGER.warn("등록되지 않은 잡 '{}'을(를) 건너뜁니다. 사유: {}", jobName, e.getMessage());
+                    continue;
+                }
 
-            Job job;
-            try {
-                job = jobRegistry.getJob(jobName);
-            } catch (NoSuchJobException e) {
-                // 등록되지 않은 잡은 경고 로그 후 건너뜁니다
-                LOGGER.warn("등록되지 않은 잡 '{}'을(를) 건너뜁니다. 사유: {}", jobName, e.getMessage());
-                continue;
+                boolean durability = (cron == null || cron.isEmpty());
+                JobDetail jobDetail = createJobDetail(job, durability, extraData(jobName));
+
+                if (durability) {
+                    jobDetails.add(jobDetail);
+                    LOGGER.info("내구성 잡 '{}'을(를) 초기 등록했습니다.", jobName);
+                } else {
+                    triggers.add(cronTrigger(jobDetail, cron));
+                    LOGGER.info("크론 '{}'으로 잡 '{}'을(를) 초기 등록했습니다.", cron, jobName);
+                }
             }
+        } else {
+            // DB에 저장된 스케줄 정보를 사용
+            LOGGER.info("DB에서 조회한 스케줄 정보 {}건을 사용합니다.", jobDtos.size());
+            for (SchedulerJobDto jobDto : jobDtos) {
+                String jobName = jobDto.getJobName();
+                String cron = jobDto.getCronExpression();
 
-            boolean durability = (cron == null || cron.isEmpty());
-            JobDetail jobDetail = createJobDetail(job, durability, extraData(jobName));
+                Job job;
+                try {
+                    job = jobRegistry.getJob(jobName);
+                } catch (NoSuchJobException e) {
+                    LOGGER.warn("등록되지 않은 잡 '{}'을(를) 건너뜁니다. 사유: {}", jobName, e.getMessage());
+                    continue;
+                }
 
-            if (durability) {
-                // 크론이 없으면 영속 JobDetail로만 등록
-                jobDetails.add(jobDetail);
-            } else {
-                // 크론이 있으면 트리거만 등록
-                triggers.add(cronTrigger(jobDetail, cron));
+                boolean durability = (cron == null || cron.isEmpty());
+                JobDetail jobDetail = createJobDetail(job, durability, extraData(jobName));
+
+                if (durability) {
+                    jobDetails.add(jobDetail);
+                } else {
+                    triggers.add(cronTrigger(jobDetail, cron));
+                }
             }
         }
 

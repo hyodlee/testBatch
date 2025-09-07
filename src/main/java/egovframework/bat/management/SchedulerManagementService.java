@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import egovframework.bat.management.dto.ScheduledJobDto;
-import egovframework.bat.repository.SchedulerJobMapper;
 
 /**
  * Quartz 스케줄러를 제어하기 위한 서비스.
@@ -20,8 +19,6 @@ public class SchedulerManagementService {
 
     /** Quartz 스케줄러 */
     private final Scheduler scheduler;
-    /** 스케줄러 잡 설정 매퍼 */
-    private final SchedulerJobMapper schedulerJobMapper;
 
     /**
      * 새로운 잡을 추가한다.
@@ -44,8 +41,7 @@ public class SchedulerManagementService {
                 .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
                 .build();
         scheduler.scheduleJob(jobDetail, trigger);
-        // DB에 잡 정보를 저장
-        schedulerJobMapper.save(jobName, cronExpression);
+        // 크론 정보는 Quartz 테이블에 자동으로 저장된다
     }
 
     /**
@@ -92,8 +88,7 @@ public class SchedulerManagementService {
                 .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
                 .build();
         scheduler.rescheduleJob(triggerKey, newTrigger);
-        // DB의 크론 표현식 갱신
-        schedulerJobMapper.save(jobName, cronExpression);
+        // 변경된 크론 정보도 Quartz 테이블에 자동 반영된다
     }
 
     /**

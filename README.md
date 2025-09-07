@@ -273,6 +273,7 @@ public class SampleTasklet implements Tasklet {
 ### 페이지(HTML) 엔드포인트
 - `GET /batch/detail` – 배치 상세 페이지
 - `GET /batch/list` – 배치 목록 페이지
+- `GET /scheduler/list` – 스케줄러 잡 목록 페이지
 - `GET /error` – 오류 페이지
 
 더 자세한 설명은 각 컨트롤러 소스 코드를 참고하세요.

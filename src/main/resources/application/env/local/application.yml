@@ -16,12 +16,6 @@ spring:
   profiles:
     active: local
   datasource:
-    # 기본 데이터베이스  
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/migstg?useSSL=false&serverTimezone=Asia/Seoul
-    username: miguser
-    password: mig!1234
-
     # 스테이징 MySQL (주 데이터베이스)
     migstg-mysql:
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -58,14 +52,14 @@ spring:
       org.quartz.scheduler.instanceName: MyJdbcScheduler
       org.quartz.scheduler.instanceId: AUTO
       org.quartz.threadPool.class: org.quartz.simpl.SimpleThreadPool
-      org.quartz.threadPool.threadCount: 15
+      org.quartz.threadPool.threadCount: 15   # 스레드 풀 크기
       # JobStore 직접 지정(선택): 미지정 시 Boot가 jdbc 선택에 맞춰 구성
-      org.quartz.jobStore.class: org.quartz.impl.jdbcjobstore.JobStoreTX
+      org.quartz.jobStore.class: org.springframework.scheduling.quartz.LocalDataSourceJobStore  # Spring 전용 JobStore
       org.quartz.jobStore.misfireThreshold: 60000
-      org.quartz.jobStore.tablePrefix: QRTZ_
+      org.quartz.jobStore.tablePrefix: QRTZ_  # 테이블 접두사
       org.quartz.jobStore.isClustered: true
-      #스케줄을 DB에 저장관리하기 위해서 설정 
-      org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate      
+      #스케줄을 DB에 저장관리하기 위해서 설정
+      org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate   # MySQL용 델리게이트
 
 logging:
   level:

@@ -116,6 +116,7 @@ public class SchedulerManagementService {
             List<? extends Trigger> triggers = scheduler.getTriggersOfJob(jobKey);
             String cronExpression = "";
             String status = "";
+            boolean durable = false;
             if (!triggers.isEmpty()) {
                 Trigger trigger = triggers.get(0);
                 if (trigger instanceof CronTrigger) {
@@ -123,7 +124,11 @@ public class SchedulerManagementService {
                 }
                 status = scheduler.getTriggerState(trigger.getKey()).name();
             }
-            jobs.add(new ScheduledJobDto(jobKey.getName(), cronExpression, status));
+            JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+            if (jobDetail != null) {
+                durable = jobDetail.isDurable();
+            }
+            jobs.add(new ScheduledJobDto(jobKey.getName(), cronExpression, status, durable));
         }
         return jobs;
     }
@@ -143,6 +148,7 @@ public class SchedulerManagementService {
         List<? extends Trigger> triggers = scheduler.getTriggersOfJob(jobKey);
         String cronExpression = "";
         String status = "";
+        boolean durable = false;
         if (!triggers.isEmpty()) {
             Trigger trigger = triggers.get(0);
             if (trigger instanceof CronTrigger) {
@@ -150,7 +156,11 @@ public class SchedulerManagementService {
             }
             status = scheduler.getTriggerState(trigger.getKey()).name();
         }
-        return new ScheduledJobDto(jobName, cronExpression, status);
+        JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+        if (jobDetail != null) {
+            durable = jobDetail.isDurable();
+        }
+        return new ScheduledJobDto(jobName, cronExpression, status, durable);
     }
 }
 

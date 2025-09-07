@@ -229,6 +229,8 @@ public class SampleTasklet implements Tasklet {
 | StgToRestJobController | STG 데이터를 외부 REST API로 전송 | `/api/batch` | `/erp-stg-to-rest` |
 | RestToStgJobController | ERP REST 데이터를 STG 테이블로 적재 | `/api/batch` | `/erp-rest-to-stg` |
 | VehicleController | ERP 서비스용 차량 정보를 조회 | `/api/v1` | `/vehicles` |
+| SchedulerManagementController | Quartz 잡 등록·일시중지·재개·삭제·크론 수정 API 제공 | `/api/scheduler` | `/jobs`, `/jobs/{jobName}/pause`, `/jobs/{jobName}/resume`, `/jobs/{jobName}`, `/jobs/{jobName}`(PUT) |
+| SchedulerPageController | 스케줄러 잡 목록 화면을 렌더링 | `/scheduler` | `/list` |
 
 ## API 엔드포인트
 

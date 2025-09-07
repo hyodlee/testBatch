@@ -241,6 +241,7 @@ public class SampleTasklet implements Tasklet {
 - `GET /api/batch/error-log` – 배치 에러 로그 조회
 
 ### 배치 실행 제어 API
+- `POST /api/batch/run` – jobName 파라미터로 지정한 배치 실행
 - `POST /api/batch/jobs/{jobName}/restart` – 지정 작업 재시작
 - `DELETE /api/batch/jobs/{jobName}` – 지정 작업 중지
 - `GET /api/batch/progress` (SSE) – 배치 진행 상태 스트림

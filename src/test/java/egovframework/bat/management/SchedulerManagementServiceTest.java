@@ -44,13 +44,12 @@ public class SchedulerManagementServiceTest {
                 .build();
         when(scheduler.getJobDetail(jobKey)).thenReturn(jobDetail);
 
-        CronTrigger trigger = TriggerBuilder.newTrigger()
+        Trigger trigger = TriggerBuilder.newTrigger()
                 .withIdentity("testJobTrigger")
                 .withSchedule(CronScheduleBuilder.cronSchedule("0/5 * * * * ?"))
                 .build();
-        // 트리거 리스트 생성
-        List<Trigger> triggers = Collections.<Trigger>singletonList(trigger);
-        when(scheduler.getTriggersOfJob(jobKey)).thenReturn(triggers);
+        // 트리거 리스트 모킹
+        doReturn(Collections.singletonList(trigger)).when(scheduler).getTriggersOfJob(jobKey);
         when(scheduler.getTriggerState(trigger.getKey())).thenReturn(Trigger.TriggerState.NORMAL);
 
         List<ScheduledJobDto> jobs = schedulerManagementService.listJobs();
@@ -69,13 +68,12 @@ public class SchedulerManagementServiceTest {
                 .build();
         when(scheduler.getJobDetail(jobKey)).thenReturn(jobDetail);
 
-        CronTrigger trigger = TriggerBuilder.newTrigger()
+        Trigger trigger = TriggerBuilder.newTrigger()
                 .withIdentity("testJobTrigger")
                 .withSchedule(CronScheduleBuilder.cronSchedule("0/5 * * * * ?"))
                 .build();
-        // 트리거 리스트 생성
-        List<Trigger> triggers = Collections.<Trigger>singletonList(trigger);
-        when(scheduler.getTriggersOfJob(jobKey)).thenReturn(triggers);
+        // 트리거 리스트 모킹
+        doReturn(Collections.singletonList(trigger)).when(scheduler).getTriggersOfJob(jobKey);
         when(scheduler.getTriggerState(trigger.getKey())).thenReturn(Trigger.TriggerState.NORMAL);
 
         ScheduledJobDto job = schedulerManagementService.getJob("testJob");

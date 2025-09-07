@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
 import egovframework.bat.management.dto.ScheduledJobDto;
+import egovframework.bat.management.dto.CronRequest;
 
 /**
  * Quartz 스케줄러 제어를 위한 REST 컨트롤러.
@@ -87,16 +88,17 @@ public class SchedulerManagementController {
 
     /**
      * 등록된 잡의 크론 표현식을 변경한다.
+     * 프런트엔드는 {"cronExpression":"0 0/2 * * * ?"} 형태의 JSON으로 요청한다.
      *
-     * @param jobName        잡 이름
-     * @param cronExpression 새 크론 표현식
+     * @param jobName 잡 이름
+     * @param request 크론 표현식 요청 DTO
      * @return 처리 결과
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
     @PutMapping("/jobs/{jobName}")
     public ResponseEntity<Void> updateJobCron(@PathVariable String jobName,
-            @RequestBody String cronExpression) throws SchedulerException {
-        schedulerManagementService.updateJobCron(jobName, cronExpression);
+            @RequestBody CronRequest request) throws SchedulerException {
+        schedulerManagementService.updateJobCron(jobName, request.getCronExpression());
         return ResponseEntity.ok().build();
     }
 

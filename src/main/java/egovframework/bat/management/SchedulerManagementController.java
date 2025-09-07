@@ -89,6 +89,7 @@ public class SchedulerManagementController {
     /**
      * 등록된 잡의 크론 표현식을 변경한다.
      * 프런트엔드는 {"cronExpression":"0 0/2 * * * ?"} 형태의 JSON으로 요청한다.
+     * 내구성 잡에 대해서는 400(Bad Request) 응답이 반환된다.
      *
      * @param jobName 잡 이름
      * @param request 크론 표현식 요청 DTO

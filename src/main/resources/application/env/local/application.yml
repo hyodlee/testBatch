@@ -57,7 +57,7 @@ spring:
       org.quartz.jobStore.class: org.springframework.scheduling.quartz.LocalDataSourceJobStore  # Spring 전용 JobStore
       org.quartz.jobStore.misfireThreshold: 60000
       org.quartz.jobStore.tablePrefix: QRTZ_  # 테이블 접두사
-      org.quartz.jobStore.isClustered: true
+      org.quartz.jobStore.isClustered: false
       #스케줄을 DB에 저장관리하기 위해서 설정
       org.quartz.jobStore.driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate   # MySQL용 델리게이트
 

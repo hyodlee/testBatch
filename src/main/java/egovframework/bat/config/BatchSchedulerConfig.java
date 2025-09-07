@@ -117,7 +117,8 @@ public class BatchSchedulerConfig {
         Properties quartzProps = new Properties();
         quartzProps.putAll(quartzProperties.getProperties());
         factory.setQuartzProperties(quartzProps);
-        // DB에 저장된 기존 스케줄 정보를 유지하기 위해 덮어쓰지 않음
+        // false : DB에 저장된 기존 스케줄 정보를 덮어쓰지 않음 (DB정보 유지)
+        // true : yml에 있는 cron 정보로 덮어씀
         factory.setOverwriteExistingJobs(false);
 
         List<Trigger> triggers = new ArrayList<>();

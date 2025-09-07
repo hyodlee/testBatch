@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import egovframework.bat.management.dto.ScheduledJobDto;
+import egovframework.bat.management.exception.InvalidCronExpressionException;
 
 /**
  * Quartz 스케줄러를 제어하기 위한 서비스.
@@ -82,6 +83,11 @@ public class SchedulerManagementService {
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
     public void updateJobCron(String jobName, String cronExpression) throws SchedulerException {
+        // 크론 표현식 유효성 검사
+        if (!CronExpression.isValidExpression(cronExpression)) {
+            throw new InvalidCronExpressionException("유효하지 않은 크론 표현식입니다: " + cronExpression);
+        }
+
         TriggerKey triggerKey = TriggerKey.triggerKey(jobName + "Trigger");
         Trigger newTrigger = TriggerBuilder.newTrigger()
                 .withIdentity(triggerKey)

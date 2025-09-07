@@ -28,7 +28,6 @@ migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.s
 
 ## 배치 실행 기본
 
-배치 잡 실행 시 `sourceSystem` 파라미터를 생략하면 `LND` 프리픽스로 ESNTL_ID가 생성됩니다.
 잡을 반복 실행해야 할 경우 `RunIdIncrementer`를 사용하거나 실행 명령에 임의의 `JobParameters`를 추가해 Run ID를 증가시킬 수 있습니다.
 
 ## 배치 메타데이터 정리
@@ -131,7 +130,6 @@ public class SampleTasklet implements Tasklet {
   - `src/main/resources/egovframework/batch/mapper/job/insa/insa_remote1_to_stg.xml`
   - `src/main/resources/egovframework/batch/mapper/job/insa/insa_stg_to_local.xml`
 - 공통·도메인·유틸 클래스
-  - `src/main/java/egovframework/bat/job/insa/common/SourceSystemPrefix.java`
   - `src/main/java/egovframework/bat/job/insa/domain/EmployeeInfo.java`
   - `src/main/java/egovframework/bat/job/insa/domain/Orgnztinfo.java`
 > **참고**: 빌드 및 배치 실행 시 ESNTL_ID와 같은 ID 값은 SQL에서 생성되므로 별도의 ID 생성기나 프로세서가 필요하지 않습니다.
@@ -213,7 +211,6 @@ public class SampleTasklet implements Tasklet {
 `Remote1ToStgJobController`를 통해 인사 배치를 REST로 호출할 수 있습니다.
 
 - **URL**: `POST /api/batch/remote1-to-stg`
-- **파라미터**: `sourceSystem` (선택)
 - **응답**: 실행 결과 `BatchStatus`
 
 ## 컨트롤러별 역할과 주소

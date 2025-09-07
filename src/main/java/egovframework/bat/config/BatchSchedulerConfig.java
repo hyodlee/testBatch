@@ -163,11 +163,13 @@ public class BatchSchedulerConfig {
      * 잡별 추가 데이터 설정
      */
     private Map<String, Object> extraData(String jobName) {
+    	/* 추가 데이터 넣는 예시
         if ("insaStgToLocalJob".equals(jobName)) {
             Map<String, Object> extra = new HashMap<>();
             extra.put("sourceSystem", "remote1");
             return extra;
         }
+        */
         return null;
     }
 }

@@ -11,6 +11,7 @@ import java.util.List;
 import egovframework.bat.management.dto.ScheduledJobDto;
 import egovframework.bat.management.exception.InvalidCronExpressionException;
 import egovframework.bat.management.exception.DurableJobCronUpdateNotAllowedException;
+import egovframework.bat.management.exception.DurableJobPauseResumeNotAllowedException;
 
 /**
  * Quartz 스케줄러를 제어하기 위한 서비스.
@@ -53,7 +54,14 @@ public class SchedulerManagementService {
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
     public void pauseJob(String jobName) throws SchedulerException {
-        scheduler.pauseJob(JobKey.jobKey(jobName));
+        JobKey jobKey = JobKey.jobKey(jobName);
+        JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+        // 내구성 잡은 일시 중지할 수 없도록 예외 처리
+        if (jobDetail != null && jobDetail.isDurable()) {
+            throw new DurableJobPauseResumeNotAllowedException(
+                    "내구성 잡은 일시 중지할 수 없습니다: " + jobName);
+        }
+        scheduler.pauseJob(jobKey);
     }
 
     /**
@@ -63,7 +71,14 @@ public class SchedulerManagementService {
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
     public void resumeJob(String jobName) throws SchedulerException {
-        scheduler.resumeJob(JobKey.jobKey(jobName));
+        JobKey jobKey = JobKey.jobKey(jobName);
+        JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+        // 내구성 잡은 재개할 수 없도록 예외 처리
+        if (jobDetail != null && jobDetail.isDurable()) {
+            throw new DurableJobPauseResumeNotAllowedException(
+                    "내구성 잡은 재개할 수 없습니다: " + jobName);
+        }
+        scheduler.resumeJob(jobKey);
     }
 
     /**

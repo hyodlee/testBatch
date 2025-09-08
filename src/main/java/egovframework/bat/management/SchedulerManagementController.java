@@ -12,11 +12,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.List;
 
 import egovframework.bat.management.dto.ScheduledJobDto;
 import egovframework.bat.management.dto.CronRequest;
+import egovframework.bat.management.exception.DurableJobPauseResumeNotAllowedException;
 
 /**
  * Quartz 스케줄러 제어를 위한 REST 컨트롤러.
@@ -128,6 +130,18 @@ public class SchedulerManagementController {
             return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(job);
+    }
+
+    /**
+     * 내구성 잡 제어 시 발생하는 예외를 처리한다.
+     *
+     * @param e 예외
+     * @return 사용자 친화적 메시지를 포함한 400 응답
+     */
+    @ExceptionHandler(DurableJobPauseResumeNotAllowedException.class)
+    public ResponseEntity<String> handleDurableJobPauseResumeNotAllowed(
+            DurableJobPauseResumeNotAllowedException e) {
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 }
 

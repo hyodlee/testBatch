@@ -1,4 +1,4 @@
-package egovframework.bat.management.dto;
+package egovframework.bat.management.scheduler.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;

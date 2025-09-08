@@ -1,6 +1,6 @@
 package egovframework.bat.api;
 
-import egovframework.bat.service.BatchManagementService;
+import egovframework.bat.management.batch.service.BatchManagementService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

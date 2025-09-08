@@ -1,4 +1,4 @@
-package egovframework.bat.management;
+package egovframework.bat.management.scheduler.service;
 
 import lombok.RequiredArgsConstructor;
 import org.quartz.*;
@@ -8,10 +8,10 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-import egovframework.bat.management.dto.ScheduledJobDto;
-import egovframework.bat.management.exception.InvalidCronExpressionException;
-import egovframework.bat.management.exception.DurableJobCronUpdateNotAllowedException;
-import egovframework.bat.management.exception.DurableJobPauseResumeNotAllowedException;
+import egovframework.bat.management.scheduler.dto.ScheduledJobDto;
+import egovframework.bat.management.scheduler.exception.InvalidCronExpressionException;
+import egovframework.bat.management.scheduler.exception.DurableJobCronUpdateNotAllowedException;
+import egovframework.bat.management.scheduler.exception.DurableJobPauseResumeNotAllowedException;
 
 /**
  * Quartz 스케줄러를 제어하기 위한 서비스.

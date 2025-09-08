@@ -1,4 +1,4 @@
-package egovframework.bat.management;
+package egovframework.bat.management.scheduler.api;
 
 import lombok.RequiredArgsConstructor;
 import org.quartz.SchedulerException;
@@ -13,10 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.List;
+import egovframework.bat.management.scheduler.service.SchedulerManagementService;
 
-import egovframework.bat.management.dto.ScheduledJobDto;
-import egovframework.bat.management.dto.CronRequest;
-import egovframework.bat.management.exception.DurableJobPauseResumeNotAllowedException;
+import egovframework.bat.management.scheduler.dto.ScheduledJobDto;
+import egovframework.bat.management.scheduler.dto.CronRequest;
+import egovframework.bat.management.scheduler.exception.DurableJobPauseResumeNotAllowedException;
 
 /**
  * Quartz 스케줄러 제어를 위한 REST 컨트롤러.

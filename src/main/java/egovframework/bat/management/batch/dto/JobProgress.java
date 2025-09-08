@@ -1,4 +1,4 @@
-package egovframework.bat.management.dto;
+package egovframework.bat.management.batch.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

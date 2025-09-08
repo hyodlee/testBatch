@@ -1,4 +1,4 @@
-package egovframework.bat.management.api;
+package egovframework.bat.management.batch.api;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import egovframework.bat.management.JobProgressService;
-import egovframework.bat.management.dto.JobProgress;
+import egovframework.bat.management.batch.service.JobProgressService;
+import egovframework.bat.management.batch.dto.JobProgress;
 import reactor.core.publisher.Flux;
 import org.springframework.http.codec.ServerSentEvent;
 

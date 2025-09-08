@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 잡 이름 목록을 로드
     function loadJobs() {
-        fetch('/api/batch/management/jobs')
+        fetch('/api/management/batch/jobs')
             .then(res => res.json())
             .then(data => {
                 jobs = data;
@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tr.appendChild(endTd);
 
             // 실행 이력 조회 후 상태와 시간 표시
-            fetch(`/api/batch/management/jobs/${jobName}/executions`)
+            fetch(`/api/management/batch/jobs/${jobName}/executions`)
                 .then(res => res.json())
                 .then(exec => {
                     if (exec.length > 0) {

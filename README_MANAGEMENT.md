@@ -1,22 +1,22 @@
 관리(Management) 관련 HTTP 주소
-BatchManagementController – 공통 경로 /api/batch/management
-GET /api/batch/management/jobs – 등록된 배치 잡 이름 목록 조회
-GET /api/batch/management/jobs/{jobName}/executions – 특정 잡의 실행 이력 조회
-GET /api/batch/management/executions/{jobExecutionId}/errors – 특정 실행 ID의 에러 로그 조회
-POST /api/batch/management/jobs/{jobName}/restart – 실패한 잡 재실행
-POST /api/batch/management/jobs/{jobName}/stop – 실행 중인 잡 중지
+BatchManagementController – 공통 경로 /api/management/batch
+GET /api/management/batch/jobs – 등록된 배치 잡 이름 목록 조회
+GET /api/management/batch/jobs/{jobName}/executions – 특정 잡의 실행 이력 조회
+GET /api/management/batch/executions/{jobExecutionId}/errors – 특정 실행 ID의 에러 로그 조회
+POST /api/management/batch/jobs/{jobName}/restart – 실패한 잡 재실행
+POST /api/management/batch/jobs/{jobName}/stop – 실행 중인 잡 중지
 
-SchedulerManagementController – 공통 경로 /api/scheduler
-POST /api/scheduler/jobs – 새로운 잡 추가
-POST /api/scheduler/jobs/{jobName}/pause – 지정한 잡 일시 중지
-POST /api/scheduler/jobs/{jobName}/resume – 일시 중지된 잡 재개
-POST /api/scheduler/jobs/{jobName}/delete – 등록된 잡 삭제
-POST /api/scheduler/jobs/{jobName}/cron – 잡의 크론 표현식 변경
-GET /api/scheduler/jobs – 모든 잡 정보 조회
-GET /api/scheduler/jobs/{jobName} – 특정 잡 정보 조회
+SchedulerManagementController – 공통 경로 /api/management/scheduler
+POST /api/management/scheduler/jobs – 새로운 잡 추가
+POST /api/management/scheduler/jobs/{jobName}/pause – 지정한 잡 일시 중지
+POST /api/management/scheduler/jobs/{jobName}/resume – 일시 중지된 잡 재개
+POST /api/management/scheduler/jobs/{jobName}/delete – 등록된 잡 삭제
+POST /api/management/scheduler/jobs/{jobName}/cron – 잡의 크론 표현식 변경
+GET /api/management/scheduler/jobs – 모든 잡 정보 조회
+GET /api/management/scheduler/jobs/{jobName} – 특정 잡 정보 조회
 
-JobProgressController – 공통 경로 /api/batch
-GET /api/batch/progress – 배치 진행 상황 SSE 스트림 제공
+JobProgressController – 공통 경로 /api/management/batch
+GET /api/management/batch/progress – 배치 진행 상황 SSE 스트림 제공
 
 관리 관련 Java 패키지/폴더 구조
 src/main/java/egovframework/bat/management

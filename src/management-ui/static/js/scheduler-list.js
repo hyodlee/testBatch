@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 잡 목록을 로드
     function load() {
-        fetch('/api/scheduler/jobs')
+        fetch('/api/management/scheduler/jobs')
             .then(res => res.json())
             .then(data => {
                 tbody.innerHTML = '';
@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         if (job.status === 'PAUSED') {
                             pauseBtn.addEventListener('click', () => {
-                                fetch(`/api/scheduler/jobs/${job.jobName}/resume`, { method: 'POST' })
+                                fetch(`/api/management/scheduler/jobs/${job.jobName}/resume`, { method: 'POST' })
                                     .then(res => {
                                         if (res.ok) {
                                             load(); // 성공 시 목록 갱신
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             });
                         } else {
                             pauseBtn.addEventListener('click', () => {
-                                fetch(`/api/scheduler/jobs/${job.jobName}/pause`, { method: 'POST' })
+                                fetch(`/api/management/scheduler/jobs/${job.jobName}/pause`, { method: 'POST' })
                                     .then(res => {
                                         if (res.ok) {
                                             load(); // 성공 시 목록 갱신
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         cronBtn.addEventListener('click', () => {
                             const cron = prompt('새 크론 표현식을 입력하세요', job.cronExpression);
                             if (cron) {
-                                fetch(`/api/scheduler/jobs/${job.jobName}/cron`, {
+                                fetch(`/api/management/scheduler/jobs/${job.jobName}/cron`, {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify({ cronExpression: cron }) // 크론 표현식을 JSON으로 전송

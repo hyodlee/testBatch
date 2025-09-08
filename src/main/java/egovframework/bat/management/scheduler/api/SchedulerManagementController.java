@@ -23,7 +23,7 @@ import egovframework.bat.management.scheduler.exception.DurableJobPauseResumeNot
  * Quartz 스케줄러 제어를 위한 REST 컨트롤러.
  */
 @RestController
-@RequestMapping("/api/scheduler")
+@RequestMapping("/api/management/scheduler")
 @RequiredArgsConstructor
 public class SchedulerManagementController {
 

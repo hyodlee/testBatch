@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('pageTitle').textContent = `잡 상세 - ${jobName}`;
 
     function load() {
-        fetch(`/api/batch/management/jobs/${jobName}/executions`)
+        fetch(`/api/management/batch/jobs/${jobName}/executions`)
             .then(res => res.json())
             .then(data => { executions = data; render(); });
     }
@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const restartBtn = document.createElement('button');
             restartBtn.textContent = '재시작';
             restartBtn.addEventListener('click', () => {
-                fetch(`/api/batch/management/executions/${exec.jobExecutionId}/restart`, { method: 'POST' })
+                fetch(`/api/management/batch/executions/${exec.jobExecutionId}/restart`, { method: 'POST' })
                     .then(() => load());
             });
             actionTd.appendChild(restartBtn);
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const stopBtn = document.createElement('button');
             stopBtn.textContent = '중지';
             stopBtn.addEventListener('click', () => {
-                fetch(`/api/batch/management/executions/${exec.jobExecutionId}/stop`, { method: 'POST' })
+                fetch(`/api/management/batch/executions/${exec.jobExecutionId}/stop`, { method: 'POST' })
                     .then(() => load());
             });
             actionTd.appendChild(stopBtn);
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // SSE 구독: 해당 잡의 상태가 변경되면 목록을 갱신
-    const eventSource = new EventSource('/api/batch/progress');
+    const eventSource = new EventSource('/api/management/batch/progress');
     eventSource.onmessage = e => {
         const data = JSON.parse(e.data);
         if (data.jobName === jobName) {

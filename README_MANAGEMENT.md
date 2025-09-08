@@ -20,15 +20,13 @@ GET /api/management/batch/progress – 배치 진행 상황 SSE 스트림 제공
 
 관리 관련 Java 패키지/폴더 구조
 src/main/java/egovframework/bat/management
-├─ 주요 클래스: JobProgressService, SchedulerManagementController, SchedulerManagementService
-├─ api 패키지: 관리용 REST 컨트롤러 (BatchManagementController, JobProgressController)
-├─ dto 패키지: CronRequest, JobProgress, ScheduledJobDto 등 DTO 모음
-└─ exception 패키지: 스케줄러 제어 관련 예외 클래스들
-(DurableJobCronUpdateNotAllowedException, DurableJobPauseResumeNotAllowedException, InvalidCronExpressionException)
+├─ batch: 배치 관리용 API·서비스·DTO (BatchManagementController, JobProgressController, BatchManagementService, JobProgressService, JobProgress 등)
+└─ scheduler: 스케줄러 제어 API·서비스·DTO·예외 (SchedulerManagementController, SchedulerManagementService, ScheduledJobDto, CronRequest, DurableJobPauseResumeNotAllowedException 등)
 
 테스트 코드
-├─ src/test/java/egovframework/bat/management/SchedulerManagementServiceTest.java 등 서비스 테스트
-└─ src/test/java/egovframework/bat/management/dto/CronRequestTest.java 등 DTO 검증 테스트
+├─ src/test/java/egovframework/bat/management/batch/service/BatchManagementServiceTest.java
+├─ src/test/java/egovframework/bat/management/scheduler/service/SchedulerManagementServiceTest.java
+└─ src/test/java/egovframework/bat/management/scheduler/dto/CronRequestTest.java
 
 위와 같이 관리 기능은 management 패키지 아래에 API·DTO·예외 등으로 명확히 분리되어 있으며, 
 다양한 HTTP 엔드포인트를 통해 배치 및 스케줄러를 제어하도록 구성되어 있음

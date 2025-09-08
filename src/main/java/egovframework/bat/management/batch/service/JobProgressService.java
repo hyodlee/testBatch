@@ -1,9 +1,9 @@
-package egovframework.bat.management;
+package egovframework.bat.management.batch.service;
 
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.stereotype.Service;
 
-import egovframework.bat.management.dto.JobProgress;
+import egovframework.bat.management.batch.dto.JobProgress;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Sinks;
 

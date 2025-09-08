@@ -1,4 +1,4 @@
-package egovframework.bat.management.exception;
+package egovframework.bat.management.scheduler.exception;
 
 /**
  * 내구성 잡의 일시 중지 또는 재개를 시도할 때 발생하는 예외.

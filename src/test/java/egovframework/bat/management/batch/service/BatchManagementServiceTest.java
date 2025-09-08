@@ -1,4 +1,4 @@
-package egovframework.bat.service;
+package egovframework.bat.management.batch.service;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -16,6 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import egovframework.bat.service.BatchManagementMapper;
 import egovframework.bat.service.dto.JobExecutionDto;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.Job;

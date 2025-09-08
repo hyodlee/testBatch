@@ -1,6 +1,8 @@
-package egovframework.bat.service;
+package egovframework.bat.management.batch.service;
 
 import java.util.List;
+
+import egovframework.bat.service.BatchManagementMapper;
 
 import egovframework.bat.service.dto.JobExecutionDto;
 import java.time.ZoneId;

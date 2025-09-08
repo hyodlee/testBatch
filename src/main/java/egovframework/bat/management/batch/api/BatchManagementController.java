@@ -1,4 +1,4 @@
-package egovframework.bat.management.api;
+package egovframework.bat.management.batch.api;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import egovframework.bat.repository.dto.BatchJobExecutionDto;
-import egovframework.bat.service.BatchManagementService;
+import egovframework.bat.management.batch.service.BatchManagementService;
 
 /**
  * 배치 잡 조회와 제어를 위한 REST 컨트롤러.

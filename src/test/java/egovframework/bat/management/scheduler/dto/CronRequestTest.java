@@ -1,4 +1,4 @@
-package egovframework.bat.management.dto;
+package egovframework.bat.management.scheduler.dto;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Test;

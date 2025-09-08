@@ -33,7 +33,7 @@ import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
-import egovframework.bat.management.JobProgressService;
+import egovframework.bat.management.batch.service.JobProgressService;
 import egovframework.bat.service.JobLockService;
 
 /**

@@ -1,4 +1,4 @@
-package egovframework.bat.management;
+package egovframework.bat.management.scheduler.service;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
@@ -13,7 +13,7 @@ import org.mockito.MockitoAnnotations;
 import org.quartz.*;
 import org.quartz.jobs.NoOpJob;
 
-import egovframework.bat.management.dto.ScheduledJobDto;
+import egovframework.bat.management.scheduler.dto.ScheduledJobDto;
 
 /**
  * SchedulerManagementService의 내구성 필드 처리를 검증한다.

@@ -1,5 +1,5 @@
 -- Quartz 스케줄러 MySQL 스키마
--- 운영 DB가 이미 존재한다면 이 스크립트를 수동으로 실행해 테이블을 생성하세요.
+-- 이 스크립트를 수동으로 실행해 테이블을 생성하세요.
 --
 -- Quartz seems to work best with the driver mm.mysql-2.0.7-bin.jar
 --

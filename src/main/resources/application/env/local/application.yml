@@ -1,9 +1,4 @@
 spring:
-  sql:
-    init:
-      mode: never # 스크립트를 실행하지 않음
-      #continue-on-error: true # 이미 존재하는 테이블이 있어도 계속 실행
-      schema-locations: classpath:schema-quartz.sql
   main:
     # Spring Framework 5.*에서 같은 이름의 빈을 등록할 때 발생하는 BeanDefinitionOverrideException 방지
     allow-bean-definition-overriding: true

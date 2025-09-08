@@ -14,9 +14,36 @@
   - 스케줄러 잡 추가: `POST /api/management/scheduler/jobs` 등
 - SSE 통신  
   - 배치 진행 상황: `GET /api/management/batch/progress`로 SSE 스트림 연결
-- 인증/보안  
-  - API 키 또는 토큰 기반 인증 적용  
-  - 별도 도메인일 경우 CORS 허용 혹은 리버스 프록시 설정
+- 인증/보안
+  - API 키 또는 토큰 기반 인증 적용
+  - `X-API-KEY` 헤더에 미리 배포된 키 값을 전달
+  - `application.yml`의 `security.api-key.enabled`로 필터 활성화/비활성화
+  - HTTPS 기반 통신 필수
+
+### 적용 예시
+
+```yaml
+# application.yml
+security:
+  api-key:
+    enabled: true        # 필터 사용 여부
+    value: my-secret-key # 배포된 키 값
+```
+
+### 테스트 절차
+
+1. 올바른 키로 호출
+
+   ```bash
+   curl -H "X-API-KEY: my-secret-key" http://localhost:8080/api/management/batch/jobs
+   ```
+
+2. 잘못된 키로 호출 시 `401 Unauthorized` 응답 확인
+
+   ```bash
+   curl -i -H "X-API-KEY: wrong-key" http://localhost:8080/api/management/batch/jobs
+   ```
+
 
 ## 3. 디렉터리 구조 제안
 ```

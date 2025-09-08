@@ -32,3 +32,14 @@ src/main/java/egovframework/bat/management
 
 위와 같이 관리 기능은 management 패키지 아래에 API·DTO·예외 등으로 명확히 분리되어 있으며, 
 다양한 HTTP 엔드포인트를 통해 배치 및 스케줄러를 제어하도록 구성되어 있음
+
+관리 UI 리소스 분리
+src/management-ui
+├─ templates/batch, templates/scheduler: 배치·스케줄러 화면용 템플릿
+├─ static/index.html: 관리 콘솔 진입점
+└─ static/js: 관리 화면 전용 JavaScript 파일
+
+위 리소스는 pom.xml에 별도 리소스 경로로 등록되어 있으며
+application.yml의 `spring.thymeleaf.prefix`와
+`spring.web.resources.static-locations` 설정을 통해 서빙된다.
+빌드 후 관리 콘솔은 `/index.html`로 접근하여 사용할 수 있다.

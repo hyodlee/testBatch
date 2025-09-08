@@ -13,6 +13,11 @@ spring:
   batch:
     job:
       enabled: false # 애플리케이션 시작 시 배치 잡 자동 실행 방지
+  thymeleaf:
+    prefix: classpath:/management-ui/templates/
+  web:
+    resources:
+      static-locations: classpath:/management-ui/static/,classpath:/static/
   profiles:
     active: prod
   datasource:

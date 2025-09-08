@@ -263,13 +263,18 @@
                     <exclude>log4j2/env/**</exclude>							<!-- 2번(환경별 log4j2.xml 파일만 포함) -->
                     <exclude>application/env/**</exclude>						<!-- 3번(환경별 application.yml 파일만 포함) -->
 	            </excludes>
-	            <filtering>false</filtering>
-			</resource>
-            <!-- 2번(환경별 log4j2.xml 파일만 포함) -->
+                      <filtering>false</filtering>
+                          </resource>
+            <!-- 관리 UI 리소스 -->
             <resource>
-                <directory>src/main/resources/log4j2/env/${env}</directory>
-                <targetPath>.</targetPath>
-                <includes>
+                <directory>src/management-ui</directory>
+                <targetPath>management-ui</targetPath>
+            </resource>
+              <!-- 2번(환경별 log4j2.xml 파일만 포함) -->
+              <resource>
+                  <directory>src/main/resources/log4j2/env/${env}</directory>
+                  <targetPath>.</targetPath>
+                  <includes>
                     <include>log4j2.xml</include>
                 </includes>
             </resource>

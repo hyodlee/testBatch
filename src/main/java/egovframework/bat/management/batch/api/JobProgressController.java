@@ -15,7 +15,7 @@ import org.springframework.http.codec.ServerSentEvent;
  * 배치 진행 상황을 SSE로 제공하는 컨트롤러.
  */
 @RestController
-@RequestMapping("/api/batch")
+@RequestMapping("/api/management/batch")
 @RequiredArgsConstructor
 public class JobProgressController {
 

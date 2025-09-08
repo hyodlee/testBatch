@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
         container.textContent = '조회된 내용이 없습니다';
         return;
     }
-    fetch(`/api/batch/management/executions/${id}/errors`)
+    fetch(`/api/management/batch/executions/${id}/errors`)
         .then(res => {
             // 응답 상태가 성공인지 확인
             if (!res.ok) {

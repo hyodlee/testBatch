@@ -21,7 +21,7 @@ import egovframework.bat.management.batch.service.BatchManagementService;
  * 배치 잡 조회와 제어를 위한 REST 컨트롤러.
  */
 @RestController
-@RequestMapping("/api/batch/management")
+@RequestMapping("/api/management/batch")
 @RequiredArgsConstructor
 public class BatchManagementController {
 

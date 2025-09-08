@@ -220,8 +220,8 @@ public class SampleTasklet implements Tasklet {
 | 컨트롤러 | 역할 요약 | 기본 URL | 주요 하위 경로 |
 | --- | --- | --- | --- |
 | BatchApiController | 배치 잡 목록 조회, 실행 이력/상세, 에러 로그, 재시작·중지 등 관리 API 제공 | `/api/batch` | `/jobs`, `/jobs/{jobName}/executions`, `/executions/{execId}`, `/error-log`, `/jobs/{jobName}/restart`, `/jobs/{jobName}` |
-| BatchManagementController | DTO 기반 관리용 API로 잡 목록·이력·에러 로그·재시작/중지 기능 제공 | `/api/batch/management` | `/jobs`, `/jobs/{jobName}/executions`, `/executions/{jobExecutionId}/errors`, `/jobs/{jobName}/restart`, `/jobs/{jobName}/stop` |
-| JobProgressController | 배치 진행 상황을 SSE 스트림으로 전송 | `/api/batch` | `/progress` |
+| BatchManagementController | DTO 기반 관리용 API로 잡 목록·이력·에러 로그·재시작/중지 기능 제공 | `/api/management/batch` | `/jobs`, `/jobs/{jobName}/executions`, `/executions/{jobExecutionId}/errors`, `/jobs/{jobName}/restart`, `/jobs/{jobName}/stop` |
+| JobProgressController | 배치 진행 상황을 SSE 스트림으로 전송 | `/api/management/batch` | `/progress` |
 | BatchPageController | 배치 작업 리스트·상세·로그 화면을 렌더링 | `/batch` | `/list`, `/detail`, `/log` |
 | JobRunController | 공통 잡 실행 엔드포인트로 지정된 잡을 실행 | `/api/batch` | `/run` |
 | Remote1ToStgJobController | Remote1 데이터를 STG로 적재하는 배치 실행 | `/api/batch` | `/remote1-to-stg` |
@@ -229,7 +229,7 @@ public class SampleTasklet implements Tasklet {
 | StgToRestJobController | STG 데이터를 외부 REST API로 전송 | `/api/batch` | `/erp-stg-to-rest` |
 | RestToStgJobController | ERP REST 데이터를 STG 테이블로 적재 | `/api/batch` | `/erp-rest-to-stg` |
 | VehicleController | ERP 서비스용 차량 정보를 조회 | `/api/v1` | `/vehicles` |
-| SchedulerManagementController | Quartz 잡 등록·일시중지·재개·삭제·크론 수정 API 제공 | `/api/scheduler` | `/jobs`, `/jobs/{jobName}/pause`, `/jobs/{jobName}/resume`, `/jobs/{jobName}/delete`, `/jobs/{jobName}/cron` |
+| SchedulerManagementController | Quartz 잡 등록·일시중지·재개·삭제·크론 수정 API 제공 | `/api/management/scheduler` | `/jobs`, `/jobs/{jobName}/pause`, `/jobs/{jobName}/resume`, `/jobs/{jobName}/delete`, `/jobs/{jobName}/cron` |
 | SchedulerPageController | 스케줄러 잡 목록 화면을 렌더링 | `/scheduler` | `/list` |
 
 ## API 엔드포인트
@@ -244,14 +244,14 @@ public class SampleTasklet implements Tasklet {
 - `POST /api/batch/run` – jobName 파라미터로 지정한 배치 실행
 - `POST /api/batch/jobs/{jobName}/restart` – 지정 작업 재시작
 - `DELETE /api/batch/jobs/{jobName}` – 지정 작업 중지
-- `GET /api/batch/progress` (SSE) – 배치 진행 상태 스트림
+- `GET /api/management/batch/progress` (SSE) – 배치 진행 상태 스트림
 
 ### 스케줄러 관리 API
-- `POST /api/scheduler/jobs` – 새 잡 등록 (`jobName`, `jobClass`, `cronExpression` 필요)
-- `POST /api/scheduler/jobs/{jobName}/pause` – 해당 잡 일시 중지
-- `POST /api/scheduler/jobs/{jobName}/resume` – 해당 잡 재개
-- `POST /api/scheduler/jobs/{jobName}/cron` – 해당 잡의 크론 표현식 변경 (요청 본문에 크론식 전달)
-- `POST /api/scheduler/jobs/{jobName}/delete` – 해당 잡 삭제
+- `POST /api/management/scheduler/jobs` – 새 잡 등록 (`jobName`, `jobClass`, `cronExpression` 필요)
+- `POST /api/management/scheduler/jobs/{jobName}/pause` – 해당 잡 일시 중지
+- `POST /api/management/scheduler/jobs/{jobName}/resume` – 해당 잡 재개
+- `POST /api/management/scheduler/jobs/{jobName}/cron` – 해당 잡의 크론 표현식 변경 (요청 본문에 크론식 전달)
+- `POST /api/management/scheduler/jobs/{jobName}/delete` – 해당 잡 삭제
 * 크론 표현식 변경 내용은 Quartz DB에 저장되어 재시작 후에도 유지된다.
 
 ### 개별 Job 실행 API
@@ -261,11 +261,11 @@ public class SampleTasklet implements Tasklet {
 - `POST /api/batch/remote1-to-stg` – Remote1 → STG 전송 배치 실행
 
 ### 관리용 배치 API
-- `GET /api/batch/management/jobs` – 관리용 배치 작업명 목록
-- `GET /api/batch/management/jobs/{jobName}/executions` – 관리용 작업 실행 이력 조회
-- `GET /api/batch/management/executions/{jobExecutionId}/errors` – 특정 실행 ID 에러 로그 조회
-- `POST /api/batch/management/jobs/{jobName}/restart` – 관리용 작업 재시작
-- `POST /api/batch/management/jobs/{jobName}/stop` – 관리용 작업 중지
+- `GET /api/management/batch/jobs` – 관리용 배치 작업명 목록
+- `GET /api/management/batch/jobs/{jobName}/executions` – 관리용 작업 실행 이력 조회
+- `GET /api/management/batch/executions/{jobExecutionId}/errors` – 특정 실행 ID 에러 로그 조회
+- `POST /api/management/batch/jobs/{jobName}/restart` – 관리용 작업 재시작
+- `POST /api/management/batch/jobs/{jobName}/stop` – 관리용 작업 중지
 
 ### 도메인 데이터 조회 API
 - `GET /api/v1/vehicles` – 차량 목록 조회

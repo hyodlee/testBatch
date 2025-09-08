@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +21,9 @@ import egovframework.bat.management.scheduler.exception.DurableJobPauseResumeNot
 @Service
 @RequiredArgsConstructor
 public class SchedulerManagementService {
+
+    /** 로깅을 위한 로거 */
+    private static final Logger LOGGER = LoggerFactory.getLogger(SchedulerManagementService.class);
 
     /** Quartz 스케줄러 */
     private final Scheduler scheduler;
@@ -99,7 +104,9 @@ public class SchedulerManagementService {
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
     public void updateJobCron(String jobName, String cronExpression) throws SchedulerException {
+        LOGGER.debug("잡 {} 크론 변경 요청: {}", jobName, cronExpression);
         JobDetail jobDetail = scheduler.getJobDetail(JobKey.jobKey(jobName));
+        LOGGER.debug("JobDetail: {}, isDurable: {}", jobDetail, jobDetail != null ? jobDetail.isDurable() : null);
         if (jobDetail != null && jobDetail.isDurable()) {
             throw new DurableJobCronUpdateNotAllowedException(
                     "내구성 잡은 크론 표현식을 변경할 수 없습니다: " + jobName);
@@ -109,13 +116,16 @@ public class SchedulerManagementService {
         if (!CronExpression.isValidExpression(cronExpression)) {
             throw new InvalidCronExpressionException("유효하지 않은 크론 표현식입니다: " + cronExpression);
         }
+        LOGGER.debug("크론 표현식 유효성 통과");
 
         TriggerKey triggerKey = TriggerKey.triggerKey(jobName + "Trigger");
         Trigger newTrigger = TriggerBuilder.newTrigger()
                 .withIdentity(triggerKey)
                 .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
                 .build();
+        LOGGER.debug("TriggerKey {}에 대해 크론 {}으로 재스케줄링 시도", triggerKey, cronExpression);
         scheduler.rescheduleJob(triggerKey, newTrigger);
+        LOGGER.info("잡 {}의 크론을 {}로 변경 완료", jobName, cronExpression);
         // 변경된 크론 정보도 Quartz 테이블에 자동 반영된다
     }
 

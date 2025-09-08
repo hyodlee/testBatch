@@ -18,7 +18,6 @@
   - API 키 또는 토큰 기반 인증 적용
   - `X-API-KEY` 헤더에 미리 배포된 키 값을 전달
   - `application.yml`의 `security.api-key.enabled`로 필터 활성화/비활성화
-  - HTTPS 기반 통신 필수
 
 ### 적용 예시
 

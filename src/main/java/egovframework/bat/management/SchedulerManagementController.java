@@ -3,14 +3,12 @@ package egovframework.bat.management;
 import lombok.RequiredArgsConstructor;
 import org.quartz.SchedulerException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -82,7 +80,7 @@ public class SchedulerManagementController {
      * @return 처리 결과
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
-    @DeleteMapping("/jobs/{jobName}")
+    @PostMapping("/jobs/{jobName}/delete")
     public ResponseEntity<Void> deleteJob(@PathVariable String jobName) throws SchedulerException {
         schedulerManagementService.deleteJob(jobName);
         return ResponseEntity.ok().build();
@@ -98,7 +96,7 @@ public class SchedulerManagementController {
      * @return 처리 결과
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
-    @PutMapping("/jobs/{jobName}")
+    @PostMapping("/jobs/{jobName}/cron")
     public ResponseEntity<Void> updateJobCron(@PathVariable String jobName,
             @RequestBody CronRequest request) throws SchedulerException {
         schedulerManagementService.updateJobCron(jobName, request.getCronExpression());

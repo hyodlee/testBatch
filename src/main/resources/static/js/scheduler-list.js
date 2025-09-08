@@ -28,34 +28,39 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     const actionTd = document.createElement('td');
 
-                    // 상태에 따라 일시 중지 또는 재개 버튼을 생성
+                    // 일시 중지/재개 버튼 생성 후 상태에 따라 텍스트 설정
                     const pauseBtn = document.createElement('button');
-                    if (job.status === 'PAUSED') {
-                        pauseBtn.textContent = '재개';
-                        pauseBtn.addEventListener('click', () => {
-                            fetch(`/api/scheduler/jobs/${job.jobName}/resume`, { method: 'POST' })
-                                .then(res => {
-                                    if (res.ok) {
-                                        load(); // 성공 시 목록 갱신
-                                    } else {
-                                        res.text().then(text => alert(text || '재개에 실패했습니다.'));
-                                    }
-                                })
-                                .catch(() => alert('재개 중 오류가 발생했습니다.'));
-                        });
+                    pauseBtn.textContent = job.status === 'PAUSED' ? '재개' : '일시 중지';
+
+                    if (job.durable === true) {
+                        pauseBtn.disabled = true;
+                        pauseBtn.title = 'Durable 잡은 일시 중지/재개할 수 없습니다.';
                     } else {
-                        pauseBtn.textContent = '일시 중지';
-                        pauseBtn.addEventListener('click', () => {
-                            fetch(`/api/scheduler/jobs/${job.jobName}/pause`, { method: 'POST' })
-                                .then(res => {
-                                    if (res.ok) {
-                                        load(); // 성공 시 목록 갱신
-                                    } else {
-                                        res.text().then(text => alert(text || '일시 중지에 실패했습니다.'));
-                                    }
-                                })
-                                .catch(() => alert('일시 중지 중 오류가 발생했습니다.'));
-                        });
+                        if (job.status === 'PAUSED') {
+                            pauseBtn.addEventListener('click', () => {
+                                fetch(`/api/scheduler/jobs/${job.jobName}/resume`, { method: 'POST' })
+                                    .then(res => {
+                                        if (res.ok) {
+                                            load(); // 성공 시 목록 갱신
+                                        } else {
+                                            res.text().then(text => alert(text || '재개에 실패했습니다.'));
+                                        }
+                                    })
+                                    .catch(() => alert('재개 중 오류가 발생했습니다.'));
+                            });
+                        } else {
+                            pauseBtn.addEventListener('click', () => {
+                                fetch(`/api/scheduler/jobs/${job.jobName}/pause`, { method: 'POST' })
+                                    .then(res => {
+                                        if (res.ok) {
+                                            load(); // 성공 시 목록 갱신
+                                        } else {
+                                            res.text().then(text => alert(text || '일시 중지에 실패했습니다.'));
+                                        }
+                                    })
+                                    .catch(() => alert('일시 중지 중 오류가 발생했습니다.'));
+                            });
+                        }
                     }
                     actionTd.appendChild(pauseBtn);
 

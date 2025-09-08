@@ -13,22 +13,32 @@ SmsNotificationSender.java : SMS 알림 전송 구현체
 
 ## egovframework.bat.service
 JobExecutionDto.java : 배치 잡 실행 정보를 담는 DTO
-BatchManagementService.java : 잡 목록·이력 조회와 재시작·중지 등 배치 관리 서비스
 JobLockService.java : 배치 작업 중복 실행을 막는 락 서비스
 BatchManagementMapper.java : 잡 이름·실행·에러 로그 조회 매퍼
 
-## egovframework.bat.management.api
+## egovframework.bat.management.batch.api
 BatchManagementController.java : 등록된 잡과 실행 이력·에러 로그 조회, 재시작·중지 API 제공
 JobProgressController.java : 배치 진행 상황을 SSE 스트림으로 전달
 
-## egovframework.bat.management.dto
+## egovframework.bat.management.batch.dto
 JobProgress.java : 작업명과 상태를 담는 진행 상황 DTO
-ScheduledJobDto.java : 잡 이름·크론 표현식·상태·내구성 여부를 담는 스케줄 DTO
 
-## egovframework.bat.management
+## egovframework.bat.management.batch.service
+BatchManagementService.java : 잡 목록·이력 조회와 재시작·중지 등 배치 관리 서비스
 JobProgressService.java : Reactor Sinks로 진행 상황을 전송하는 서비스
-SchedulerManagementService.java : Quartz 잡 추가·수정·삭제·조회 서비스
+
+## egovframework.bat.management.scheduler.api
 SchedulerManagementController.java : 스케줄러 잡 관리 REST API
+
+## egovframework.bat.management.scheduler.dto
+ScheduledJobDto.java : 잡 이름·크론 표현식·상태·내구성 여부를 담는 스케줄 DTO
+CronRequest.java : 크론 표현식 변경 요청 DTO
+
+## egovframework.bat.management.scheduler.service
+SchedulerManagementService.java : Quartz 잡 추가·수정·삭제·조회 서비스
+
+## egovframework.bat.management.scheduler.exception
+DurableJobPauseResumeNotAllowedException 등 스케줄러 제어 관련 예외
 
 ## egovframework.bat.job.erp.api
 VehicleController.java : ERP용 차량 정보를 제공하는 조회 API

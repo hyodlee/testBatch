@@ -76,8 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         cronBtn.addEventListener('click', () => {
                             const cron = prompt('새 크론 표현식을 입력하세요', job.cronExpression);
                             if (cron) {
-                                fetch(`/api/scheduler/jobs/${job.jobName}`, {
-                                    method: 'PUT',
+                                fetch(`/api/scheduler/jobs/${job.jobName}/cron`, {
+                                    method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify({ cronExpression: cron }) // 크론 표현식을 JSON으로 전송
                                 })

@@ -1,6 +1,8 @@
 package egovframework.bat.management.scheduler.api;
 
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.quartz.SchedulerException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,6 +28,9 @@ import egovframework.bat.management.scheduler.exception.DurableJobPauseResumeNot
 @RequestMapping("/api/management/scheduler")
 @RequiredArgsConstructor
 public class SchedulerManagementController {
+
+    /** 로거 */
+    private static final Logger LOGGER = LoggerFactory.getLogger(SchedulerManagementController.class);
 
     /** 스케줄러 관리 서비스 */
     private final SchedulerManagementService schedulerManagementService;
@@ -100,8 +105,15 @@ public class SchedulerManagementController {
     @PostMapping("/jobs/{jobName}/cron")
     public ResponseEntity<Void> updateJobCron(@PathVariable String jobName,
             @RequestBody CronRequest request) throws SchedulerException {
-        schedulerManagementService.updateJobCron(jobName, request.getCronExpression());
-        return ResponseEntity.ok().build();
+        LOGGER.debug("API 요청: jobName={}, cronExpression={}", jobName, request.getCronExpression());
+        try {
+            schedulerManagementService.updateJobCron(jobName, request.getCronExpression());
+            LOGGER.info("잡 {} 크론 변경 API 호출 성공", jobName);
+            return ResponseEntity.ok().build();
+        } catch (SchedulerException e) {
+            LOGGER.error("잡 {} 크론 변경 실패", jobName, e);
+            throw e;
+        }
     }
 
     /**

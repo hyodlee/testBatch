@@ -11,7 +11,7 @@ mvn -Pprod package    # 운영 환경 빌드
 각 프로필은 해당 환경의 `application-<프로필>.yml` 설정 파일을 사용합니다.
 
 ## 최초 기동 전에 STG-DB에 다음 스크립트를 실행하여, 기본 테이블을 생성해야 한다
-1.schema-quartz.sql 파일을 실행하면, quartz관련 테이블이 생성된다 (/src/main/resources/schema-quartz.sql)
+1.schema-quartz.sql 파일을 실행하면, quartz관련 테이블이 생성된다 (/src/script/mysql/main/schema-quartz.sql)
 2.schema-ddl-mysql.sql 파일을 실행하면, 스프링 배치관련 테이블이 생성된다 (/src/script/mysql/main/schema-ddl-mysql.sql)
 3.schema-insert-mysql.sql 파일을 실행하면, 스프링 배치관련 기초 데이터가 입력된다 /src/script/mysql/main/schema-insert-mysql.sql
 

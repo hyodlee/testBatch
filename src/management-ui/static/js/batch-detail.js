@@ -47,16 +47,26 @@ document.addEventListener('DOMContentLoaded', () => {
             const restartBtn = document.createElement('button');
             restartBtn.textContent = '재시작';
             restartBtn.addEventListener('click', () => {
-                fetch(`/api/management/batch/executions/${exec.jobExecutionId}/restart`, { method: 'POST' })
-                    .then(() => load());
+                // 잡을 재시작하는 API 호출
+                fetch(`/api/management/batch/jobs/${jobName}/restart`, { method: 'POST' })
+                    .then(res => {
+                        if (!res.ok) throw new Error('재시작 요청 실패');
+                        load();
+                    })
+                    .catch(err => alert(`재시작 실패: ${err.message}`));
             });
             actionTd.appendChild(restartBtn);
 
             const stopBtn = document.createElement('button');
             stopBtn.textContent = '중지';
             stopBtn.addEventListener('click', () => {
-                fetch(`/api/management/batch/executions/${exec.jobExecutionId}/stop`, { method: 'POST' })
-                    .then(() => load());
+                // 실행 중인 잡을 중지하는 API 호출
+                fetch(`/api/management/batch/jobs/${jobName}/stop`, { method: 'POST' })
+                    .then(res => {
+                        if (!res.ok) throw new Error('중지 요청 실패');
+                        load();
+                    })
+                    .catch(err => alert(`중지 실패: ${err.message}`));
             });
             actionTd.appendChild(stopBtn);
 

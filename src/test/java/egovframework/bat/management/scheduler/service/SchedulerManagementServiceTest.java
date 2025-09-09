@@ -15,6 +15,7 @@ import org.quartz.*;
 import org.quartz.jobs.NoOpJob;
 
 import egovframework.bat.management.scheduler.dto.ScheduledJobDto;
+import egovframework.bat.management.scheduler.exception.TriggerNotFoundException;
 
 /**
  * SchedulerManagementService의 내구성 필드 처리를 검증한다.
@@ -107,5 +108,54 @@ public class SchedulerManagementServiceTest {
         verify(scheduler).rescheduleJob(eq(triggerKey), captor.capture());
         CronTrigger newTrigger = (CronTrigger) captor.getValue();
         assertEquals("0/5 * * * * ?", newTrigger.getCronExpression());
+    }
+
+    @Test
+    public void updateJobCronFindsTriggerInAnotherGroup() throws Exception {
+        String jobName = "testJob";
+        String group = "quartz-batch";
+        String otherGroup = "other-group";
+
+        JobDetail jobDetail = JobBuilder.newJob(NoOpJob.class)
+                .withIdentity(jobName)
+                .storeDurably(false)
+                .build();
+        when(scheduler.getJobDetail(JobKey.jobKey(jobName))).thenReturn(jobDetail);
+
+        TriggerKey initialTriggerKey = TriggerKey.triggerKey(jobName + "Trigger", group);
+        when(scheduler.getTrigger(initialTriggerKey)).thenReturn(null);
+
+        TriggerKey foundTriggerKey = TriggerKey.triggerKey(jobName + "Trigger", otherGroup);
+        CronTrigger oldTrigger = TriggerBuilder.newTrigger()
+                .withIdentity(foundTriggerKey)
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 * * * ?"))
+                .build();
+        doReturn(Collections.singletonList(oldTrigger)).when(scheduler).getTriggersOfJob(JobKey.jobKey(jobName));
+
+        ArgumentCaptor<Trigger> captor = ArgumentCaptor.forClass(Trigger.class);
+
+        schedulerManagementService.updateJobCron(jobName, "0/5 * * * * ?", group);
+
+        verify(scheduler).rescheduleJob(eq(foundTriggerKey), captor.capture());
+        CronTrigger newTrigger = (CronTrigger) captor.getValue();
+        assertEquals("0/5 * * * * ?", newTrigger.getCronExpression());
+    }
+
+    @Test(expected = TriggerNotFoundException.class)
+    public void updateJobCronThrowsTriggerNotFoundExceptionWhenMissing() throws Exception {
+        String jobName = "missingJob";
+        String group = "quartz-batch";
+
+        JobDetail jobDetail = JobBuilder.newJob(NoOpJob.class)
+                .withIdentity(jobName)
+                .storeDurably(false)
+                .build();
+        when(scheduler.getJobDetail(JobKey.jobKey(jobName))).thenReturn(jobDetail);
+
+        TriggerKey triggerKey = TriggerKey.triggerKey(jobName + "Trigger", group);
+        when(scheduler.getTrigger(triggerKey)).thenReturn(null);
+        doReturn(Collections.emptyList()).when(scheduler).getTriggersOfJob(JobKey.jobKey(jobName));
+
+        schedulerManagementService.updateJobCron(jobName, "0/5 * * * * ?", group);
     }
 }

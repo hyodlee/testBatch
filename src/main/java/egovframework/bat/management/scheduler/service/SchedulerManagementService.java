@@ -16,6 +16,7 @@ import egovframework.bat.management.scheduler.dto.ScheduledJobDto;
 import egovframework.bat.management.scheduler.exception.InvalidCronExpressionException;
 import egovframework.bat.management.scheduler.exception.DurableJobCronUpdateNotAllowedException;
 import egovframework.bat.management.scheduler.exception.DurableJobPauseResumeNotAllowedException;
+import egovframework.bat.management.scheduler.exception.TriggerNotFoundException;
 
 /**
  * Quartz 스케줄러를 제어하기 위한 서비스.
@@ -139,8 +140,21 @@ public class SchedulerManagementService {
         // 기존 트리거 조회
         Trigger oldTrigger = scheduler.getTrigger(triggerKey);
         if (oldTrigger == null) {
-            LOGGER.info("기존 트리거를 찾지 못했습니다: {}", triggerKey);
-            throw new SchedulerException("Trigger not found: " + triggerKey);
+            LOGGER.warn("그룹 '{}'에서 트리거 '{}'를 찾지 못했습니다", group, jobName + "Trigger");
+            List<? extends Trigger> triggers = scheduler.getTriggersOfJob(JobKey.jobKey(jobName));
+            LOGGER.debug("잡 {}에 연결된 트리거 수: {}", jobName, triggers.size());
+            for (Trigger trigger : triggers) {
+                if (trigger.getKey().getName().equals(jobName + "Trigger")) {
+                    triggerKey = trigger.getKey();
+                    oldTrigger = trigger;
+                    LOGGER.info("다른 그룹 '{}'에서 트리거 '{}'를 찾았습니다", triggerKey.getGroup(), triggerKey.getName());
+                    break;
+                }
+            }
+            if (oldTrigger == null) {
+                LOGGER.error("잡 {}의 트리거 '{}'를 찾을 수 없습니다", jobName, jobName + "Trigger");
+                throw new TriggerNotFoundException("트리거를 찾을 수 없습니다: " + jobName + "Trigger");
+            }
         } else {
             LOGGER.info("기존 트리거를 찾았습니다: {}", triggerKey);
         }

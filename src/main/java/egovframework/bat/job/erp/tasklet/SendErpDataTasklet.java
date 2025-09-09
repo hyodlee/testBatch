@@ -1,6 +1,7 @@
 package egovframework.bat.job.erp.tasklet;
 
 import java.sql.PreparedStatement;
+import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,10 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
+import reactor.util.retry.Retry;
 
 import egovframework.bat.job.erp.domain.VehicleInfo;
 import egovframework.bat.job.erp.exception.ErpApiException;
@@ -50,18 +54,28 @@ public class SendErpDataTasklet implements Tasklet {
      */
     private final int defaultPageSize;
 
+    /** 병렬 전송 시 사용할 스레드 수 */
+    private final int parallelism;
+
+    /** 전송 실패 시 재시도 횟수 */
+    private final int retryCount;
+
     public SendErpDataTasklet(WebClient.Builder builder,
                               @Qualifier("migstgJdbcTemplate") JdbcTemplate jdbcTemplate,
                               @Qualifier("emailNotificationSender") NotificationSender emailNotificationSender,
                               @Qualifier("smsNotificationSender") NotificationSender smsNotificationSender,
                               @Value("${erp.outbound-api-url}") String apiUrl,
-                              @Value("${erp.fetch-page-size:100}") int defaultPageSize) {
+                              @Value("${erp.fetch-page-size:100}") int defaultPageSize,
+                              @Value("${erp.send-parallelism:4}") int parallelism,
+                              @Value("${erp.send-retry:3}") int retryCount) {
         this.webClient = builder.build();
         this.jdbcTemplate = jdbcTemplate;
         // 주입받은 알림 전송기를 리스트로 구성
         this.notificationSenders = List.of(emailNotificationSender, smsNotificationSender);
         this.apiUrl = apiUrl;
         this.defaultPageSize = defaultPageSize;
+        this.parallelism = parallelism;
+        this.retryCount = retryCount;
     }
 
     /** 현재 설정된 외부 API URL 반환 */
@@ -100,15 +114,21 @@ public class SendErpDataTasklet implements Tasklet {
                 break;
             }
 
-            for (VehicleInfo vehicle : vehicles) {
-                try {
-                    sendVehicle(vehicle);
-                    lastId = vehicle.getVehicleId(); // 다음 페이지 조회를 위한 마지막 ID 갱신
-                } catch (ErpApiException e) {
-                    LOGGER.error("차량 전송 실패: {}", vehicle.getVehicleId(), e);
-                    notifyFailure("차량 전송 실패: " + e.getMessage());
-                    throw e;
-                }
+            // 현재 페이지의 마지막 VEHICLE_ID를 미리 확보
+            long maxId = vehicles.get(vehicles.size() - 1).getVehicleId();
+            try {
+                // 차량 정보를 Flux로 구성하여 병렬 전송
+                Flux.fromIterable(vehicles)
+                        .parallel(parallelism)
+                        .runOn(Schedulers.boundedElastic())
+                        .flatMap(this::sendVehicle)
+                        .sequential()
+                        .blockLast();
+                lastId = maxId; // 다음 페이지 조회를 위한 마지막 ID 갱신
+            } catch (ErpApiException e) {
+                LOGGER.error("차량 전송 실패", e);
+                notifyFailure("차량 전송 실패: " + e.getMessage());
+                throw e;
             }
         }
 
@@ -134,18 +154,16 @@ public class SendErpDataTasklet implements Tasklet {
         }, new BeanPropertyRowMapper<>(VehicleInfo.class));
     }
 
-    /** 단건 차량 정보를 외부 ERP API로 전송 */
-    private void sendVehicle(VehicleInfo vehicle) {
-        try {
-            webClient.post()
-                    .uri(apiUrl)
-                    .bodyValue(vehicle)
-                    .retrieve()
-                    .bodyToMono(Void.class)
-                    .block();
-        } catch (WebClientResponseException e) {
-            throw new ErpApiException("ERP API 호출 실패", e);
-        }
+    /** 단건 차량 정보를 외부 ERP API로 비동기 전송 */
+    private Mono<Void> sendVehicle(VehicleInfo vehicle) {
+        return webClient.post()
+                .uri(apiUrl)
+                .bodyValue(vehicle)
+                .retrieve()
+                .bodyToMono(Void.class)
+                // 전송 실패 시 지정 횟수만큼 재시도
+                .retryWhen(Retry.fixedDelay(retryCount, Duration.ofSeconds(1)))
+                .onErrorMap(e -> new ErpApiException("ERP API 호출 실패", e));
     }
 
     /** 장애 알림 전송 */

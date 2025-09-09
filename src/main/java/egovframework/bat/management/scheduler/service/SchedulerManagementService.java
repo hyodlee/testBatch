@@ -65,7 +65,8 @@ public class SchedulerManagementService {
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
     public void pauseJob(String jobName) throws SchedulerException {
-        JobKey jobKey = JobKey.jobKey(jobName);
+        // 그룹을 명시하여 JobKey 생성
+        JobKey jobKey = JobKey.jobKey(jobName, QUARTZ_BATCH_GROUP);
         JobDetail jobDetail = scheduler.getJobDetail(jobKey);
         // 내구성 잡은 일시 중지할 수 없도록 예외 처리
         if (jobDetail != null && jobDetail.isDurable()) {
@@ -82,7 +83,8 @@ public class SchedulerManagementService {
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
     public void resumeJob(String jobName) throws SchedulerException {
-        JobKey jobKey = JobKey.jobKey(jobName);
+        // 그룹을 명시하여 JobKey 생성
+        JobKey jobKey = JobKey.jobKey(jobName, QUARTZ_BATCH_GROUP);
         JobDetail jobDetail = scheduler.getJobDetail(jobKey);
         // 내구성 잡은 재개할 수 없도록 예외 처리
         if (jobDetail != null && jobDetail.isDurable()) {
@@ -99,7 +101,8 @@ public class SchedulerManagementService {
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
     public void deleteJob(String jobName) throws SchedulerException {
-        scheduler.deleteJob(JobKey.jobKey(jobName));
+        // 그룹을 명시하여 잡 삭제
+        scheduler.deleteJob(JobKey.jobKey(jobName, QUARTZ_BATCH_GROUP));
     }
 
     /**
@@ -123,7 +126,8 @@ public class SchedulerManagementService {
      */
     public void updateJobCron(String jobName, String cronExpression, String group) throws SchedulerException {
         LOGGER.debug("잡 {} 크론 변경 요청: {}", jobName, cronExpression);
-        JobDetail jobDetail = scheduler.getJobDetail(JobKey.jobKey(jobName));
+        // 그룹을 명시하여 JobDetail 조회
+        JobDetail jobDetail = scheduler.getJobDetail(JobKey.jobKey(jobName, group));
         LOGGER.debug("JobDetail: {}, isDurable: {}", jobDetail, jobDetail != null ? jobDetail.isDurable() : null);
         if (jobDetail != null && jobDetail.isDurable()) {
             throw new DurableJobCronUpdateNotAllowedException(
@@ -141,7 +145,8 @@ public class SchedulerManagementService {
         Trigger oldTrigger = scheduler.getTrigger(triggerKey);
         if (oldTrigger == null) {
             LOGGER.warn("그룹 '{}'에서 트리거 '{}'를 찾지 못했습니다", group, jobName + "Trigger");
-            List<? extends Trigger> triggers = scheduler.getTriggersOfJob(JobKey.jobKey(jobName));
+            // 그룹을 명시하여 트리거 목록 조회
+            List<? extends Trigger> triggers = scheduler.getTriggersOfJob(JobKey.jobKey(jobName, group));
             LOGGER.debug("잡 {}에 연결된 트리거 수: {}", jobName, triggers.size());
             for (Trigger trigger : triggers) {
                 if (trigger.getKey().getName().equals(jobName + "Trigger")) {
@@ -235,7 +240,8 @@ public class SchedulerManagementService {
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
     public ScheduledJobDto getJob(String jobName) throws SchedulerException {
-        JobKey jobKey = JobKey.jobKey(jobName);
+        // 그룹을 명시하여 JobKey 생성
+        JobKey jobKey = JobKey.jobKey(jobName, QUARTZ_BATCH_GROUP);
         if (!scheduler.checkExists(jobKey)) {
             return null;
         }

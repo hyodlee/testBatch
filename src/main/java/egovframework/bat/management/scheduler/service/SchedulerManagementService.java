@@ -61,11 +61,12 @@ public class SchedulerManagementService {
     /**
      * 등록된 잡을 일시 중지한다.
      *
-     * @param jobName 잡 이름
+     * @param jobName  잡 이름
+     * @param jobGroup 잡 그룹
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
-    public void pauseJob(String jobName) throws SchedulerException {
-        JobKey jobKey = JobKey.jobKey(jobName);
+    public void pauseJob(String jobName, String jobGroup) throws SchedulerException {
+        JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
         JobDetail jobDetail = scheduler.getJobDetail(jobKey);
         // 내구성 잡은 일시 중지할 수 없도록 예외 처리
         if (jobDetail != null && jobDetail.isDurable()) {
@@ -78,11 +79,12 @@ public class SchedulerManagementService {
     /**
      * 일시 중지된 잡을 재개한다.
      *
-     * @param jobName 잡 이름
+     * @param jobName  잡 이름
+     * @param jobGroup 잡 그룹
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
-    public void resumeJob(String jobName) throws SchedulerException {
-        JobKey jobKey = JobKey.jobKey(jobName);
+    public void resumeJob(String jobName, String jobGroup) throws SchedulerException {
+        JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
         JobDetail jobDetail = scheduler.getJobDetail(jobKey);
         // 내구성 잡은 재개할 수 없도록 예외 처리
         if (jobDetail != null && jobDetail.isDurable()) {
@@ -95,35 +97,25 @@ public class SchedulerManagementService {
     /**
      * 등록된 잡을 삭제한다.
      *
-     * @param jobName 잡 이름
+     * @param jobName  잡 이름
+     * @param jobGroup 잡 그룹
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
-    public void deleteJob(String jobName) throws SchedulerException {
-        scheduler.deleteJob(JobKey.jobKey(jobName));
+    public void deleteJob(String jobName, String jobGroup) throws SchedulerException {
+        scheduler.deleteJob(JobKey.jobKey(jobName, jobGroup));
     }
 
     /**
      * 등록된 잡의 크론 표현식을 변경한다.
      *
      * @param jobName        잡 이름
+     * @param jobGroup       잡 그룹
      * @param cronExpression 새 크론 표현식
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
-    public void updateJobCron(String jobName, String cronExpression) throws SchedulerException {
-        updateJobCron(jobName, cronExpression, QUARTZ_BATCH_GROUP);
-    }
-
-    /**
-     * 등록된 잡의 크론 표현식을 변경한다.
-     *
-     * @param jobName        잡 이름
-     * @param cronExpression 새 크론 표현식
-     * @param group          트리거 그룹, 기본값은 "quartz-batch"
-     * @throws SchedulerException 스케줄러 작업 실패 시 발생
-     */
-    public void updateJobCron(String jobName, String cronExpression, String group) throws SchedulerException {
-        LOGGER.debug("잡 {} 크론 변경 요청: {}", jobName, cronExpression);
-        JobDetail jobDetail = scheduler.getJobDetail(JobKey.jobKey(jobName));
+    public void updateJobCron(String jobName, String jobGroup, String cronExpression) throws SchedulerException {
+        LOGGER.debug("잡 {} 그룹의 {} 크론 변경 요청: {}", jobGroup, jobName, cronExpression);
+        JobDetail jobDetail = scheduler.getJobDetail(JobKey.jobKey(jobName, jobGroup));
         LOGGER.debug("JobDetail: {}, isDurable: {}", jobDetail, jobDetail != null ? jobDetail.isDurable() : null);
         if (jobDetail != null && jobDetail.isDurable()) {
             throw new DurableJobCronUpdateNotAllowedException(
@@ -136,12 +128,12 @@ public class SchedulerManagementService {
         }
         LOGGER.debug("크론 표현식 유효성 통과");
 
-        TriggerKey triggerKey = TriggerKey.triggerKey(jobName + "Trigger", group);
+        TriggerKey triggerKey = TriggerKey.triggerKey(jobName + "Trigger", jobGroup);
         // 기존 트리거 조회
         Trigger oldTrigger = scheduler.getTrigger(triggerKey);
         if (oldTrigger == null) {
-            LOGGER.warn("그룹 '{}'에서 트리거 '{}'를 찾지 못했습니다", group, jobName + "Trigger");
-            List<? extends Trigger> triggers = scheduler.getTriggersOfJob(JobKey.jobKey(jobName));
+            LOGGER.warn("그룹 '{}'에서 트리거 '{}'를 찾지 못했습니다", jobGroup, jobName + "Trigger");
+            List<? extends Trigger> triggers = scheduler.getTriggersOfJob(JobKey.jobKey(jobName, jobGroup));
             LOGGER.debug("잡 {}에 연결된 트리거 수: {}", jobName, triggers.size());
             for (Trigger trigger : triggers) {
                 if (trigger.getKey().getName().equals(jobName + "Trigger")) {
@@ -194,7 +186,7 @@ public class SchedulerManagementService {
         Trigger newTrigger = triggerBuilder.build();
         LOGGER.debug("TriggerKey {}에 대해 크론 {}으로 재스케줄링 시도", triggerKey, cronExpression);
         scheduler.rescheduleJob(triggerKey, newTrigger);
-        LOGGER.info("잡 {}의 크론을 {}로 변경 완료", jobName, cronExpression);
+        LOGGER.info("잡 {} 그룹의 {} 크론을 {}로 변경 완료", jobGroup, jobName, cronExpression);
         // 변경된 크론 정보도 Quartz 테이블에 자동 반영된다
     }
 

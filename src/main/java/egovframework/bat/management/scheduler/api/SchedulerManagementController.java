@@ -56,39 +56,45 @@ public class SchedulerManagementController {
     /**
      * 지정한 잡을 일시 중지한다.
      *
-     * @param jobName 잡 이름
+     * @param jobGroup 잡 그룹
+     * @param jobName  잡 이름
      * @return 처리 결과
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
-    @PostMapping("/jobs/{jobName}/pause")
-    public ResponseEntity<Void> pauseJob(@PathVariable String jobName) throws SchedulerException {
-        schedulerManagementService.pauseJob(jobName);
+    @PostMapping("/jobs/{jobGroup}/{jobName}/pause")
+    public ResponseEntity<Void> pauseJob(@PathVariable String jobGroup, @PathVariable String jobName)
+            throws SchedulerException {
+        schedulerManagementService.pauseJob(jobName, jobGroup);
         return ResponseEntity.ok().build();
     }
 
     /**
      * 일시 중지된 잡을 재개한다.
      *
-     * @param jobName 잡 이름
+     * @param jobGroup 잡 그룹
+     * @param jobName  잡 이름
      * @return 처리 결과
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
-    @PostMapping("/jobs/{jobName}/resume")
-    public ResponseEntity<Void> resumeJob(@PathVariable String jobName) throws SchedulerException {
-        schedulerManagementService.resumeJob(jobName);
+    @PostMapping("/jobs/{jobGroup}/{jobName}/resume")
+    public ResponseEntity<Void> resumeJob(@PathVariable String jobGroup, @PathVariable String jobName)
+            throws SchedulerException {
+        schedulerManagementService.resumeJob(jobName, jobGroup);
         return ResponseEntity.ok().build();
     }
 
     /**
      * 등록된 잡을 삭제한다.
      *
-     * @param jobName 잡 이름
+     * @param jobGroup 잡 그룹
+     * @param jobName  잡 이름
      * @return 처리 결과
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
-    @PostMapping("/jobs/{jobName}/delete")
-    public ResponseEntity<Void> deleteJob(@PathVariable String jobName) throws SchedulerException {
-        schedulerManagementService.deleteJob(jobName);
+    @PostMapping("/jobs/{jobGroup}/{jobName}/delete")
+    public ResponseEntity<Void> deleteJob(@PathVariable String jobGroup, @PathVariable String jobName)
+            throws SchedulerException {
+        schedulerManagementService.deleteJob(jobName, jobGroup);
         return ResponseEntity.ok().build();
     }
 
@@ -97,21 +103,23 @@ public class SchedulerManagementController {
      * 프런트엔드는 {"cronExpression":"0 0/2 * * * ?"} 형태의 JSON으로 요청한다.
      * 내구성 잡에 대해서는 400(Bad Request) 응답이 반환된다.
      *
-     * @param jobName 잡 이름
+     * @param jobGroup 잡 그룹
+     * @param jobName  잡 이름
      * @param request 크론 표현식 요청 DTO
      * @return 처리 결과
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
-    @PostMapping("/jobs/{jobName}/cron")
-    public ResponseEntity<Void> updateJobCron(@PathVariable String jobName,
+    @PostMapping("/jobs/{jobGroup}/{jobName}/cron")
+    public ResponseEntity<Void> updateJobCron(@PathVariable String jobGroup, @PathVariable String jobName,
             @RequestBody CronRequest request) throws SchedulerException {
-        LOGGER.debug("API 요청: jobName={}, cronExpression={}", jobName, request.getCronExpression());
+        LOGGER.debug("API 요청: jobGroup={}, jobName={}, cronExpression={}", jobGroup, jobName,
+                request.getCronExpression());
         try {
-            schedulerManagementService.updateJobCron(jobName, request.getCronExpression());
-            LOGGER.info("잡 {} 크론 변경 API 호출 성공", jobName);
+            schedulerManagementService.updateJobCron(jobName, jobGroup, request.getCronExpression());
+            LOGGER.info("잡 {} 그룹의 {} 크론 변경 API 호출 성공", jobGroup, jobName);
             return ResponseEntity.ok().build();
         } catch (SchedulerException e) {
-            LOGGER.error("잡 {} 크론 변경 실패", jobName, e);
+            LOGGER.error("잡 {} 그룹의 {} 크론 변경 실패", jobGroup, jobName, e);
             throw e;
         }
     }

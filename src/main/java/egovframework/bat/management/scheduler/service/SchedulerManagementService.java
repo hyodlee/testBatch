@@ -65,14 +65,17 @@ public class SchedulerManagementService {
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
     public void pauseJob(String jobName, String jobGroup) throws SchedulerException {
+        LOGGER.debug("잡 {} 그룹의 {} 일시 중지 요청", jobGroup, jobName);
         JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
         JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+        LOGGER.debug("JobDetail: {}, isDurable: {}", jobDetail, jobDetail != null ? jobDetail.isDurable() : null);
         // 내구성 잡은 일시 중지할 수 없도록 예외 처리
         if (jobDetail != null && jobDetail.isDurable()) {
             throw new DurableJobPauseResumeNotAllowedException(
                     "내구성 잡은 일시 중지할 수 없습니다: " + jobName);
         }
         scheduler.pauseJob(jobKey);
+        LOGGER.info("잡 {} 그룹의 {} 일시 중지 완료", jobGroup, jobName);
     }
 
     /**
@@ -83,14 +86,17 @@ public class SchedulerManagementService {
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
     public void resumeJob(String jobName, String jobGroup) throws SchedulerException {
+        LOGGER.debug("잡 {} 그룹의 {} 재개 요청", jobGroup, jobName);
         JobKey jobKey = JobKey.jobKey(jobName, jobGroup);
         JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+        LOGGER.debug("JobDetail: {}, isDurable: {}", jobDetail, jobDetail != null ? jobDetail.isDurable() : null);
         // 내구성 잡은 재개할 수 없도록 예외 처리
         if (jobDetail != null && jobDetail.isDurable()) {
             throw new DurableJobPauseResumeNotAllowedException(
                     "내구성 잡은 재개할 수 없습니다: " + jobName);
         }
         scheduler.resumeJob(jobKey);
+        LOGGER.info("잡 {} 그룹의 {} 재개 완료", jobGroup, jobName);
     }
 
     /**

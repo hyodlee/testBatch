@@ -64,8 +64,15 @@ public class SchedulerManagementController {
     @PostMapping("/jobs/{jobGroup}/{jobName}/pause")
     public ResponseEntity<Void> pauseJob(@PathVariable String jobGroup, @PathVariable String jobName)
             throws SchedulerException {
-        schedulerManagementService.pauseJob(jobName, jobGroup);
-        return ResponseEntity.ok().build();
+        LOGGER.debug("API 요청: jobGroup={}, jobName={}", jobGroup, jobName);
+        try {
+            schedulerManagementService.pauseJob(jobName, jobGroup);
+            LOGGER.info("잡 {} 그룹의 {} 일시 중지 API 호출 성공", jobGroup, jobName);
+            return ResponseEntity.ok().build();
+        } catch (SchedulerException e) {
+            LOGGER.error("잡 {} 그룹의 {} 일시 중지 실패", jobGroup, jobName, e);
+            throw e;
+        }
     }
 
     /**
@@ -79,8 +86,15 @@ public class SchedulerManagementController {
     @PostMapping("/jobs/{jobGroup}/{jobName}/resume")
     public ResponseEntity<Void> resumeJob(@PathVariable String jobGroup, @PathVariable String jobName)
             throws SchedulerException {
-        schedulerManagementService.resumeJob(jobName, jobGroup);
-        return ResponseEntity.ok().build();
+        LOGGER.debug("API 요청: jobGroup={}, jobName={}", jobGroup, jobName);
+        try {
+            schedulerManagementService.resumeJob(jobName, jobGroup);
+            LOGGER.info("잡 {} 그룹의 {} 재개 API 호출 성공", jobGroup, jobName);
+            return ResponseEntity.ok().build();
+        } catch (SchedulerException e) {
+            LOGGER.error("잡 {} 그룹의 {} 재개 실패", jobGroup, jobName, e);
+            throw e;
+        }
     }
 
     /**

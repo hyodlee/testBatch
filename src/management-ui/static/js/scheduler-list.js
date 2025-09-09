@@ -43,7 +43,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     } else {
                         if (job.status === 'PAUSED') {
                             pauseBtn.addEventListener('click', () => {
-                                fetch(`/api/management/scheduler/jobs/${job.jobName}/resume`, { method: 'POST' })
+                                // 잡 그룹과 이름을 포함한 URI로 재개 요청
+                                fetch(`/api/management/scheduler/jobs/${job.jobGroup}/${job.jobName}/resume`, { method: 'POST' })
                                     .then(res => {
                                         if (res.ok) {
                                             load(); // 성공 시 목록 갱신
@@ -55,7 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
                             });
                         } else {
                             pauseBtn.addEventListener('click', () => {
-                                fetch(`/api/management/scheduler/jobs/${job.jobName}/pause`, { method: 'POST' })
+                                // 잡 그룹과 이름을 포함한 URI로 일시 중지 요청
+                                fetch(`/api/management/scheduler/jobs/${job.jobGroup}/${job.jobName}/pause`, { method: 'POST' })
                                     .then(res => {
                                         if (res.ok) {
                                             load(); // 성공 시 목록 갱신
@@ -81,7 +83,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         cronBtn.addEventListener('click', () => {
                             const cron = prompt('새 크론 표현식을 입력하세요', job.cronExpression);
                             if (cron) {
-                                fetch(`/api/management/scheduler/jobs/${job.jobName}/cron`, {
+                                // 잡 그룹과 이름을 포함한 URI로 크론 수정 요청
+                                fetch(`/api/management/scheduler/jobs/${job.jobGroup}/${job.jobName}/cron`, {
                                     method: 'POST',
                                     headers: { 'Content-Type': 'application/json' },
                                     body: JSON.stringify({ cronExpression: cron }) // 크론 표현식을 JSON으로 전송

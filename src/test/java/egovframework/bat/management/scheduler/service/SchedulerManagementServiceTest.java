@@ -92,7 +92,7 @@ public class SchedulerManagementServiceTest {
                 .withIdentity(jobName)
                 .storeDurably(false)
                 .build();
-        when(scheduler.getJobDetail(JobKey.jobKey(jobName))).thenReturn(jobDetail);
+        when(scheduler.getJobDetail(JobKey.jobKey(jobName, group))).thenReturn(jobDetail);
 
         TriggerKey triggerKey = TriggerKey.triggerKey(jobName + "Trigger", group);
         CronTrigger oldTrigger = TriggerBuilder.newTrigger()
@@ -103,7 +103,7 @@ public class SchedulerManagementServiceTest {
 
         ArgumentCaptor<Trigger> captor = ArgumentCaptor.forClass(Trigger.class);
 
-        schedulerManagementService.updateJobCron(jobName, "0/5 * * * * ?", group);
+        schedulerManagementService.updateJobCron(jobName, group, "0/5 * * * * ?");
 
         verify(scheduler).rescheduleJob(eq(triggerKey), captor.capture());
         CronTrigger newTrigger = (CronTrigger) captor.getValue();
@@ -120,7 +120,7 @@ public class SchedulerManagementServiceTest {
                 .withIdentity(jobName)
                 .storeDurably(false)
                 .build();
-        when(scheduler.getJobDetail(JobKey.jobKey(jobName))).thenReturn(jobDetail);
+        when(scheduler.getJobDetail(JobKey.jobKey(jobName, group))).thenReturn(jobDetail);
 
         TriggerKey initialTriggerKey = TriggerKey.triggerKey(jobName + "Trigger", group);
         when(scheduler.getTrigger(initialTriggerKey)).thenReturn(null);
@@ -130,11 +130,11 @@ public class SchedulerManagementServiceTest {
                 .withIdentity(foundTriggerKey)
                 .withSchedule(CronScheduleBuilder.cronSchedule("0 0 * * * ?"))
                 .build();
-        doReturn(Collections.singletonList(oldTrigger)).when(scheduler).getTriggersOfJob(JobKey.jobKey(jobName));
+        doReturn(Collections.singletonList(oldTrigger)).when(scheduler).getTriggersOfJob(JobKey.jobKey(jobName, group));
 
         ArgumentCaptor<Trigger> captor = ArgumentCaptor.forClass(Trigger.class);
 
-        schedulerManagementService.updateJobCron(jobName, "0/5 * * * * ?", group);
+        schedulerManagementService.updateJobCron(jobName, group, "0/5 * * * * ?");
 
         verify(scheduler).rescheduleJob(eq(foundTriggerKey), captor.capture());
         CronTrigger newTrigger = (CronTrigger) captor.getValue();
@@ -150,12 +150,12 @@ public class SchedulerManagementServiceTest {
                 .withIdentity(jobName)
                 .storeDurably(false)
                 .build();
-        when(scheduler.getJobDetail(JobKey.jobKey(jobName))).thenReturn(jobDetail);
+        when(scheduler.getJobDetail(JobKey.jobKey(jobName, group))).thenReturn(jobDetail);
 
         TriggerKey triggerKey = TriggerKey.triggerKey(jobName + "Trigger", group);
         when(scheduler.getTrigger(triggerKey)).thenReturn(null);
-        doReturn(Collections.emptyList()).when(scheduler).getTriggersOfJob(JobKey.jobKey(jobName));
+        doReturn(Collections.emptyList()).when(scheduler).getTriggersOfJob(JobKey.jobKey(jobName, group));
 
-        schedulerManagementService.updateJobCron(jobName, "0/5 * * * * ?", group);
+        schedulerManagementService.updateJobCron(jobName, group, "0/5 * * * * ?");
     }
 }

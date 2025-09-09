@@ -27,6 +27,9 @@ public class SchedulerManagementService {
     /** 로깅을 위한 로거 */
     private static final Logger LOGGER = LoggerFactory.getLogger(SchedulerManagementService.class);
 
+    /** Quartz 잡 및 트리거 그룹 */
+    private static final String QUARTZ_BATCH_GROUP = "quartz-batch";
+
     /** Quartz 스케줄러 */
     private final Scheduler scheduler;
 
@@ -44,10 +47,10 @@ public class SchedulerManagementService {
         @SuppressWarnings("unchecked")
         Class<? extends Job> jobClass = (Class<? extends Job>) Class.forName(jobClassName);
         JobDetail jobDetail = JobBuilder.newJob(jobClass)
-                .withIdentity(jobName)
+                .withIdentity(jobName, QUARTZ_BATCH_GROUP)
                 .build();
         Trigger trigger = TriggerBuilder.newTrigger()
-                .withIdentity(jobName + "Trigger")
+                .withIdentity(jobName + "Trigger", QUARTZ_BATCH_GROUP)
                 .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
                 .build();
         scheduler.scheduleJob(jobDetail, trigger);
@@ -106,7 +109,7 @@ public class SchedulerManagementService {
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
     public void updateJobCron(String jobName, String cronExpression) throws SchedulerException {
-        updateJobCron(jobName, cronExpression, "quartz-batch");
+        updateJobCron(jobName, cronExpression, QUARTZ_BATCH_GROUP);
     }
 
     /**

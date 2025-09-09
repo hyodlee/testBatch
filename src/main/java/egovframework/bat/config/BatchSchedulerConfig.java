@@ -78,6 +78,7 @@ public class BatchSchedulerConfig {
      */
     private Trigger cronTrigger(JobDetail jobDetail, String expression) throws Exception {
         CronTriggerFactoryBean factory = new CronTriggerFactoryBean();
+        factory.setName( jobDetail.getKey().getName().replace("Detail", "Trigger") );	// JobDetail 이름을 기반으로 트리거 이름 지정        
         factory.setGroup(Constant.QUARTZ_BATCH_GROUP);
         factory.setJobDetail(jobDetail);
         factory.setCronExpression(expression);

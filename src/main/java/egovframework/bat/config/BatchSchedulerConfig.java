@@ -28,6 +28,7 @@ import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
+import egovframework.bat.common.Constant;
 import egovframework.bat.repository.dto.SchedulerJobDto;
 import egovframework.bat.scheduler.EgovQuartzJobLauncher;
 import lombok.RequiredArgsConstructor;
@@ -57,7 +58,7 @@ public class BatchSchedulerConfig {
         JobDetailFactoryBean factory = new JobDetailFactoryBean();
         factory.setName(job.getName() + "Detail");
         factory.setJobClass(EgovQuartzJobLauncher.class);
-        factory.setGroup("quartz-batch");
+        factory.setGroup(Constant.QUARTZ_BATCH_GROUP);
         factory.setDurability(durability);
 
         Map<String, Object> map = new HashMap<>();
@@ -89,10 +90,10 @@ public class BatchSchedulerConfig {
     @Bean
     public JobChainingJobListener jobChainingJobListener() {
         JobChainingJobListener listener = new JobChainingJobListener("jobChainingListener");
-        listener.addJobChainLink(new JobKey("insaRemote1ToStgJobDetail", "quartz-batch"),
-                new JobKey("insaStgToLocalJobDetail", "quartz-batch"));
-        listener.addJobChainLink(new JobKey("erpRestToStgJobDetail", "quartz-batch"),
-                new JobKey("erpStgToLocalJobDetail", "quartz-batch"));
+        listener.addJobChainLink(new JobKey("insaRemote1ToStgJobDetail", Constant.QUARTZ_BATCH_GROUP),
+                new JobKey("insaStgToLocalJobDetail", Constant.QUARTZ_BATCH_GROUP));
+        listener.addJobChainLink(new JobKey("erpRestToStgJobDetail", Constant.QUARTZ_BATCH_GROUP),
+                new JobKey("erpStgToLocalJobDetail", Constant.QUARTZ_BATCH_GROUP));
         return listener;
     }
 

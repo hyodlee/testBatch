@@ -14,6 +14,7 @@ import org.mockito.ArgumentCaptor;
 import org.quartz.*;
 import org.quartz.jobs.NoOpJob;
 
+import egovframework.bat.common.Constant;
 import egovframework.bat.management.scheduler.dto.ScheduledJobDto;
 import egovframework.bat.management.scheduler.exception.TriggerNotFoundException;
 
@@ -86,7 +87,7 @@ public class SchedulerManagementServiceTest {
     @Test
     public void updateJobCronWithGroupChangesCron() throws Exception {
         String jobName = "testJob";
-        String group = "quartz-batch";
+        String group = Constant.QUARTZ_BATCH_GROUP;
 
         JobDetail jobDetail = JobBuilder.newJob(NoOpJob.class)
                 .withIdentity(jobName)
@@ -113,7 +114,7 @@ public class SchedulerManagementServiceTest {
     @Test
     public void updateJobCronFindsTriggerInAnotherGroup() throws Exception {
         String jobName = "testJob";
-        String group = "quartz-batch";
+        String group = Constant.QUARTZ_BATCH_GROUP;
         String otherGroup = "other-group";
 
         JobDetail jobDetail = JobBuilder.newJob(NoOpJob.class)
@@ -144,7 +145,7 @@ public class SchedulerManagementServiceTest {
     @Test(expected = TriggerNotFoundException.class)
     public void updateJobCronThrowsTriggerNotFoundExceptionWhenMissing() throws Exception {
         String jobName = "missingJob";
-        String group = "quartz-batch";
+        String group = Constant.QUARTZ_BATCH_GROUP;
 
         JobDetail jobDetail = JobBuilder.newJob(NoOpJob.class)
                 .withIdentity(jobName)

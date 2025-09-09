@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import egovframework.bat.common.Constant;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Date;
@@ -28,9 +30,6 @@ public class SchedulerManagementService {
     /** 로깅을 위한 로거 */
     private static final Logger LOGGER = LoggerFactory.getLogger(SchedulerManagementService.class);
 
-    /** Quartz 잡 및 트리거 그룹 */
-    private static final String QUARTZ_BATCH_GROUP = "quartz-batch";
-
     /** Quartz 스케줄러 */
     private final Scheduler scheduler;
 
@@ -48,10 +47,10 @@ public class SchedulerManagementService {
         @SuppressWarnings("unchecked")
         Class<? extends Job> jobClass = (Class<? extends Job>) Class.forName(jobClassName);
         JobDetail jobDetail = JobBuilder.newJob(jobClass)
-                .withIdentity(jobName, QUARTZ_BATCH_GROUP)
+                .withIdentity(jobName, Constant.QUARTZ_BATCH_GROUP)
                 .build();
         Trigger trigger = TriggerBuilder.newTrigger()
-                .withIdentity(jobName + "Trigger", QUARTZ_BATCH_GROUP)
+                .withIdentity(jobName + "Trigger", Constant.QUARTZ_BATCH_GROUP)
                 .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
                 .build();
         scheduler.scheduleJob(jobDetail, trigger);

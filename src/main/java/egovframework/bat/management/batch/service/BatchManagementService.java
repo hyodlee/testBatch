@@ -7,23 +7,26 @@ import egovframework.bat.service.BatchManagementMapper;
 import egovframework.bat.service.dto.JobExecutionDto;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.Set;
 import java.util.stream.Collectors;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.BatchStatus;
 import org.springframework.batch.core.ExitStatus;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
-import org.springframework.batch.core.explore.JobExplorer;
-import org.springframework.batch.core.repository.JobRepository;
-import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.configuration.JobRegistry;
+import org.springframework.batch.core.explore.JobExplorer;
+import org.springframework.batch.core.launch.JobLauncher;
+import org.springframework.batch.core.repository.JobRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
  * 배치 잡 관리 기능을 제공하는 서비스.
  */
+@Slf4j
 @Service
 public class BatchManagementService {
 
@@ -117,11 +120,23 @@ public class BatchManagementService {
      * @throws Exception 잡 실행 중 예외 발생 시
      */
     public void restart(String jobName) throws Exception {
-        Job job = jobRegistry.getJob(jobName);
-        JobParameters params = new JobParametersBuilder()
-                .addLong("timestamp", System.currentTimeMillis())
-                .toJobParameters();
-        jobLauncher.run(job, params);
+        try {
+            Job job = jobRegistry.getJob(jobName);
+            JobParameters params = new JobParametersBuilder()
+                    .addLong("timestamp", System.currentTimeMillis())
+                    .toJobParameters();
+            // 잡 이름과 파라미터 로그 출력
+            log.info("잡 재실행 요청 - 이름: {}, 파라미터: {}", jobName, params);
+            // 실행 전 상태 기록
+            log.info("잡 실행 시작");
+            jobLauncher.run(job, params);
+            // 실행 후 상태 기록
+            log.info("잡 실행 완료");
+        } catch (Exception e) {
+            // 예외 발생 시 로그 남기고 다시 던짐
+            log.error("잡 재실행 중 예외 발생 - 잡 이름: {}", jobName, e);
+            throw e;
+        }
     }
 
     /**
@@ -130,10 +145,26 @@ public class BatchManagementService {
      * @param jobName 중지할 잡 이름
      */
     public void stop(String jobName) {
-        jobExplorer.findRunningJobExecutions(jobName).forEach(execution -> {
-            execution.stop();
-            jobRepository.update(execution);
-        });
+        try {
+            Set<JobExecution> executions = jobExplorer.findRunningJobExecutions(jobName);
+            // 조회된 실행 건수 로그
+            log.info("중지 대상 실행 건수: {}", executions.size());
+            executions.forEach(execution -> {
+                try {
+                    execution.stop();
+                    jobRepository.update(execution);
+                    // 각 실행의 중지 성공 여부 로그
+                    log.debug("잡 실행 {} 중지 성공", execution.getId());
+                } catch (Exception e) {
+                    // 실행 중 예외 발생 시 로그
+                    log.error("잡 실행 {} 중지 실패", execution.getId(), e);
+                }
+            });
+        } catch (Exception e) {
+            // 전체 중지 과정에서 예외 발생 시 로그 후 예외 전달
+            log.error("잡 중지 처리 중 예외 발생 - 잡 이름: {}", jobName, e);
+            throw new IllegalStateException("잡 중지 실패: " + jobName, e);
+        }
     }
 }
 

@@ -127,24 +127,25 @@ public class SchedulerManagementService {
         }
         LOGGER.debug("크론 표현식 유효성 통과");
 
-        TriggerKey triggerKey = TriggerKey.triggerKey(jobName + "Trigger", jobGroup);
+        // 잡 이름에서 Detail을 Trigger로 변경해 트리거 이름 생성
+        String triggerName = jobName.replace("Detail", "Trigger");
+        TriggerKey triggerKey = TriggerKey.triggerKey(triggerName, jobGroup);
         // 기존 트리거 조회
         Trigger oldTrigger = scheduler.getTrigger(triggerKey);
         if (oldTrigger == null) {
-            LOGGER.warn("그룹 '{}'에서 트리거 '{}'를 찾지 못했습니다", jobGroup, jobName + "Trigger");
+            LOGGER.warn("그룹 '{}'에서 트리거 '{}'를 찾지 못했습니다", jobGroup, triggerName);
             List<? extends Trigger> triggers = scheduler.getTriggersOfJob(JobKey.jobKey(jobName, jobGroup));
             LOGGER.debug("잡 {}에 연결된 트리거 수: {}", jobName, triggers.size());
-            for (Trigger trigger : triggers) {
-                if (trigger.getKey().getName().equals(jobName + "Trigger")) {
-                    triggerKey = trigger.getKey();
-                    oldTrigger = trigger;
-                    LOGGER.info("다른 그룹 '{}'에서 트리거 '{}'를 찾았습니다", triggerKey.getGroup(), triggerKey.getName());
-                    break;
-                }
+            if (!triggers.isEmpty()) {
+                // 잡에 연결된 트리거에서 이름 직접 사용
+                Trigger trigger = triggers.get(0);
+                triggerKey = trigger.getKey();
+                oldTrigger = trigger;
+                LOGGER.info("잡 {}에서 트리거 '{}'를 사용합니다", jobName, triggerKey.getName());
             }
             if (oldTrigger == null) {
-                LOGGER.error("잡 {}의 트리거 '{}'를 찾을 수 없습니다", jobName, jobName + "Trigger");
-                throw new TriggerNotFoundException("트리거를 찾을 수 없습니다: " + jobName + "Trigger");
+                LOGGER.error("잡 {}의 트리거 '{}'를 찾을 수 없습니다", jobName, triggerName);
+                throw new TriggerNotFoundException("트리거를 찾을 수 없습니다: " + triggerName);
             }
         } else {
             LOGGER.info("기존 트리거를 찾았습니다: {}", triggerKey);

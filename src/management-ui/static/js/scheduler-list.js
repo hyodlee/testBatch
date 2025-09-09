@@ -14,6 +14,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     nameTd.textContent = job.jobName;
                     tr.appendChild(nameTd);
 
+                    const groupTd = document.createElement('td');
+                    // 잡 그룹 표시
+                    groupTd.textContent = job.jobGroup;
+                    tr.appendChild(groupTd);
+
                     const cronTd = document.createElement('td');
                     cronTd.textContent = job.cronExpression;
                     tr.appendChild(cronTd);

@@ -222,7 +222,7 @@ public class SchedulerManagementService {
             if (jobDetail != null) {
                 durable = jobDetail.isDurable();
             }
-            jobs.add(new ScheduledJobDto(jobKey.getName(), cronExpression, status, durable));
+            jobs.add(new ScheduledJobDto(jobKey.getName(), jobKey.getGroup(), cronExpression, status, durable));
         }
         return jobs;
     }
@@ -254,7 +254,7 @@ public class SchedulerManagementService {
         if (jobDetail != null) {
             durable = jobDetail.isDurable();
         }
-        return new ScheduledJobDto(jobName, cronExpression, status, durable);
+        return new ScheduledJobDto(jobName, jobKey.getGroup(), cronExpression, status, durable);
     }
 }
 

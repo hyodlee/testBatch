@@ -64,6 +64,12 @@ Quartz는 스케줄 정보를 `qrtz_cron_triggers` 테이블에 저장하므로 
 
 WebClient처럼 이미 자바 설정으로 작성된 클래스(`WebClientConfig`)는 좋은 예시입니다. 반복적으로 사용하는 공통 빈(예: 로깅, 글로벌 메시지)은 별도의 `@Configuration` 클래스에 배치하여 응집력을 높입니다. 예를 들어, `NotificationConfig`는 이메일 및 SMS 알림 전송기를 빈으로 등록합니다.
 
+### 알림 기능 제거 방법
+SMS와 이메일 알림을 사용하지 않으려면 아래 항목을 삭제하거나 주석 처리하세요.
+1. `src/main/java/egovframework/bat/config/NotificationConfig.java`
+2. `EmailNotificationSender`, `SmsNotificationSender` 등 알림 전송기 클래스
+3. `pom.xml`에서 메일·SMS 관련 의존성
+
 ## Spring Batch 처리 방식: Chunk와 Tasklet
 
 Spring Batch는 두 가지 대표적인 Step 구현 방식을 제공합니다.

@@ -18,7 +18,6 @@ mvn -Pprod package    # 운영 환경 빌드
 ## STG 환경용 DDL 스크립트
 
 migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.sql`을 실행해 테이블 구조를 생성합니다. STG 연결 정보는 각 환경별 `src/main/resources/application/env/<프로필>/application.yml` 파일의 관련 항목을 참고하세요.
-해당 스크립트에는 REST 호출 실패 로그 테이블(`erp_api_fail_log`)과 DB 적재 실패 로그 테이블(`erp_db_fail_log`) DDL이 포함되어 있으며, `FetchErpDataTasklet`이 DB 적재 실패 시 이 테이블에 로그를 남깁니다.
 
 > **참고**: 증분 이관은 `EMPLYR_ID`로 중복 여부를 판단하므로 STG의 `COMTNEMPLYRINFO` 테이블에는 `ESNTL_ID` 컬럼이 필수는 아닙니다. 반면 로컬 DB는 `src/script/mysql/test/3.local_ddl-mysql.sql`에서처럼 `ESNTL_ID`를 기본 키로 사용하므로 컬럼을 반드시 유지해야 합니다.
 
@@ -176,11 +175,19 @@ public class SampleTasklet implements Tasklet {
   - `src/main/java/egovframework/bat/job/erp/tasklet/FetchErpDataTasklet.java`
   - `src/main/java/egovframework/bat/job/erp/tasklet/SendErpDataTasklet.java`
   - `src/main/java/egovframework/bat/job/erp/tasklet/TruncateErpVehicleTasklet.java`
-- 테스트 코드
-  - `src/test/java/egovframework/bat/job/erp/tasklet/FetchErpDataTaskletTest.java`
-  - `src/test/java/egovframework/bat/job/erp/tasklet/FetchErpDataTaskletPropertyInjectionTest.java`
-  - `src/test/java/egovframework/bat/job/erp/api/VehicleControllerTest.java`
-  - `src/test/java/egovframework/bat/job/erp/api/DummyErpApiInfoTest.java`
+  - 테스트 코드
+    - `src/test/java/egovframework/bat/job/erp/tasklet/FetchErpDataTaskletTest.java`
+    - `src/test/java/egovframework/bat/job/erp/tasklet/FetchErpDataTaskletPropertyInjectionTest.java`
+    - `src/test/java/egovframework/bat/job/erp/api/VehicleControllerTest.java`
+    - `src/test/java/egovframework/bat/job/erp/api/DummyErpApiInfoTest.java`
+
+### ERP 실패 로그 테이블 미사용 시
+
+`erp_api_fail_log`, `erp_db_fail_log` 테이블을 사용하지 않는 경우 아래 단계를 순서대로 수행합니다.
+
+1. `src/main/java/egovframework/bat/job/erp/config/ErpFailLogTableInitializer.java` 삭제
+2. `src/main/java/egovframework/bat/job/erp/tasklet/FetchErpDataTasklet.java`에서 실패 로그 처리 관련 메서드 제거
+3. 관련 테스트 코드와 DDL 스크립트(`src/test/java/egovframework/bat/job/erp/tasklet/FetchErpDataTaskletTest.java`, `src/script/mysql/test/2.stg_ddl-mysql.sql` 등) 업데이트
 
 ## EXAMPLE 배치 잡 디렉터리(`example`)
 

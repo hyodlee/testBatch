@@ -48,7 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
             restartBtn.textContent = '재시작';
             restartBtn.addEventListener('click', () => {
                 // 잡을 재시작하는 API 호출
-                fetch(`/api/management/batch/jobs/${jobName}/restart`, { method: 'POST' })
+                fetch(`/api/management/batch/jobs/${jobName}/restart`, {
+                    method: 'POST',
+                    // API 키 헤더 추가
+                    headers: { 'X-API-KEY': '<발급받은-API-키>' }
+                })
                     .then(res => {
                         if (!res.ok) throw new Error('재시작 요청 실패');
                         load();
@@ -61,7 +65,11 @@ document.addEventListener('DOMContentLoaded', () => {
             stopBtn.textContent = '중지';
             stopBtn.addEventListener('click', () => {
                 // 실행 중인 잡을 중지하는 API 호출
-                fetch(`/api/management/batch/jobs/${jobName}/stop`, { method: 'POST' })
+                fetch(`/api/management/batch/jobs/${jobName}/stop`, {
+                    method: 'POST',
+                    // API 키 헤더 추가
+                    headers: { 'X-API-KEY': '<발급받은-API-키>' }
+                })
                     .then(res => {
                         if (!res.ok) throw new Error('중지 요청 실패');
                         load();

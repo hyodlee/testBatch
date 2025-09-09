@@ -106,6 +106,18 @@ public class SchedulerManagementService {
      * @throws SchedulerException 스케줄러 작업 실패 시 발생
      */
     public void updateJobCron(String jobName, String cronExpression) throws SchedulerException {
+        updateJobCron(jobName, cronExpression, "quartz-batch");
+    }
+
+    /**
+     * 등록된 잡의 크론 표현식을 변경한다.
+     *
+     * @param jobName        잡 이름
+     * @param cronExpression 새 크론 표현식
+     * @param group          트리거 그룹, 기본값은 "quartz-batch"
+     * @throws SchedulerException 스케줄러 작업 실패 시 발생
+     */
+    public void updateJobCron(String jobName, String cronExpression, String group) throws SchedulerException {
         LOGGER.debug("잡 {} 크론 변경 요청: {}", jobName, cronExpression);
         JobDetail jobDetail = scheduler.getJobDetail(JobKey.jobKey(jobName));
         LOGGER.debug("JobDetail: {}, isDurable: {}", jobDetail, jobDetail != null ? jobDetail.isDurable() : null);
@@ -120,7 +132,7 @@ public class SchedulerManagementService {
         }
         LOGGER.debug("크론 표현식 유효성 통과");
 
-        TriggerKey triggerKey = TriggerKey.triggerKey(jobName + "Trigger");
+        TriggerKey triggerKey = TriggerKey.triggerKey(jobName + "Trigger", group);
         // 기존 트리거 조회
         Trigger oldTrigger = scheduler.getTrigger(triggerKey);
         if (oldTrigger == null) {

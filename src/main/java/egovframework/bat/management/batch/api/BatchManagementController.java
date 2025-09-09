@@ -6,8 +6,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.JobExecution;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,6 +25,7 @@ import egovframework.bat.management.batch.service.BatchManagementService;
 @RestController
 @RequestMapping("/api/management/batch")
 @RequiredArgsConstructor
+@Slf4j
 public class BatchManagementController {
 
     /** 배치 관리 서비스를 주입 */
@@ -46,6 +49,7 @@ public class BatchManagementController {
      */
     @GetMapping("/jobs/{jobName}/executions")
     public ResponseEntity<List<BatchJobExecutionDto>> getExecutions(@PathVariable String jobName) {
+        log.info("잡 실행 이력 조회 요청: {}", jobName);
         List<JobExecution> executions = batchManagementService.getJobExecutions(jobName);
         List<BatchJobExecutionDto> dtos = executions.stream().map(je -> {
             BatchJobExecutionDto dto = new BatchJobExecutionDto();
@@ -65,6 +69,7 @@ public class BatchManagementController {
             dto.setJobName(jobName);
             return dto;
         }).collect(Collectors.toList());
+        log.debug("잡 실행 이력 조회 결과: {}", dtos);
         return ResponseEntity.ok(dtos);
     }
 
@@ -84,12 +89,18 @@ public class BatchManagementController {
      *
      * @param jobName 잡 이름
      * @return 처리 결과
-     * @throws Exception 재실행 중 예외 발생 시
      */
     @PostMapping("/jobs/{jobName}/restart")
-    public ResponseEntity<Void> restart(@PathVariable String jobName) throws Exception {
-        batchManagementService.restart(jobName);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> restart(@PathVariable String jobName) {
+        log.info("잡 재실행 요청: {}", jobName);
+        try {
+            batchManagementService.restart(jobName);
+            log.debug("잡 재실행 완료: {}", jobName);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("잡 재실행 중 예외 발생: {}", jobName, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     /**
@@ -100,8 +111,15 @@ public class BatchManagementController {
      */
     @PostMapping("/jobs/{jobName}/stop")
     public ResponseEntity<Void> stop(@PathVariable String jobName) {
-        batchManagementService.stop(jobName);
-        return ResponseEntity.ok().build();
+        log.info("잡 중지 요청: {}", jobName);
+        try {
+            batchManagementService.stop(jobName);
+            log.debug("잡 중지 완료: {}", jobName);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            log.error("잡 중지 중 예외 발생: {}", jobName, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
 

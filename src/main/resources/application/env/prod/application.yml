@@ -78,7 +78,7 @@ logging:
 
 security:
   api-key:
-    enabled: true    # 운영 환경 API 키 사용
+    enabled: false    # 운영 환경 API 키 사용
     value: prod-0987654321
 
 erp:

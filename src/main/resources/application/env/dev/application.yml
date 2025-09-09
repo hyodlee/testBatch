@@ -78,7 +78,7 @@ logging:
 
 security:
   api-key:
-    enabled: true    # 개발 환경 API 키 사용
+    enabled: false    # 개발 환경 API 키 사용
     value: dev-1234567890
 
 erp:

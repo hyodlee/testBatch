@@ -315,3 +315,8 @@ CRM 배치는 신규 시스템 추가시의 예시입니다
 
 ※ ID이름이 중복되지 않게 신경쓸것. (예로 step빈의 ID가 다른 업무와 같게 구성할경우, 에러가 발생하지 않는데, 그 작업이 실행되지 않는 현상을 경험할 수 있음)
 
+
+## 에러 로그 조회 테이블 안내
+
+배치 결과 목록 화면에서 **잡 상세 → 액션 → 로그**를 선택하면 `BatchManagementService`가 `BatchManagementMapper.selectErrorLogs`를 호출해 에러 로그를 조회합니다. 이 매퍼는 `BATCH_STEP_EXECUTION` 테이블의 `EXIT_MESSAGE` 컬럼에서 해당 `JOB_EXECUTION_ID`의 메시지를 가져와 화면에 표시합니다.
+

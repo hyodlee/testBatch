@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.mockito.ArgumentCaptor;
 import org.quartz.*;
 import org.quartz.jobs.NoOpJob;
 
@@ -79,5 +80,32 @@ public class SchedulerManagementServiceTest {
         ScheduledJobDto job = schedulerManagementService.getJob("testJob");
         assertNotNull(job);
         assertFalse(job.isDurable());
+    }
+
+    @Test
+    public void updateJobCronWithGroupChangesCron() throws Exception {
+        String jobName = "testJob";
+        String group = "quartz-batch";
+
+        JobDetail jobDetail = JobBuilder.newJob(NoOpJob.class)
+                .withIdentity(jobName)
+                .storeDurably(false)
+                .build();
+        when(scheduler.getJobDetail(JobKey.jobKey(jobName))).thenReturn(jobDetail);
+
+        TriggerKey triggerKey = TriggerKey.triggerKey(jobName + "Trigger", group);
+        CronTrigger oldTrigger = TriggerBuilder.newTrigger()
+                .withIdentity(triggerKey)
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 * * * ?"))
+                .build();
+        when(scheduler.getTrigger(triggerKey)).thenReturn(oldTrigger);
+
+        ArgumentCaptor<Trigger> captor = ArgumentCaptor.forClass(Trigger.class);
+
+        schedulerManagementService.updateJobCron(jobName, "0/5 * * * * ?", group);
+
+        verify(scheduler).rescheduleJob(eq(triggerKey), captor.capture());
+        CronTrigger newTrigger = (CronTrigger) captor.getValue();
+        assertEquals("0/5 * * * * ?", newTrigger.getCronExpression());
     }
 }

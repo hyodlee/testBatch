@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Date;
+import java.util.TimeZone;
 
 import egovframework.bat.management.scheduler.dto.ScheduledJobDto;
 import egovframework.bat.management.scheduler.exception.InvalidCronExpressionException;
@@ -119,10 +121,39 @@ public class SchedulerManagementService {
         LOGGER.debug("크론 표현식 유효성 통과");
 
         TriggerKey triggerKey = TriggerKey.triggerKey(jobName + "Trigger");
-        Trigger newTrigger = TriggerBuilder.newTrigger()
+        // 기존 트리거 조회
+        Trigger existingTrigger = scheduler.getTrigger(triggerKey);
+        if (existingTrigger == null) {
+            throw new SchedulerException("기존 트리거를 찾을 수 없습니다: " + jobName);
+        }
+
+        // 기존 트리거의 시작/종료 시간을 유지
+        Date startTime = existingTrigger.getStartTime();
+        Date endTime = existingTrigger.getEndTime();
+
+        // 미스파이어 시 아무 작업도 하지 않도록 설정하고, 필요 시 기존 시간대를 반영
+        CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression)
+                .withMisfireHandlingInstructionDoNothing();
+
+        if (existingTrigger instanceof CronTrigger) {
+            TimeZone timeZone = ((CronTrigger) existingTrigger).getTimeZone();
+            if (timeZone != null) {
+                cronScheduleBuilder = cronScheduleBuilder.inTimeZone(TimeZone.getTimeZone(timeZone.getID()));
+            }
+        }
+
+        TriggerBuilder<?> triggerBuilder = TriggerBuilder.newTrigger()
                 .withIdentity(triggerKey)
-                .withSchedule(CronScheduleBuilder.cronSchedule(cronExpression))
-                .build();
+                .withSchedule(cronScheduleBuilder);
+
+        if (startTime != null) {
+            triggerBuilder.startAt(startTime);
+        }
+        if (endTime != null) {
+            triggerBuilder.endAt(endTime);
+        }
+
+        Trigger newTrigger = triggerBuilder.build();
         LOGGER.debug("TriggerKey {}에 대해 크론 {}으로 재스케줄링 시도", triggerKey, cronExpression);
         scheduler.rescheduleJob(triggerKey, newTrigger);
         LOGGER.info("잡 {}의 크론을 {}로 변경 완료", jobName, cronExpression);

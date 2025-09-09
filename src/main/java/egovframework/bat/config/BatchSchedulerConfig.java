@@ -78,6 +78,7 @@ public class BatchSchedulerConfig {
      */
     private Trigger cronTrigger(JobDetail jobDetail, String expression) throws Exception {
         CronTriggerFactoryBean factory = new CronTriggerFactoryBean();
+        factory.setGroup(Constant.QUARTZ_BATCH_GROUP);
         factory.setJobDetail(jobDetail);
         factory.setCronExpression(expression);
         factory.afterPropertiesSet();

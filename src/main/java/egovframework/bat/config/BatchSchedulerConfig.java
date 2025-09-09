@@ -79,6 +79,9 @@ public class BatchSchedulerConfig {
         CronTriggerFactoryBean factory = new CronTriggerFactoryBean();
         factory.setJobDetail(jobDetail);
         factory.setCronExpression(expression);
+        // 트리거 이름과 그룹을 명시하여 관리하기 쉽게 한다
+        factory.setName(jobDetail.getKey().getName() + "Trigger");
+        factory.setGroup("quartz-batch");
         factory.afterPropertiesSet();
         return factory.getObject();
     }

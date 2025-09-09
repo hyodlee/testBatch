@@ -4,6 +4,7 @@ import egovframework.bat.job.erp.domain.VehicleInfo;
 import egovframework.bat.job.erp.exception.ErpApiException;
 import egovframework.bat.notification.NotificationSender;
 import java.sql.Timestamp;
+import java.sql.Types;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -186,10 +187,18 @@ public class FetchErpDataTasklet implements Tasklet {
                 ps.setString(3, vehicle.getManufacturer());
                 // 가격
                 ps.setBigDecimal(4, vehicle.getPrice());
-                // 등록일시
-                ps.setTimestamp(5, vehicle.getRegDttm() == null ? null : new Timestamp(vehicle.getRegDttm().getTime()));
-                // 수정일시
-                ps.setTimestamp(6, vehicle.getModDttm() == null ? null : new Timestamp(vehicle.getModDttm().getTime()));
+                // 등록일시 (null이면 DB NULL로 저장)
+                if (vehicle.getRegDttm() == null) {
+                    ps.setNull(5, Types.TIMESTAMP);
+                } else {
+                    ps.setTimestamp(5, new Timestamp(vehicle.getRegDttm().getTime()));
+                }
+                // 수정일시 (null이면 DB NULL로 저장)
+                if (vehicle.getModDttm() == null) {
+                    ps.setNull(6, Types.TIMESTAMP);
+                } else {
+                    ps.setTimestamp(6, new Timestamp(vehicle.getModDttm().getTime()));
+                }
             });
         } catch (CannotGetJdbcConnectionException e) {
             LOGGER.error("차량 정보 적재 중 커넥션 획득 실패", e);

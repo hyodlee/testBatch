@@ -122,25 +122,34 @@ public class SchedulerManagementService {
 
         TriggerKey triggerKey = TriggerKey.triggerKey(jobName + "Trigger");
         // 기존 트리거 조회
-        Trigger existingTrigger = scheduler.getTrigger(triggerKey);
-        if (existingTrigger == null) {
-            throw new SchedulerException("기존 트리거를 찾을 수 없습니다: " + jobName);
+        Trigger oldTrigger = scheduler.getTrigger(triggerKey);
+        if (oldTrigger == null) {
+            LOGGER.info("기존 트리거를 찾지 못했습니다: {}", triggerKey);
+            throw new SchedulerException("Trigger not found: " + triggerKey);
+        } else {
+            LOGGER.info("기존 트리거를 찾았습니다: {}", triggerKey);
         }
 
         // 기존 트리거의 시작/종료 시간을 유지
-        Date startTime = existingTrigger.getStartTime();
-        Date endTime = existingTrigger.getEndTime();
+        Date startTime = oldTrigger.getStartTime();
+        Date endTime = oldTrigger.getEndTime();
 
         // 미스파이어 시 아무 작업도 하지 않도록 설정하고, 필요 시 기존 시간대를 반영
         CronScheduleBuilder cronScheduleBuilder = CronScheduleBuilder.cronSchedule(cronExpression)
                 .withMisfireHandlingInstructionDoNothing();
 
-        if (existingTrigger instanceof CronTrigger) {
-            TimeZone timeZone = ((CronTrigger) existingTrigger).getTimeZone();
+        if (oldTrigger instanceof CronTrigger) {
+            // 기존 트리거가 CronTrigger인 경우 기존 크론 표현식과 시간대를 로그로 남김
+            String oldCron = ((CronTrigger) oldTrigger).getCronExpression();
+            LOGGER.info("기존 크론 표현식: {}", oldCron);
+            TimeZone timeZone = ((CronTrigger) oldTrigger).getTimeZone();
             if (timeZone != null) {
                 cronScheduleBuilder = cronScheduleBuilder.inTimeZone(TimeZone.getTimeZone(timeZone.getID()));
             }
         }
+
+        // 새로 적용할 크론 표현식을 로그로 남김
+        LOGGER.info("새 크론 표현식: {}", cronExpression);
 
         TriggerBuilder<?> triggerBuilder = TriggerBuilder.newTrigger()
                 .withIdentity(triggerKey)

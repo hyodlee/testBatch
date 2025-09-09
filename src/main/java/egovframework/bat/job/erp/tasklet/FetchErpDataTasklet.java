@@ -50,6 +50,39 @@ public class FetchErpDataTasklet implements Tasklet {
     /** 차량 정보를 조회할 API URL */
     private final String apiUrl;
 
+    /**
+     * 허용된 로그 테이블 목록.
+     */
+    private enum LogTable {
+        /** ERP API 실패 로그 테이블 */
+        ERP_API_FAIL_LOG("migstg.erp_api_fail_log"),
+        /** DB 적재 실패 로그 테이블 */
+        ERP_DB_FAIL_LOG("migstg.erp_db_fail_log");
+
+        private final String tableName;
+
+        LogTable(String tableName) {
+            this.tableName = tableName;
+        }
+
+        public String getTableName() {
+            return tableName;
+        }
+
+        /**
+         * 문자열 테이블명을 열거형으로 변환한다.
+         * 허용되지 않은 테이블명일 경우 예외를 발생시킨다.
+         */
+        public static LogTable from(String table) {
+            for (LogTable value : values()) {
+                if (value.tableName.equals(table)) {
+                    return value;
+                }
+            }
+            throw new IllegalArgumentException("허용되지 않은 테이블명: " + table);
+        }
+    }
+
     public FetchErpDataTasklet(WebClient.Builder builder,
                                @Qualifier("jdbcTemplateLocal") JdbcTemplate jdbcTemplate,
                                @Qualifier("emailNotificationSender") NotificationSender emailNotificationSender,
@@ -210,39 +243,72 @@ public class FetchErpDataTasklet implements Tasklet {
     /**
      * 공통 로그 저장 메서드.
      *
-     * @param table  저장할 테이블명
+     * @param table  저장할 테이블 열거형
      * @param apiUrl API URL (필요 없으면 null)
      * @param e      발생한 예외
      */
-    private void saveLog(String table, String apiUrl, Exception e) {
+    private void saveLog(LogTable table, String apiUrl, Exception e) {
         String sql;
         Object[] params;
-        if (apiUrl != null) {
-            sql = "INSERT INTO " + table + " (api_url, error_message, reg_dttm) VALUES (?, ?, ?)";
-            params = new Object[] {apiUrl, e.getMessage(), new Timestamp(System.currentTimeMillis())};
-        } else {
-            sql = "INSERT INTO " + table + " (error_message, reg_dttm) VALUES (?, ?)";
-            params = new Object[] {e.getMessage(), new Timestamp(System.currentTimeMillis())};
+        Timestamp now = new Timestamp(System.currentTimeMillis());
+
+        switch (table) {
+            case ERP_API_FAIL_LOG:
+                if (apiUrl != null) {
+                    // API URL이 필요한 경우
+                    sql = "INSERT INTO migstg.erp_api_fail_log (api_url, error_message, reg_dttm) VALUES (?, ?, ?)";
+                    params = new Object[] {apiUrl, e.getMessage(), now};
+                } else {
+                    sql = "INSERT INTO migstg.erp_api_fail_log (error_message, reg_dttm) VALUES (?, ?)";
+                    params = new Object[] {e.getMessage(), now};
+                }
+                break;
+            case ERP_DB_FAIL_LOG:
+                sql = "INSERT INTO migstg.erp_db_fail_log (error_message, reg_dttm) VALUES (?, ?)";
+                params = new Object[] {e.getMessage(), now};
+                break;
+            default:
+                LOGGER.warn("처리되지 않은 로그 테이블: {}", table);
+                return;
         }
 
         try {
             jdbcTemplate.update(sql, params);
         } catch (CannotGetJdbcConnectionException ex) {
-            LOGGER.error("{} 로그 저장 중 커넥션 획득 실패", table, ex);
+            LOGGER.error("{} 로그 저장 중 커넥션 획득 실패", table.getTableName(), ex);
         } catch (BadSqlGrammarException ex) {
             // 테이블 미존재 등 SQL 문법 오류가 발생해도 배치를 중단하지 않음
-            LOGGER.error("{} 로그 테이블 SQL 오류", table, ex);
+            LOGGER.error("{} 로그 테이블 SQL 오류", table.getTableName(), ex);
         } catch (DataAccessException ex) {
             // 기타 데이터베이스 접근 오류 처리
-            LOGGER.error("{} 로그 저장 중 데이터 접근 오류", table, ex);
+            LOGGER.error("{} 로그 저장 중 데이터 접근 오류", table.getTableName(), ex);
+        }
+    }
+
+    /**
+     * 문자열 테이블명을 받아 로그를 저장한다.
+     * 허용되지 않은 테이블명일 경우 경고 로그만 남기고 무시한다.
+     */
+    private void saveLog(String table, String apiUrl, Exception e) {
+        try {
+            saveLog(LogTable.from(table), apiUrl, e);
+        } catch (IllegalArgumentException ex) {
+            LOGGER.warn("허용되지 않은 로그 테이블명: {}", table);
         }
     }
 
     /**
      * 공통 로그 저장 메서드(API URL 없이).
      *
-     * @param table 저장할 테이블명
+     * @param table 저장할 테이블 열거형
      * @param e     발생한 예외
+     */
+    private void saveLog(LogTable table, Exception e) {
+        saveLog(table, null, e);
+    }
+
+    /**
+     * 문자열 테이블명을 받아 로그를 저장한다(API URL 없이).
      */
     private void saveLog(String table, Exception e) {
         saveLog(table, null, e);
@@ -254,7 +320,7 @@ public class FetchErpDataTasklet implements Tasklet {
      * @param e 발생한 예외
      */
     private void saveFailLog(Exception e) {
-        saveLog("migstg.erp_api_fail_log", apiUrl, e);
+        saveLog(LogTable.ERP_API_FAIL_LOG, apiUrl, e);
     }
 
     /**
@@ -263,7 +329,7 @@ public class FetchErpDataTasklet implements Tasklet {
      * @param e 발생한 예외
      */
     private void saveDbFail(Exception e) {
-        saveLog("migstg.erp_db_fail_log", e);
+        saveLog(LogTable.ERP_DB_FAIL_LOG, e);
     }
 
     /**

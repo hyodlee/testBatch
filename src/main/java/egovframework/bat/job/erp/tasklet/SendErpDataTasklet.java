@@ -115,7 +115,7 @@ public class SendErpDataTasklet implements Tasklet {
             }
 
             // 현재 페이지의 마지막 VEHICLE_ID를 미리 확보
-            long maxId = vehicles.get(vehicles.size() - 1).getVehicleId();
+            long maxId = Long.parseLong(vehicles.get(vehicles.size() - 1).getVehicleId());
             try {
                 // 차량 정보를 Flux로 구성하여 병렬 전송
                 Flux.fromIterable(vehicles)

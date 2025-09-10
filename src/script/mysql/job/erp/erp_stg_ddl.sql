@@ -1,0 +1,18 @@
+-- migstg.erp_vehicle definition
+
+CREATE TABLE `erp_vehicle` (
+  `VEHICLE_ID` varchar(20) NOT NULL COMMENT '차량ID',
+  `MODEL` varchar(100) NOT NULL COMMENT '차량모델',
+  `MANUFACTURER` varchar(100) NOT NULL COMMENT '제조사',
+  `PRICE` decimal(15,2) DEFAULT NULL COMMENT '가격',
+  `REG_DTTM` datetime NOT NULL COMMENT '등록일시',
+  `MOD_DTTM` datetime DEFAULT NULL COMMENT '수정일시',
+  PRIMARY KEY (`VEHICLE_ID`),
+  UNIQUE KEY `ERP_VEHICLE_PK` (`VEHICLE_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci COMMENT='ERP 차량 정보';
+
+
+INSERT INTO erp_vehicle (VEHICLE_ID,MODEL,MANUFACTURER,PRICE,REG_DTTM,MOD_DTTM) VALUES
+	 ('SAMPLE-0001','샘플 모델','샘플 제조사',1000.00,'2025-09-09 13:05:01','2025-09-09 13:05:01');
+
+	 

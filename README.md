@@ -30,7 +30,11 @@ mvn -Pprod package    # 운영 환경 빌드
 2.schema-ddl-mysql.sql 파일을 실행하면, 스프링 배치관련 테이블이 생성된다 (/src/script/mysql/main/schema-ddl-mysql.sql)
 3.schema-insert-mysql.sql 파일을 실행하면, 스프링 배치관련 기초 데이터가 입력된다 /src/script/mysql/main/schema-insert-mysql.sql
 
-## STG 환경용 DDL 스크립트
+## 테스트 환경용 DDL 스크립트
+
+테스트 환경용 DDL스크립트는 
+/src/script/mysql/job/
+를 확인할것
 
 migstg 데이터베이스 초기화 시 `src/script/mysql/test/2.stg_ddl-mysql.sql`을 실행해 테이블 구조를 생성합니다. STG 연결 정보는 각 환경별 `src/main/resources/application/env/<프로필>/application.yml` 파일의 관련 항목을 참고하세요.
 

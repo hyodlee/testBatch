@@ -148,11 +148,6 @@
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz-jobs</artifactId>
         </dependency>
-                <dependency>
-                        <groupId>org.antlr</groupId>
-                        <artifactId>antlr</artifactId>
-                        <version>3.5</version>
-                </dependency>
 		<dependency>
 			<groupId>com.googlecode.log4jdbc</groupId>
 			<artifactId>log4jdbc</artifactId>

@@ -147,6 +147,7 @@
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz-jobs</artifactId>
+            <scope>test</scope>
         </dependency>
 		<dependency>
 			<groupId>com.googlecode.log4jdbc</groupId>

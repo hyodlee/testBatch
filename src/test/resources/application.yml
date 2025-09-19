@@ -10,6 +10,11 @@ spring:
       url: jdbc:h2:mem:localdb;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
       username: sa
       password:
+    risk-remote-mysql:
+      driver-class-name: org.h2.Driver
+      url: jdbc:h2:mem:riskremote;MODE=MySQL;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
+      username: sa
+      password:
   batch:
     job:
       enabled: false

@@ -96,6 +96,8 @@ public class BatchSchedulerConfig {
                 new JobKey("insaStgToLocalJobDetail", Constant.QUARTZ_BATCH_GROUP));
         listener.addJobChainLink(new JobKey("erpRestToStgJobDetail", Constant.QUARTZ_BATCH_GROUP),
                 new JobKey("erpStgToLocalJobDetail", Constant.QUARTZ_BATCH_GROUP));
+        listener.addJobChainLink(new JobKey("riskRemote1ToStgJobDetail", Constant.QUARTZ_BATCH_GROUP),
+                new JobKey("riskStgToLocalJobDetail", Constant.QUARTZ_BATCH_GROUP));
         return listener;
     }
 

@@ -198,6 +198,37 @@ public class SampleTasklet implements Tasklet {
     - `src/test/java/egovframework/bat/job/erp/tasklet/FetchErpDataTaskletTest.java`
     - `src/test/java/egovframework/bat/job/erp/tasklet/FetchErpDataTaskletPropertyInjectionTest.java`
     - `src/test/java/egovframework/bat/job/erp/api/VehicleControllerTest.java`
+
+## 리스크 배치 잡 디렉터리(`risk`)
+
+`src/main/java/egovframework/bat/job/risk` 디렉터리는 리스크 관리 업무 배치를 위한 구성을 모아둔 공간입니다. 주요 Job은 다음과 같습니다.
+
+- `riskRemote1ToStgJob`: 원격 리스크 DB에서 스테이징으로 카테고리/사건 정보를 이관합니다.
+- `riskStgToLocalJob`: 스테이징 데이터를 로컬 운영 DB와 동기화합니다.
+
+### 관련 소스 위치
+
+- 잡 설정 클래스
+  - `src/main/java/egovframework/bat/job/risk/config/RiskRemote1ToStgJobConfig.java`
+  - `src/main/java/egovframework/bat/job/risk/config/RiskStgToLocalJobConfig.java`
+- API 컨트롤러
+  - `src/main/java/egovframework/bat/job/risk/api/RiskRemote1ToStgJobController.java`
+- 도메인 및 태스크릿
+  - `src/main/java/egovframework/bat/job/risk/domain/RiskCategory.java`
+  - `src/main/java/egovframework/bat/job/risk/domain/RiskIncident.java`
+  - `src/main/java/egovframework/bat/job/risk/tasklet/TruncateRiskStgTablesTasklet.java`
+  - `src/main/java/egovframework/bat/job/risk/tasklet/RiskStgToLocalIncidentTasklet.java`
+- 매퍼 파일
+  - `src/main/resources/egovframework/batch/mapper/job/risk/risk_remote1_to_stg.xml`
+  - `src/main/resources/egovframework/batch/mapper/job/risk/risk_stg_to_local.xml`
+- 테스트 코드
+  - `src/test/java/egovframework/bat/job/risk/processor/RiskStgToLocalJobIntegrationTest.java`
+
+### 실행 방법과 설정 요약
+
+- REST 엔드포인트: `POST /api/batch/risk/remote1-to-stg`
+- 스케줄러: `scheduler.jobs` 맵에 `riskRemote1ToStgJob`, `riskStgToLocalJob`이 등록되어 있으며, `BatchSchedulerConfig`에서 체인 실행되도록 구성되어 있습니다.
+- 데이터소스 설정: `spring.datasource.risk-remote-mysql` 키로 원격 리스크 DB 접속 정보를 환경별 `application.yml`에 정의합니다.
     - `src/test/java/egovframework/bat/job/erp/api/DummyErpApiInfoTest.java`
 
 ### ERP 실패 로그 테이블 미사용 시

@@ -63,8 +63,21 @@ public class MultiDataSourceConfig {
     @Bean(name = "egovremote1CubridJdbcTemplate")
     //JdbcTemplate egovremote1CubridJdbcTemplate(@Qualifier("egovremote1CubridDataSource") DataSource ds) {
     JdbcTemplate egovremote1CubridJdbcTemplate(@Qualifier("dataSource-remote1") DataSource ds) {
-    	//return new JdbcTemplate(ds);
+        //return new JdbcTemplate(ds);
         // LazyConnectionDataSourceProxy로 실제 커넥션 생성을 지연
+        return new JdbcTemplate(new LazyConnectionDataSourceProxy(ds));
+    }
+
+    // 리스크 원격 MySQL용 데이타소스
+    @Bean(name = "dataSource-risk-remote")
+    @ConfigurationProperties("spring.datasource.risk-remote-mysql")
+    DataSource riskRemoteDataSource() {
+        return DataSourceBuilder.create().build();
+    }
+
+    // 리스크 원격 MySQL용 JdbcTemplate
+    @Bean(name = "riskRemoteJdbcTemplate")
+    JdbcTemplate riskRemoteJdbcTemplate(@Qualifier("dataSource-risk-remote") DataSource ds) {
         return new JdbcTemplate(new LazyConnectionDataSourceProxy(ds));
     }
 }

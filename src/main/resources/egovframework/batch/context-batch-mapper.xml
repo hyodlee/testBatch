@@ -14,6 +14,7 @@
             <list>
                 <value>classpath:/egovframework/batch/mapper/job/insa/insa_stg_to_local.xml</value>
                 <value>classpath:/egovframework/batch/mapper/job/erp/erp_stg_to_local.xml</value>
+                <value>classpath:/egovframework/batch/mapper/job/risk/risk_stg_to_local.xml</value>
             </list>
         </property>
     </bean>
@@ -28,13 +29,15 @@
                 <value>classpath:/egovframework/batch/mapper/job/insa/insa_remote1_to_stg.xml</value>
                 <value>classpath:/egovframework/batch/mapper/job/erp/erp_stg_to_local.xml</value>
                 <value>classpath:/egovframework/batch/mapper/job/erp/erp_rest_to_stg.xml</value>
+                <value>classpath:/egovframework/batch/mapper/job/risk/risk_stg_to_local.xml</value>
+                <value>classpath:/egovframework/batch/mapper/job/risk/risk_remote1_to_stg.xml</value>
                 <value>classpath:/egovframework/batch/mapper/job/example/Egov_Example_SQL.xml</value>
                 <!-- 배치 관리 매퍼는 스테이징 환경에서만 사용됩니다. -->
                 <value>classpath:/egovframework/batch/mapper/batch/BatchManagementMapper.xml</value>
             </list>
         </property>
     </bean>
-    
+
     <!-- insa - remote1 DB용 SqlSessionFactory -->
     <bean id="insa-sqlSessionFactory-remote1" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource-remote1"/>
@@ -42,6 +45,17 @@
         <property name="mapperLocations">
             <list>
                 <value>classpath:/egovframework/batch/mapper/job/insa/insa_remote1_to_stg.xml</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- risk - remote1 DB용 SqlSessionFactory -->
+    <bean id="risk-sqlSessionFactory-remote1" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource-risk-remote"/>
+        <property name="configLocation" value="classpath:/egovframework/batch/mapper/config/mapper-config.xml" />
+        <property name="mapperLocations">
+            <list>
+                <value>classpath:/egovframework/batch/mapper/job/risk/risk_remote1_to_stg.xml</value>
             </list>
         </property>
     </bean>

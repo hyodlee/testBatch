@@ -2,7 +2,7 @@ package egovframework.bat.job.erp.config;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter;
-import org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader;
+import org.mybatis.spring.batch.MyBatisPagingItemReader;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -34,9 +34,9 @@ public class ErpStgToLocalJobConfig {
      */
     @Bean
     @StepScope
-    public EgovMyBatisPagingItemReader<VehicleInfo> erpStgToLocalVehicleReader(
+    public MyBatisPagingItemReader<VehicleInfo> erpStgToLocalVehicleReader(
             @Qualifier("sqlSessionFactory-stg") SqlSessionFactory sqlSessionFactory) {
-        EgovMyBatisPagingItemReader<VehicleInfo> reader = new EgovMyBatisPagingItemReader<>();
+        MyBatisPagingItemReader<VehicleInfo> reader = new MyBatisPagingItemReader<>();
         reader.setSqlSessionFactory(sqlSessionFactory);
         reader.setQueryId("Vehicle.selectVehicleList");
         reader.setPageSize(100);

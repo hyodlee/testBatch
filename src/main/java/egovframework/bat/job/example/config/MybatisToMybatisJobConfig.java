@@ -1,7 +1,7 @@
 package egovframework.bat.job.example.config;
 
 import org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter;
-import org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader;
+import org.mybatis.spring.batch.MyBatisPagingItemReader;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -32,9 +32,9 @@ public class MybatisToMybatisJobConfig {
      */
     @Bean
     @StepScope
-    public EgovMyBatisPagingItemReader<CustomerCredit> mybatisItemReader(
+    public MyBatisPagingItemReader<CustomerCredit> mybatisItemReader(
             @Qualifier("example-sqlSessionFactory-remote1") SqlSessionFactory sqlSessionFactory) {
-        EgovMyBatisPagingItemReader<CustomerCredit> reader = new EgovMyBatisPagingItemReader<>();
+        MyBatisPagingItemReader<CustomerCredit> reader = new MyBatisPagingItemReader<>();
         reader.setSqlSessionFactory(sqlSessionFactory);
         reader.setQueryId("Customer.getAllCustomerCredits");
         reader.setPageSize(100);

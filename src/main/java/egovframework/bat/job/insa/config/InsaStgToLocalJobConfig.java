@@ -2,7 +2,7 @@ package egovframework.bat.job.insa.config;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter;
-import org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader;
+import org.mybatis.spring.batch.MyBatisPagingItemReader;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -32,9 +32,9 @@ public class InsaStgToLocalJobConfig {
      */
     @Bean
     @StepScope
-    public EgovMyBatisPagingItemReader<Orgnztinfo> stgToLocalOrgnztReader(
+    public MyBatisPagingItemReader<Orgnztinfo> stgToLocalOrgnztReader(
             @Qualifier("sqlSessionFactory-stg") SqlSessionFactory sqlSessionFactory) {
-        EgovMyBatisPagingItemReader<Orgnztinfo> reader = new EgovMyBatisPagingItemReader<>();
+        MyBatisPagingItemReader<Orgnztinfo> reader = new MyBatisPagingItemReader<>();
         reader.setSqlSessionFactory(sqlSessionFactory);
         reader.setQueryId("insaStgToLoc.selectOrgnztList");
         reader.setPageSize(100);

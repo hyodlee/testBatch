@@ -34,6 +34,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import egovframework.bat.management.batch.service.JobProgressService;
+import egovframework.bat.scheduler.ConditionalJobChainingListener;
 import egovframework.bat.service.JobLockService;
 
 /**
@@ -75,6 +76,10 @@ public class EgovQuartzJobLauncher extends QuartzJobBean {
         @Autowired
         private JobRegistry jobRegistry;
 
+        /** 잡 체이닝 상태를 관리하는 리스너 */
+        @Autowired
+        private ConditionalJobChainingListener conditionalJobChainingListener;
+
 	@Override
 	@SuppressWarnings("unchecked")
 	protected void executeInternal(JobExecutionContext context) {
@@ -115,6 +120,7 @@ public class EgovQuartzJobLauncher extends QuartzJobBean {
         try {
             LOGGER.info("{} 작업 시작", jobName); // 작업 시작 로그
             JobExecution jobExecution = jobLauncher.run(job, jobParameters);
+            conditionalJobChainingListener.afterJob(jobExecution);
             LOGGER.info("{} 작업 종료, 상태: {}", jobName, jobExecution.getStatus()); // 작업 종료 로그
             jobProgressService.send(jobName, jobExecution.getStatus().toString());
         } catch (JobExecutionException e) {

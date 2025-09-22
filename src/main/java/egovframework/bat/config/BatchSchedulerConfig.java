@@ -11,7 +11,6 @@ import javax.sql.DataSource;
 import org.quartz.JobDetail;
 import org.quartz.JobKey;
 import org.quartz.Trigger;
-import org.quartz.listeners.JobChainingJobListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
@@ -30,6 +29,7 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
 import egovframework.bat.common.Constant;
 import egovframework.bat.repository.dto.SchedulerJobDto;
+import egovframework.bat.scheduler.ConditionalJobChainingListener;
 import egovframework.bat.scheduler.EgovQuartzJobLauncher;
 import lombok.RequiredArgsConstructor;
 
@@ -90,8 +90,8 @@ public class BatchSchedulerConfig {
      * 잡 체이닝 리스너
      */
     @Bean
-    public JobChainingJobListener jobChainingJobListener() {
-        JobChainingJobListener listener = new JobChainingJobListener("jobChainingListener");
+    public ConditionalJobChainingListener jobChainingJobListener() {
+        ConditionalJobChainingListener listener = new ConditionalJobChainingListener("jobChainingListener");
         listener.addJobChainLink(new JobKey("insaRemote1ToStgJobDetail", Constant.QUARTZ_BATCH_GROUP),
                 new JobKey("insaStgToLocalJobDetail", Constant.QUARTZ_BATCH_GROUP));
         listener.addJobChainLink(new JobKey("erpRestToStgJobDetail", Constant.QUARTZ_BATCH_GROUP),
@@ -104,12 +104,12 @@ public class BatchSchedulerConfig {
      *
      * <p>application.yml의 {@code scheduler.jobs} 값을 읽어 크론이 있는 잡은
      * {@code CronTrigger}로 등록하고, 크론이 비어 있는 잡은 {@code JobDetail}만 생성한 뒤
-     * {@code JobChainingJobListener}로 체인 처리한다.</p>
+     * {@link ConditionalJobChainingListener}로 체인 처리한다.</p>
      */
     @Bean
     @DependsOn("jobRegistryBeanPostProcessor") // 잡 등록이 완료된 후 스케줄러 생성
     public SchedulerFactoryBean schedulerFactoryBean(JobRegistry jobRegistry,
-            JobChainingJobListener jobChainingJobListener,
+            ConditionalJobChainingListener jobChainingJobListener,
             List<Job> jobBeans,
             @Qualifier("dataSource-stg") DataSource quartzDataSource,
             AutowiringJobFactory autowiringJobFactory,

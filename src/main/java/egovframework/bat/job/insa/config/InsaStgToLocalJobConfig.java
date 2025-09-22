@@ -37,7 +37,7 @@ public class InsaStgToLocalJobConfig {
         MyBatisPagingItemReader<Orgnztinfo> reader = new MyBatisPagingItemReader<>();
         reader.setSqlSessionFactory(sqlSessionFactory);
         reader.setQueryId("insaStgToLoc.selectOrgnztList");
-        reader.setPageSize(100);
+        reader.setPageSize(10);
         return reader;
     }
 

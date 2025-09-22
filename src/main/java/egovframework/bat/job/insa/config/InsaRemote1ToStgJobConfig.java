@@ -51,7 +51,7 @@ public class InsaRemote1ToStgJobConfig {
         MyBatisPagingItemReader<Orgnztinfo> reader = new MyBatisPagingItemReader<>();
         reader.setSqlSessionFactory(sqlSessionFactory);
         reader.setQueryId("insaRemToStg.selectOrgnztList");
-        reader.setPageSize(100);
+        reader.setPageSize(10);
         return reader;
     }
 
@@ -78,7 +78,7 @@ public class InsaRemote1ToStgJobConfig {
         MyBatisPagingItemReader<EmployeeInfo> reader = new MyBatisPagingItemReader<>();
         reader.setSqlSessionFactory(sqlSessionFactory);
         reader.setQueryId("insaRemToStg.selectEmployeeList");
-        reader.setPageSize(100);
+        reader.setPageSize(10);
         return reader;
     }
 

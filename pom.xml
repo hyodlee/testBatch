@@ -216,10 +216,10 @@
             <scope>test</scope>
         </dependency>
         <!-- MyBatis 기반 배치 작업 지원을 위한 의존성 추가 -->
-        <dependency>
+		<dependency>
             <groupId>org.mybatis</groupId>
-            <artifactId>mybatis-spring-batch</artifactId>
-            <version>2.0.0</version>
+            <artifactId>mybatis-spring</artifactId>
+            <version>2.0.7</version>
         </dependency>
     </dependencies>
        

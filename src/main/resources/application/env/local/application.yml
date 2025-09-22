@@ -34,6 +34,8 @@ spring:
     egovremote1-mysql:
       driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://localhost:3306/egovremote1?useSSL=false&serverTimezone=Asia/Seoul
+#      driver-class-name: net.sf.log4jdbc.DriverSpy
+#      url: jdbc:log4jdbc:mysql://localhost:3306/egovremote1?useSSL=false&serverTimezone=Asia/Seoul
       username: readuser
       password: read!1234
 

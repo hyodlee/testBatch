@@ -27,6 +27,8 @@
                          REG_DTTM,
                          MOD_DTTM
                 FROM COMTNEMPLYRINFO
+                ORDER BY EMPLYR_ID ASC
+                LIMIT #{_skiprows}, #{_pagesize}
         </select>
 
        <!-- STG DB에 조직 정보 적재 (STG 대상 테이블이 사전 TRUNCATE되므로 중복 갱신 없음) -->

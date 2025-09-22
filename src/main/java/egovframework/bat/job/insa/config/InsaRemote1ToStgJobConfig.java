@@ -1,5 +1,8 @@
 package egovframework.bat.job.insa.config;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter;
 import org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader;
@@ -12,6 +15,7 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -74,10 +78,16 @@ public class InsaRemote1ToStgJobConfig {
     @Bean
     @StepScope
     public EgovMyBatisPagingItemReader<EmployeeInfo> remote1ToStgEmpReader(
-            @Qualifier("insa-sqlSessionFactory-remote1") SqlSessionFactory sqlSessionFactory) {
+            @Qualifier("insa-sqlSessionFactory-remote1") SqlSessionFactory sqlSessionFactory,
+            @Value("#{jobParameters['lastEmplyrId']}") Long lastEmplyrId) {
         EgovMyBatisPagingItemReader<EmployeeInfo> reader = new EgovMyBatisPagingItemReader<>();
         reader.setSqlSessionFactory(sqlSessionFactory);
         reader.setQueryId("insaRemToStg.selectEmployeeList");
+        if (lastEmplyrId != null) {
+            Map<String, Object> parameterValues = new HashMap<>();
+            parameterValues.put("lastEmplyrId", lastEmplyrId);
+            reader.setParameterValues(parameterValues);
+        }
         reader.setPageSize(100);
         return reader;
     }

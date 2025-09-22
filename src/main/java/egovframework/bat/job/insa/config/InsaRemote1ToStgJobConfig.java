@@ -115,6 +115,7 @@ public class InsaRemote1ToStgJobConfig {
             StepCountLogger stepCountLogger) {
         return new StepBuilder("truncateStgTablesStep").repository(jobRepository)
                 .tasklet(truncateStgTablesTasklet)
+                .allowStartIfComplete(true)
                 .transactionManager(transactionManager)
                 .listener(stepCountLogger)
                 .build();

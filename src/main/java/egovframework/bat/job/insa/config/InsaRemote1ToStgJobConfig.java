@@ -2,7 +2,7 @@ package egovframework.bat.job.insa.config;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter;
-import org.egovframe.rte.bat.core.item.database.EgovMyBatisPagingItemReader;
+import org.mybatis.spring.batch.MyBatisPagingItemReader;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.StepScope;
@@ -46,9 +46,9 @@ public class InsaRemote1ToStgJobConfig {
      */
     @Bean
     @StepScope
-    public EgovMyBatisPagingItemReader<Orgnztinfo> remote1ToStgOrgnztReader(
+    public MyBatisPagingItemReader<Orgnztinfo> remote1ToStgOrgnztReader(
             @Qualifier("insa-sqlSessionFactory-remote1") SqlSessionFactory sqlSessionFactory) {
-        EgovMyBatisPagingItemReader<Orgnztinfo> reader = new EgovMyBatisPagingItemReader<>();
+        MyBatisPagingItemReader<Orgnztinfo> reader = new MyBatisPagingItemReader<>();
         reader.setSqlSessionFactory(sqlSessionFactory);
         reader.setQueryId("insaRemToStg.selectOrgnztList");
         reader.setPageSize(100);
@@ -73,9 +73,9 @@ public class InsaRemote1ToStgJobConfig {
      */
     @Bean
     @StepScope
-    public EgovMyBatisPagingItemReader<EmployeeInfo> remote1ToStgEmpReader(
+    public MyBatisPagingItemReader<EmployeeInfo> remote1ToStgEmpReader(
             @Qualifier("insa-sqlSessionFactory-remote1") SqlSessionFactory sqlSessionFactory) {
-        EgovMyBatisPagingItemReader<EmployeeInfo> reader = new EgovMyBatisPagingItemReader<>();
+        MyBatisPagingItemReader<EmployeeInfo> reader = new MyBatisPagingItemReader<>();
         reader.setSqlSessionFactory(sqlSessionFactory);
         reader.setQueryId("insaRemToStg.selectEmployeeList");
         reader.setPageSize(100);

@@ -112,9 +112,9 @@
             <version>${org.egovframe.rte.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.mybatis.spring.batch</groupId>
-            <artifactId>mybatis-spring-batch</artifactId>
-            <version>2.0.1</version>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>2.0.7</version>
         </dependency>
         <!-- JPA 엔티티를 사용하기 위한 의존성 추가 -->
         <dependency>

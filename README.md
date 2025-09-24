@@ -25,6 +25,14 @@ mvn -Pprod package    # 운영 환경 빌드
 
 각 프로필은 `src/main/resources/application/env/<프로필>/application.yml` 설정 파일을 사용합니다.
 
+# 실행방법
+올바른 실행방법
+java -jar testBatchlocal.jar --startDate=20250101 --endDate=20250131 (O)
+java -DstartDate=20250101 -DendDate=20250131 -jar testBatchlocal.jar (O)
+잘못된 실행방법
+java -jar testBatchlocal.jar -DstartDate=20250101 -DendDate=20250131 (X)
+
+
 ## 최초 기동 전에 STG-DB에 다음 스크립트를 실행하여, 기본 테이블을 생성해야 한다
 1.schema-quartz.sql 파일을 실행하면, quartz관련 테이블이 생성된다 (/src/script/mysql/main/schema-quartz.sql)
 2.schema-ddl-mysql.sql 파일을 실행하면, 스프링 배치관련 테이블이 생성된다 (/src/script/mysql/main/schema-ddl-mysql.sql)

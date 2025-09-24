@@ -13,7 +13,7 @@
         </select>
 
         <!-- remote1 DB에서 STG 이관 시 ESNTL_ID와 SOURCE_SYSTEM을 제외하여 조회 -->
-        <select id="selectEmployeeList" resultType="egovframework.bat.job.insa.domain.EmployeeInfo">
+        <select id="selectEmployeeList" parameterType="map" resultType="egovframework.bat.job.insa.domain.EmployeeInfo">
                 SELECT
                          EMPLYR_ID,
                          ORGNZT_ID,
@@ -27,6 +27,20 @@
                          REG_DTTM,
                          MOD_DTTM
                 FROM COMTNEMPLYRINFO
+                <where>
+                        <if test="startDate != null">
+                                AND (
+                                        (REG_DTTM <![CDATA[>=]]> STR_TO_DATE(#{startDate}, '%Y%m%d%H%i%s'))
+                                        OR (MOD_DTTM <![CDATA[>=]]> STR_TO_DATE(#{startDate}, '%Y%m%d%H%i%s'))
+                                )
+                        </if>
+                        <if test="endDate != null">
+                                AND (
+                                        (REG_DTTM <![CDATA[<=]]> STR_TO_DATE(#{endDate}, '%Y%m%d%H%i%s'))
+                                        OR (MOD_DTTM <![CDATA[<=]]> STR_TO_DATE(#{endDate}, '%Y%m%d%H%i%s'))
+                                )
+                        </if>
+                </where>
                 ORDER BY EMPLYR_ID ASC
                 LIMIT #{_skiprows}, #{_pagesize}
         </select>

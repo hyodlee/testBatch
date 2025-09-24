@@ -1,5 +1,12 @@
 package egovframework.bat.job.insa.config;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.egovframe.rte.bat.core.item.database.EgovMyBatisBatchItemWriter;
 import org.mybatis.spring.batch.MyBatisPagingItemReader;
@@ -12,6 +19,7 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -26,6 +34,8 @@ import egovframework.bat.job.insa.tasklet.TruncateStgTablesTasklet;
  */
 @Configuration
 public class InsaRemote1ToStgJobConfig {
+    private static final DateTimeFormatter DATE_TIME_COMPACT = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+    private static final String DATE_TIME_PADDING = "000000";
 
     /**
      * STG 테이블을 비우는 Tasklet 빈.
@@ -74,11 +84,26 @@ public class InsaRemote1ToStgJobConfig {
     @Bean
     @StepScope
     public MyBatisPagingItemReader<EmployeeInfo> remote1ToStgEmpReader(
-            @Qualifier("insa-sqlSessionFactory-remote1") SqlSessionFactory sqlSessionFactory) {
+            @Qualifier("insa-sqlSessionFactory-remote1") SqlSessionFactory sqlSessionFactory,
+            @Value("#{jobParameters['startDate']}") String startDate,
+            @Value("#{jobParameters['endDate']}") String endDate) {
         MyBatisPagingItemReader<EmployeeInfo> reader = new MyBatisPagingItemReader<>();
         reader.setSqlSessionFactory(sqlSessionFactory);
         reader.setQueryId("insaRemToStg.selectEmployeeList");
         reader.setPageSize(10);
+
+        Map<String, Object> parameterValues = new HashMap<>();
+        String normalizedStart = normalizeDateTime(startDate, false);
+        if (normalizedStart != null) {
+            parameterValues.put("startDate", normalizedStart);
+        }
+        String normalizedEnd = normalizeDateTime(endDate, true);
+        if (normalizedEnd != null) {
+            parameterValues.put("endDate", normalizedEnd);
+        }
+        if (!parameterValues.isEmpty()) {
+            reader.setParameterValues(parameterValues);
+        }
         return reader;
     }
 
@@ -160,5 +185,58 @@ public class InsaRemote1ToStgJobConfig {
                 .next(remote1ToStgStep)
                 .build();
     }
-}
 
+    private String normalizeDateTime(String value, boolean endOfRange) {
+        if (value == null) {
+            return null;
+        }
+
+        String trimmed = value.trim();
+        if (trimmed.isEmpty()) {
+            return null;
+        }
+
+        String digits = trimmed.replaceAll("[^0-9]", "");
+        if (digits.length() < 8) {
+            return null;
+        }
+
+        String datePart = digits.substring(0, 8);
+        String timeDigits = digits.substring(8);
+        if (timeDigits.length() % 2 == 1) {
+            timeDigits = timeDigits.substring(0, timeDigits.length() - 1);
+        }
+        if (timeDigits.length() > 6) {
+            timeDigits = timeDigits.substring(0, 6);
+        }
+
+        String baseTimePart = (timeDigits + DATE_TIME_PADDING).substring(0, 6);
+        String timePart;
+        if (!endOfRange) {
+            timePart = baseTimePart;
+        } else if (timeDigits.isEmpty()) {
+            timePart = "235959";
+        } else {
+            StringBuilder builder = new StringBuilder(baseTimePart);
+            int providedDigits = timeDigits.length();
+            if (providedDigits <= 2) {
+                builder.replace(2, 4, "59");
+                builder.replace(4, 6, "59");
+            } else if (providedDigits <= 4) {
+                builder.replace(4, 6, "59");
+            }
+            timePart = builder.toString();
+        }
+
+        try {
+            LocalDate date = LocalDate.parse(datePart, DateTimeFormatter.BASIC_ISO_DATE);
+            int hour = Math.min(Integer.parseInt(timePart.substring(0, 2)), 23);
+            int minute = Math.min(Integer.parseInt(timePart.substring(2, 4)), 59);
+            int second = Math.min(Integer.parseInt(timePart.substring(4, 6)), 59);
+            LocalDateTime dateTime = date.atTime(hour, minute, second);
+            return dateTime.format(DATE_TIME_COMPACT);
+        } catch (DateTimeParseException | NumberFormatException ex) {
+            return null;
+        }
+    }
+}

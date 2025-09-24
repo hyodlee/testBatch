@@ -209,7 +209,7 @@ public class BatchSchedulerConfig {
      */
     private Map<String, Object> extraData(String jobName) {
     	// 추가 데이터 넣는 예시
-        if ("insaStgToLocalJob".equals(jobName)) {
+        if ("insaRemote1ToStgJob".equals(jobName)) {
             Map<String, Object> extra = new HashMap<>();
             extra.put("startDate", startDate);	//java -jar MyApp.jar -DstartDate=20250101 -DendDate=20250131
             extra.put("endDate", endDate);		//java -jar MyApp.jar -DstartDate=20250101 -DendDate=20250131

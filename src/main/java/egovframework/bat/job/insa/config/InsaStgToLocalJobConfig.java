@@ -13,6 +13,7 @@ import org.springframework.batch.core.step.builder.StepBuilder;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -76,10 +77,15 @@ public class InsaStgToLocalJobConfig {
      * 사원 정보를 동기화하는 Tasklet 빈.
      */
     @Bean
+    @StepScope
     public StgToLocalEmployeeTasklet stgToLocalEmployeeTasklet(
-            @Qualifier("sqlSessionFactory-local") SqlSessionFactory sqlSessionFactory) {
+            @Qualifier("sqlSessionFactory-local") SqlSessionFactory sqlSessionFactory,
+            @Value("#{jobParameters['startDate']}") String startDate,
+            @Value("#{jobParameters['endDate']}") String endDate) {
         StgToLocalEmployeeTasklet tasklet = new StgToLocalEmployeeTasklet();
         tasklet.setSqlSessionFactory(sqlSessionFactory);
+        tasklet.setStartDate(startDate);
+        tasklet.setEndDate(endDate);
         return tasklet;
     }
 

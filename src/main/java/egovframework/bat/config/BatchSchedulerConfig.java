@@ -28,6 +28,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+import org.springframework.util.StringUtils;
 
 import egovframework.bat.common.Constant;
 import egovframework.bat.repository.dto.SchedulerJobDto;
@@ -50,8 +51,8 @@ public class BatchSchedulerConfig {
     /** application.yml에서 읽어 온 scheduler 정보 */
     private final SchedulerProps schedulerProps;
 
-    @Value("${startDate}") private String startDate;
-    @Value("${endDate}") private String endDate;
+    @Value("${startDate:}") private String startDate;
+    @Value("${endDate:}") private String endDate;
 
     /**
      * 공통 JobDetail 생성 메서드
@@ -211,9 +212,13 @@ public class BatchSchedulerConfig {
     	// 추가 데이터 넣는 예시
         if ("insaStgToLocalJob".equals(jobName)) {
             Map<String, Object> extra = new HashMap<>();
-            extra.put("startDate", startDate);	//java -jar MyApp.jar -DstartDate=20250101 -DendDate=20250131
-            extra.put("endDate", endDate);		//java -jar MyApp.jar -DstartDate=20250101 -DendDate=20250131
-            return extra;
+            if (StringUtils.hasText(startDate)) {
+                extra.put("startDate", startDate);	//java -jar MyApp.jar -DstartDate=20250101 -DendDate=20250131
+            }
+            if (StringUtils.hasText(endDate)) {
+                extra.put("endDate", endDate);		//java -jar MyApp.jar -DstartDate=20250101 -DendDate=20250131
+            }
+            return extra.isEmpty() ? null : extra;
         }
         
         return null;

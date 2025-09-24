@@ -28,6 +28,13 @@
                          REG_DTTM,
                          MOD_DTTM
                 FROM migstg.COMTNEMPLYRINFO
+                WHERE 1 = 1
+                <if test="startDate != null and startDate != ''">
+                        AND COALESCE(MOD_DTTM, REG_DTTM) <![CDATA[>=]]> STR_TO_DATE(#{startDate}, '%Y%m%d')
+                </if>
+                <if test="endDate != null and endDate != ''">
+                        AND COALESCE(MOD_DTTM, REG_DTTM) <![CDATA[<]]> DATE_ADD(STR_TO_DATE(#{endDate}, '%Y%m%d'), INTERVAL 1 DAY)
+                </if>
         </select>
 
         <!-- EMPLYR_ID를 기준으로 기존 사원 정보를 갱신 -->
@@ -45,6 +52,13 @@
                     u.EMPLYR_STTUS_CODE = s.EMPLYR_STTUS_CODE,
                     u.REG_DTTM = s.REG_DTTM,
                     u.MOD_DTTM = s.MOD_DTTM
+                WHERE 1 = 1
+                <if test="startDate != null and startDate != ''">
+                        AND COALESCE(s.MOD_DTTM, s.REG_DTTM) <![CDATA[>=]]> STR_TO_DATE(#{startDate}, '%Y%m%d')
+                </if>
+                <if test="endDate != null and endDate != ''">
+                        AND COALESCE(s.MOD_DTTM, s.REG_DTTM) <![CDATA[<]]> DATE_ADD(STR_TO_DATE(#{endDate}, '%Y%m%d'), INTERVAL 1 DAY)
+                </if>
         </update>
 
        <!-- 신규 사원 추가 전에 ESNTL_ID 시퀀스 초기화 -->
@@ -63,6 +77,12 @@
                FROM migstg.COMTNEMPLYRINFO s
                LEFT JOIN egovlocal.COMTNEMPLYRINFO u ON u.EMPLYR_ID = s.EMPLYR_ID
                WHERE u.EMPLYR_ID IS NULL
+               <if test="startDate != null and startDate != ''">
+                       AND COALESCE(s.MOD_DTTM, s.REG_DTTM) <![CDATA[>=]]> STR_TO_DATE(#{startDate}, '%Y%m%d')
+               </if>
+               <if test="endDate != null and endDate != ''">
+                       AND COALESCE(s.MOD_DTTM, s.REG_DTTM) <![CDATA[<]]> DATE_ADD(STR_TO_DATE(#{endDate}, '%Y%m%d'), INTERVAL 1 DAY)
+               </if>
        </insert>
 
         <!-- 로컬 DB에 조직 정보 적재 -->

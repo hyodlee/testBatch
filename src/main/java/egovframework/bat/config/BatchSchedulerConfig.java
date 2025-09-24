@@ -18,6 +18,7 @@ import org.springframework.batch.core.Job;
 import org.springframework.batch.core.configuration.JobRegistry;
 import org.springframework.batch.core.launch.NoSuchJobException;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.quartz.QuartzProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -49,6 +50,8 @@ public class BatchSchedulerConfig {
     /** application.yml에서 읽어 온 scheduler 정보 */
     private final SchedulerProps schedulerProps;
 
+    @Value("${startDate}") private String startDate;
+    @Value("${endDate}") private String endDate;
 
     /**
      * 공통 JobDetail 생성 메서드
@@ -205,13 +208,14 @@ public class BatchSchedulerConfig {
      * 잡별 추가 데이터 설정
      */
     private Map<String, Object> extraData(String jobName) {
-    	/* 추가 데이터 넣는 예시
+    	// 추가 데이터 넣는 예시
         if ("insaStgToLocalJob".equals(jobName)) {
             Map<String, Object> extra = new HashMap<>();
-            extra.put("sourceSystem", "remote1");
+            extra.put("startDate", startDate);	//java -jar MyApp.jar -DstartDate=20250101 -DendDate=20250131
+            extra.put("endDate", endDate);		//java -jar MyApp.jar -DstartDate=20250101 -DendDate=20250131
             return extra;
         }
-        */
+        
         return null;
     }
 }

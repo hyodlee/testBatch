@@ -25,7 +25,8 @@ public class Remote1ToStgJobController {
     /**
      * Remote1 데이터를 STG로 적재한다.
      *
-     * @param sourceSystem 데이터를 제공하는 시스템 이름 (선택)
+     * @param startDate 시작날짜 (선택)
+     * @param endDate 시작날짜 (선택)
      * @return 배치 잡 실행 결과 상태
      */
     @PostMapping("/remote1-to-stg")

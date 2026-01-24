@@ -26,7 +26,7 @@ mvn -Pprod package    # 운영 환경 빌드
 각 프로필은 `src/main/resources/application/env/<프로필>/application.yml` 설정 파일을 사용합니다.
 
 # 실행방법
-올바른 실행방법
+올바른 실행방법 
 java -jar testBatchlocal.jar (O)
 java -jar testBatchlocal.jar --startDate=20250101 --endDate=20250131 (O)
 java -DstartDate=20250101 -DendDate=20250131 -jar testBatchlocal.jar (O)
